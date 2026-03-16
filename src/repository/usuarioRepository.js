@@ -1,0 +1,65 @@
+const pool = require('../config/postgres');
+const Usuario = require('../models/usuario');
+
+const queryCreate = `
+    INSERT INTO usuarios (nombre, apellido_paterno, apellido_materno, rfc, foto, banner,estado, id_direccion, id_contacto) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING *
+`
+
+const queryFindById = `
+    SELECT * FROM usuarios AS u WHERE u.id = $1
+`
+
+const queryFindAll = `
+    SELECT * FROM usuarios
+`
+
+const queryUpdateById = `
+    UPDATE usuarios AS u 
+    SET nombre = $1, apellido_paterno = $2, apellido_materno = $3, 
+    rfc = $4, foto = $5, banner = $6 
+    WHERE u.id = $7
+    RETURNING *
+`
+
+const queryDeleteById = `
+    DELETE FROM usuarios AS u WHERE u.id = $1    
+`
+
+const create = async (nombre, apellido_paterno, apellido_materno, rfc, foto, banner, estado, id_direccion, id_contacto) => {
+    const result = await pool.query(queryCreate, [nombre, apellido_paterno, apellido_materno, rfc, foto, banner, estado, id_direccion, id_contacto])
+    if (result.rowCount === 0) { throw new Error(`Datos no validos: \n Nombre: ${nombre} \n Apellido Paterno: ${apellido_paterno} \n Apellido Materno: ${apellido_materno} \n RFC: ${rfc} \n Foto: ${foto} \n Banner: ${banner} \n Id_direccion: ${id_direccion} \n Id_contacto: ${id_contacto}`) }
+    const row = result.rows[0];
+    return new Usuario(row.id, row.nombre, row.apellido_paterno, row.apellido_materno, row.rfc, row.foto, row.banner, row.estado, row.id_direccion, row.id_contacto);
+}
+
+const findAll = async () => {
+    const result = await pool.query(queryFindAll);
+    return result.rows.map(
+        u => new Usuario(u.id, u.apellido_paterno, u.apellido_materno, u.rfc, u.foto, u.banner, u.estado, u.id_direccion, u.id_contacto)
+    )
+}
+
+const findById = async (id) => {
+    const result = await pool.query(queryFindById, [id])
+    if (result.rowCount === 0) { throw new Error(`El ID ${id} no existe`) }
+    const row = result.rows[0]
+    return new Usuario(row.id, row.nombre, row.apellido_paterno, row.apellido_materno, row.rfc, row.foto, row.banner, row.estado, row.id_direccion, row.id_contacto);
+}
+
+const updateById = async (id, nombre, apellido_paterno, apellido_materno, rfc, foto, banner) => {
+    const exist = await pool.query(queryFindById, [id])
+    if (exist.rowCount === 0) { throw new Error(`El ID ${id} no existe`) }
+    const result = await pool.query(queryUpdateById, [nombre, apellido_paterno, apellido_materno, rfc, foto, banner, id]);
+    const row = result.rows[0];
+    return new Usuario(row.id, row.nombre, row.apellido_paterno, row.apellido_materno, row.rfc, row.foto, row.banner,row.estado, row.id_direccion, row.id_contacto);
+}
+
+const deleteById = async (id) => {
+    const exist = await pool.query(queryFindById, [id])
+    if (exist.rowCount === 0) { throw new Error(`El ID ${id} no existe`) }
+    const result = await pool.query(queryDeleteById, [id]);
+    if (result.rowCount === 0) { throw new Error(`No se pudo eliminar el usuario`) }
+    return exist;
+}
+
+module.exports = { create, findById, findAll, updateById, deleteById }
