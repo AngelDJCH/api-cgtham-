@@ -8,8 +8,8 @@
   "host": "api-cgtham.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http",
-    "https"
+    "https",
+    "http"
   ],
   "paths": {
     "/api/v1/direcciones/{id}": {
