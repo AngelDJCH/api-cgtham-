@@ -10,4 +10,4 @@ CREATE TABLE postulaciones(
     CONSTRAINT fk_postulaciones_ofertas_laborales
     FOREIGN KEY (id_oferta_laboral)
     REFERENCES ofertaslaborales(id)
-)
+);
