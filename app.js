@@ -9,6 +9,7 @@ const app = express()
 app.use(express.json({limit:'1gb'}))
 app.use(express.urlencoded({limit:'100mb', extended:true}))
 //app.use(cors({ origin: 'http://localhost:3000' }))
+app.use(cors()) //Acepta cualquier origien
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 /*ROUTES*/
