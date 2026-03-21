@@ -74,7 +74,7 @@ const deleteById = async (req, res) => {
 
 const countConvenios = async (req, res) => {
     try {
-        const count_convenios = await convenioorganizacionService.countConvenios()
+        const count_convenios = await convenioService.countConvenios()
         res.status(200).json(
             {
                 convenios: countConvenios
