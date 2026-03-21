@@ -6,7 +6,7 @@ const doc = {
         title: 'CGTHAM API',
         description: 'Documentación de la API para la gestión de datos de la comisión de gestión de talento humano de las altas montañas'
     },
-    host: 'localhost:3001', //"api-cgtham.onrender.com" || 'localhost:3001'
+    host: 'api-cgtham.onrender.com', //"api-cgtham.onrender.com" || 'localhost:3001'
     schemes: ['https'], //schemes: ['https', 'http']
 }
 
