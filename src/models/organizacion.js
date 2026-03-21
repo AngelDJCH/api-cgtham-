@@ -9,9 +9,10 @@ class Organizacion{
     #rfc;
     #logo;
     #banner;
+    #estado;
     #id_contacto;
     #id_direccion;
-    constructor(id, nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, id_contacto, id_direccion){
+    constructor(id, nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, estado, id_contacto, id_direccion){
         this.#id = id;
         this.#nombre_comercial = nombre_comercial;
         this.#descripcion = descripcion;
@@ -22,6 +23,7 @@ class Organizacion{
         this.#rfc = rfc;
         this.#logo = logo;
         this.#banner = banner;
+        this.#estado = estado;
         this.#id_contacto = id_contacto;
         this.#id_direccion = id_direccion;
     }
@@ -64,6 +66,10 @@ class Organizacion{
 
     set banner(banner){
         this.#banner = banner;
+    }
+
+    set estado(estado){
+        this.#estado = estado;
     }
 
     set id_contacto(id_contacto){
@@ -112,6 +118,10 @@ class Organizacion{
 
     get banner(){
         return this.#banner;
+    }
+
+    get estado(){
+        return this.#estado;
     }
 
     get id_contacto(){

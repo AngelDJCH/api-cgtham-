@@ -10,5 +10,6 @@ convenioRoutes.get('/',auth, convenioController.findAll)
 convenioRoutes.post('/',auth, verifyRoles('ADMIN_ORG', 'ADMIN_SYS'),validateCreate, convenioController.create)
 convenioRoutes.put('/:id',auth,validateUpdateById, convenioController.updateById)
 convenioRoutes.delete('/:id',auth, verifyRoles('ADMIN_ORG', 'ADMIN_SYS'),validateDeleteById, convenioController.deleteById)
+convenioRoutes.get('/count', convenioController.countConvenios)
 
 module.exports = convenioRoutes;

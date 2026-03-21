@@ -98,4 +98,19 @@ const deleteById = async (req, res) => {
     }
 }
 
-module.exports = { create, findById, findAll, updateById, deleteById }
+const countOrganizaciones = async (req, res) => {
+    try {
+        const count_organizaciones = await organizacionService.countOrganizaciones()
+        res.status(200).json({
+            organizaciones: count_organizaciones
+        })
+    } catch (error) {
+        res.status(400).json(
+            {
+                message: error.message
+            }
+        )
+    }
+}
+
+module.exports = { create, findById, findAll, updateById, deleteById, countOrganizaciones }

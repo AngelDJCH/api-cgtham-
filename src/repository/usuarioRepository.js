@@ -25,6 +25,10 @@ const queryDeleteById = `
     DELETE FROM usuarios AS u WHERE u.id = $1    
 `
 
+const queryCountUsuarios = `
+    SELECT COUNT(*) AS total FROM usuarios AS u WHERE u.estado = 1
+`
+
 const create = async (nombre, apellido_paterno, apellido_materno, rfc, foto, banner, estado, id_direccion, id_contacto) => {
     const result = await pool.query(queryCreate, [nombre, apellido_paterno, apellido_materno, rfc, foto, banner, estado, id_direccion, id_contacto])
     if (result.rowCount === 0) { throw new Error(`Datos no validos: \n Nombre: ${nombre} \n Apellido Paterno: ${apellido_paterno} \n Apellido Materno: ${apellido_materno} \n RFC: ${rfc} \n Foto: ${foto} \n Banner: ${banner} \n Id_direccion: ${id_direccion} \n Id_contacto: ${id_contacto}`) }
@@ -62,4 +66,9 @@ const deleteById = async (id) => {
     return exist;
 }
 
-module.exports = { create, findById, findAll, updateById, deleteById }
+const countUsuarios = async () => {
+    const result = await pool.query(queryCountUsuarios)
+    return result.rows[0] ? parseInt(result.rows[0].total) : 0 
+}
+
+module.exports = { create, findById, findAll, updateById, deleteById, countUsuarios }

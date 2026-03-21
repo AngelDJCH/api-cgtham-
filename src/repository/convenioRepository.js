@@ -11,7 +11,7 @@ const queryFindById = `
 `
 
 const queryFindAll = `
-    SELECT * FROM convenios AS c WHERE c.estado = Activo
+    SELECT * FROM convenios
 `
 
 const queryUpdateById = `
@@ -21,6 +21,10 @@ const queryUpdateById = `
 
 const queryDeleteById = `
     DELETE FROM convenios AS c WHERE c.id = $1 RETURNING * 
+`
+
+const queryCountConvenios = `
+    SELECT COUNT(*) AS total FROM convenios AS c WHERE c.estado = 1
 `
 
 const create = async (titulo, descripcion, tipo, estado, fecha_registro, fecha_inicio, fecha_final) => {
@@ -103,4 +107,9 @@ const deleteById = async (id) => {
     )
 }
 
-module.exports = {create, findById, findAll, updateById, deleteById}
+const countConvenios = async () => {
+    const result = await pool.query(queryCountConvenios)
+    return result.rows[0] ? parseInt(result.rows[0].total) : 0
+}
+
+module.exports = {create, findById, findAll, updateById, deleteById, countConvenios}

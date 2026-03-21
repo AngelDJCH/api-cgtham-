@@ -1,10 +1,11 @@
+const { parse } = require('dotenv')
 const pool = require('../config/postgres')
 const Organizacion = require('../models/organizacion')
 const queryCreate = `
     INSERT INTO organizaciones (
-        nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, id_contacto, id_direccion
+        nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, estado, id_contacto, id_direccion
     ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
     ) 
     RETURNING *
 `
@@ -15,6 +16,10 @@ const queryFindById = `
 
 const queryFindAll = `
     SELECT * FROM organizaciones
+`
+
+const queryCountOrganizaciones = `
+    SELECT COUNT(*) AS total FROM organizaciones AS o WHERE o.estado = 1
 `
 
 const queryUpdateById = `
@@ -29,8 +34,8 @@ const queryDeleteById = `
 `
 
 
-const create = async (nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, id_contacto, id_direccion) => {
-    const result = await pool.query(queryCreate, [nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, id_contacto, id_direccion])
+const create = async (nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, estado, id_contacto, id_direccion) => {
+    const result = await pool.query(queryCreate, [nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, estado, id_contacto, id_direccion])
     const row = result.rows[0]
     return new Organizacion(
         row.id,
@@ -132,5 +137,10 @@ const deleteById = async (id) => {
 }
 
 
+const countOrganizaciones = async () => {
+    const result = await pool.query(queryCountOrganizaciones)
+    return result.rows[0] ?  parseInt(result.rows[0].total) : 0
+}
 
-module.exports = { create, findById, findAll, updateById, deleteById}
+
+module.exports = { create, findById, findAll, updateById, deleteById, countOrganizaciones}

@@ -2,7 +2,7 @@ const convenioorganizacionService = require('../services/convenioOrganizacionSer
 
 const create = async (req, res) => {
     try {
-        const {rol, id_convenio, id_organizacion} = req.body
+        const { rol, id_convenio, id_organizacion } = req.body
         const convenioOrganizacion = await convenioorganizacionService.create(rol, id_convenio, id_organizacion)
         res.status(201).json(convenioOrganizacion.toJSON())
     } catch (error) {
@@ -31,8 +31,8 @@ const findById = async (req, res) => {
 const updateRolById = async (req, res) => {
     try {
         const id = req.params.id
-        const {rol} = req.body
-        const convenioOrganizacion = await convenioorganizacionService.updateRolById(id,rol)
+        const { rol } = req.body
+        const convenioOrganizacion = await convenioorganizacionService.updateRolById(id, rol)
         res.status(200).json(convenioOrganizacion.toJSON())
     } catch (error) {
         res.status(404).json(
@@ -43,4 +43,4 @@ const updateRolById = async (req, res) => {
     }
 }
 
-module.exports = {create, findById, updateRolById}
+module.exports = { create, findById, updateRolById}

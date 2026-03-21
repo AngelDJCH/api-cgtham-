@@ -25,4 +25,9 @@ const deleteById = async (id) => {
     return convenio;
 }
 
-module.exports = {create, findAll, findById, updateById, deleteById}
+const countConvenios = async () => {
+    const count_convenios = await convenioRepository.countConvenios()
+    return count_convenios
+}
+
+module.exports = {create, findAll, findById, updateById, deleteById, countConvenios}

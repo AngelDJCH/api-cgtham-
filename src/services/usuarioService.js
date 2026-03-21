@@ -25,4 +25,9 @@ const deleteById = async (id) => {
     return usuario;
 }
 
-module.exports = { create, findById, findAll, updateById, deleteById }
+const countUsuarios = async () => {
+    const count_usuarios = await usuarioRepository.countUsuarios()
+    return count_usuarios
+}
+
+module.exports = { create, findById, findAll, updateById, deleteById, countUsuarios }

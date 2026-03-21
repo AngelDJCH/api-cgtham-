@@ -29,6 +29,7 @@ CREATE TABLE organizaciones(
     rfc VARCHAR(30) NOT NULL,
     logo TEXT NOT NULL,
     banner TEXT NOT NULL,
+    estado BOOLEAN NOT NULL,
     id_contacto UUID NOT NULL,
     id_direccion UUID NOT NULL,
     CONSTRAINT fk_organizaciones_contacto
@@ -37,7 +38,7 @@ CREATE TABLE organizaciones(
     CONSTRAINT fk_organizaciones_direccion
     FOREIGN KEY (id_direccion)
     REFERENCES direciones(id)
-);
+)
 
 CREATE TABLE cloudinaryconfig(
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
@@ -123,7 +124,7 @@ CREATE TABLE convenios(
     titulo VARCHAR(150) NOT NULL,
     descripcion TEXT NOT NULL,
     tipo VARCHAR(150) NOT NULL,
-    estado VARCHAR(150) NOT NULL,
+    estado BOOLEAN NOT NULL,
     fecha_registro DATE NOT NULL,
     fecha_inicio DATE NOT NULL,
     fecha_final DATE NOT NULL

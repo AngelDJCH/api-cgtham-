@@ -10,5 +10,6 @@ usuarioRoutes.get('/:id', auth, validateFindById, usuarioController.findById);
 usuarioRoutes.post('/', validateCreate, usuarioController.create);
 usuarioRoutes.put('/:id', auth, validateUpdateById, usuarioController.updateById);
 usuarioRoutes.delete('/:id', auth, validateDeleteById, usuarioController.deleteById)
+usuarioRoutes.get('/count', usuarioController.countUsuarios)
 
 module.exports = usuarioRoutes 

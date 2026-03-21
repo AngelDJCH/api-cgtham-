@@ -9,6 +9,7 @@ CREATE TABLE organizaciones(
     rfc VARCHAR(30) NOT NULL,
     logo TEXT NOT NULL,
     banner TEXT NOT NULL,
+    estado BOOLEAN NOT NULL,
     id_contacto UUID NOT NULL,
     id_direccion UUID NOT NULL,
     CONSTRAINT fk_organizaciones_contacto
