@@ -5,10 +5,10 @@
     "description": "Documentación de la API para la gestión de datos de la comisión de gestión de talento humano de las altas montañas",
     "version": "1.0.0"
   },
-  "host": "localhost:80",
+  "host": "api-cgtham.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/api/v1/direcciones/{id}": {
