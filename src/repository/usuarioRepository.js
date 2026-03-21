@@ -26,7 +26,7 @@ const queryDeleteById = `
 `
 
 const queryCountUsuarios = `
-    SELECT COUNT(*) AS total FROM usuarios AS u WHERE u.estado = 1
+    SELECT COUNT(*) AS total FROM usuarios AS u WHERE u.estado = true
 `
 
 const create = async (nombre, apellido_paterno, apellido_materno, rfc, foto, banner, estado, id_direccion, id_contacto) => {

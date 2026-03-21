@@ -24,7 +24,7 @@ const queryDeleteById = `
 `
 
 const queryCountConvenios = `
-    SELECT COUNT(*) AS total FROM convenios AS c WHERE c.estado = 1
+    SELECT COUNT(*) AS total FROM convenios AS c WHERE c.estado = true
 `
 
 const create = async (titulo, descripcion, tipo, estado, fecha_registro, fecha_inicio, fecha_final) => {

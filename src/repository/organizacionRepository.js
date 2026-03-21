@@ -19,7 +19,7 @@ const queryFindAll = `
 `
 
 const queryCountOrganizaciones = `
-    SELECT COUNT(*) AS total FROM organizaciones AS o WHERE o.estado = 1
+    SELECT COUNT(*) AS total FROM organizaciones AS o WHERE o.estado = true
 `
 
 const queryUpdateById = `
