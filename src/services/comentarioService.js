@@ -1,7 +1,7 @@
 const comentarioRepository = require('../repository/comentarioRepository')
 
-const create = async (contenido, estado, id_administrador, id_usuario) => {
-    const comentario = await comentarioRepository.create(contenido, estado, id_administrador, id_usuario)
+const create = async (contenido, estado, id_administrador, id_usuario, fecha) => {
+    const comentario = await comentarioRepository.create(contenido, estado, id_administrador, id_usuario, fecha)
     return comentario;
 }
 

@@ -2,6 +2,7 @@ CREATE TABLE comentarios(
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     contenido TEXT NOT NULL,
     estado VARCHAR(150) NOT NULL,
+    fecha DATE NOT NULL,
     id_usuario UUID NOT NULL,
     id_administrador UUID,
     CONSTRAINT fk_comentarios_usuarios

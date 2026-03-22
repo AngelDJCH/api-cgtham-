@@ -5,6 +5,7 @@ const validateCreate = [
     check('contenido').exists().not().isEmpty(),
     check('estado').exists().not().isEmpty(),
     check('id_usuario').exists().not().isEmpty().isUUID(),
+    check('fecha').exists().not().isEmpty().isDate(),
     (req, res, next) => {
         validateResult(req, res, next)
     }

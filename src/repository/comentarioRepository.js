@@ -2,8 +2,8 @@ const pool = require('../config/postgres')
 const Comentario = require('../models/comentario')
 
 const queryCreate = `
-    INSERT INTO comentarios (contenido, estado, id_administrador, id_usuario)
-    VALUES ($1,$2,$3,$4) RETURNING *
+    INSERT INTO comentarios (contenido, estado, id_administrador, id_usuario, fecha)
+    VALUES ($1,$2,$3,$4,$5) RETURNING *
 `
 const queryFindById = `
     SELECT * FROM comentarios AS c WHERE c.id = $1
@@ -28,8 +28,8 @@ const queryDeleteById = `
     DELETE FROM comentarios AS c WHERE c.id = $1 RETURNING *
 `
 
-const create = async (contenido, estado, id_administrador, id_usuario) => {
-    const result = await pool.query(queryCreate, [contenido, estado, id_administrador, id_usuario])
+const create = async (contenido, estado, id_administrador, id_usuario, fecha) => {
+    const result = await pool.query(queryCreate, [contenido, estado, id_administrador, id_usuario, fecha])
     if (result.rowCount === 0) throw new Error('Ocurrio un error al crear un comentario')
     const row = result.rows[0]
     return new Comentario(
@@ -37,7 +37,8 @@ const create = async (contenido, estado, id_administrador, id_usuario) => {
         row.contenido,
         row.estado,
         row.id_administrador,
-        row.id_usuario
+        row.id_usuario,
+        row.fecha
     )
 }
 
@@ -50,7 +51,8 @@ const findById = async (id) => {
         row.contenido,
         row.estado,
         row.id_administrador,
-        row.id_usuario
+        row.id_usuario,
+        row.fecha
     )
 }
 
@@ -64,7 +66,8 @@ const findAllByIdUsuario = async (id_usuario) => {
             row.contenido,
             row.estado,
             row.id_administrador,
-            row.id_usuario
+            row.id_usuario,
+            row.fecha
         )
     )
 }
@@ -78,7 +81,8 @@ const findAll = async () => {
             row.contenido,
             row.estado,
             row.id_administrador,
-            row.id_usuario
+            row.id_usuario,
+            row.fecha
         )
     )
 }
@@ -92,7 +96,8 @@ const updateContenidoById = async (id, contenido) => {
         row.contenido,
         row.estado,
         row.id_administrador,
-        row.id_usuario
+        row.id_usuario,
+        row.fecha
     )
 }
 
@@ -105,7 +110,8 @@ const updateEstadoById = async (id, estado, id_administrador) => {
         row.contenido,
         row.estado,
         row.id_administrador,
-        row.id_usuario
+        row.id_usuario,
+        row.fecha
     )
 }
 
@@ -118,7 +124,8 @@ const deleteById = async (id) => {
         row.contenido,
         row.estado,
         row.id_administrador,
-        row.id_usuario
+        row.id_usuario,
+        row.fecha
     )
 }
 

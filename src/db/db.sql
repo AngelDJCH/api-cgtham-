@@ -108,6 +108,7 @@ CREATE TABLE comentarios(
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     contenido TEXT NOT NULL,
     estado VARCHAR(150) NOT NULL,
+    fecha DATE NOT NULL,
     id_usuario UUID NOT NULL,
     id_administrador UUID,
     CONSTRAINT fk_comentarios_usuarios
@@ -117,7 +118,7 @@ CREATE TABLE comentarios(
     FOREIGN KEY (id_usuario)
     REFERENCES usuarios(id)
     ON DELETE CASCADE
-);
+)
 
 CREATE TABLE convenios(
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,

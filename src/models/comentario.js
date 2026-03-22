@@ -4,12 +4,14 @@ class Comentario{
     #estado;
     #id_administrador;
     #id_usuario;
-    constructor(id,contenido, estado, id_administrador, id_usuario){
+    #fecha;
+    constructor(id,contenido, estado, id_administrador, id_usuario, fecha){
         this.#id = id;
         this.#contenido = contenido;
         this.#estado =  estado;
         this.#id_administrador = id_administrador;
         this.#id_usuario = id_usuario;
+        this.#fecha = fecha
     }
 
     set id(id){
@@ -32,6 +34,10 @@ class Comentario{
         this.#id_usuario = id_usuario;
     }
 
+    set fecha(fecha){
+        this.#fecha = fecha
+    }
+
     get id(){
         return this.#id;
     }
@@ -52,12 +58,17 @@ class Comentario{
         return this.#id_usuario;
     }
 
+    get fecha(){
+        return this.#fecha
+    }
+
     toJSON(){
         return{
             id :  this.#id,
             contenido : this.#contenido,
             estado : this.#estado,
-            id_administrador  : this.#id_administrador
+            id_administrador  : this.#id_administrador,
+            fecha : this.#fecha
         }
     }
 }

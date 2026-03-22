@@ -2,8 +2,8 @@ const comentarioService = require('../services/comentarioService')
 
 const create = async (req, res) => {
     try {
-        const { contenido, estado, id_administrador, id_usuario } = req.body
-        const comentario = await comentarioService.create(contenido, estado, id_administrador, id_usuario)
+        const { contenido, estado, id_administrador, id_usuario, fecha } = req.body
+        const comentario = await comentarioService.create(contenido, estado, id_administrador, id_usuario, fecha)
         res.status(201).json(comentario.toJSON())
     } catch (error) {
         res.status(400).json(
