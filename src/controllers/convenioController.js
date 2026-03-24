@@ -77,7 +77,7 @@ const countConvenios = async (req, res) => {
         const count_convenios = await convenioService.countConvenios()
         res.status(200).json(
             {
-                convenios: countConvenios
+                convenios: count_convenios
             }
         )
     } catch (error) {
