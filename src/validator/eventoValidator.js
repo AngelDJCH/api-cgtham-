@@ -6,6 +6,7 @@ const validateCreate = [
     check('titulo').exists().not().isEmpty(),
     check('descripcion').exists().not().isEmpty(),
     check('tipo').exists().not().isEmpty(),
+    check('estado').exists().not().isEmpty(),
     check('id_organizacion').exists().not().isEmpty().isUUID(),
     check('fecha_inicio').exists().not().isEmpty().isDate(),
     check('fecha_final').exists().not().isEmpty().isDate(),

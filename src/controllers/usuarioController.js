@@ -2,8 +2,8 @@ const usuarioService = require('../services/usuarioService')
 
 const create = async (req, res) => {
     try {
-        const { nombre, apellido_paterno, apellido_materno, rfc, foto, banner, estado, id_direccion, id_contacto } = req.body;
-        const usuario = await usuarioService.create(nombre, apellido_paterno, apellido_materno, rfc, foto, banner, estado, id_direccion, id_contacto);
+        const { nombre, apellido_paterno, apellido_materno, rfc, foto, banner, estado, id_direccion, id_contacto, id_organizacion } = req.body;
+        const usuario = await usuarioService.create(nombre, apellido_paterno, apellido_materno, rfc, foto, banner, estado, id_direccion, id_contacto, id_organizacion);
         res.status(201).json(usuario.toJSON())
     } catch (error) {
         res.status(400).json(
@@ -94,4 +94,19 @@ const countUsuarios = async (req, res) => {
     }
 }
 
-module.exports = { create, findById, findAll, updateById, deleteById, countUsuarios }
+const findPerfilById = async (req, res) => {
+    try {
+        const id = req.params.id
+        const perfil = await usuarioService.findPerfilById(id)
+        console.log(perfil)
+        res.status(200).json(perfil)
+    } catch (error) {
+        res.status(400).json(
+            {
+                message : error.message
+            }
+        )
+    }
+}
+
+module.exports = { create, findById, findAll, updateById, deleteById, countUsuarios, findPerfilById}

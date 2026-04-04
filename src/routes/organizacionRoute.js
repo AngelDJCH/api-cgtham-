@@ -8,7 +8,7 @@ const verifyRoles = require('../midlewares/verifyRoles')
 
 organizacionRoutes.get('/count', organizacionController.countOrganizaciones)
 organizacionRoutes.get('/', organizacionController.findAll)
-organizacionRoutes.get('/:id',auth, validateFindById, organizacionController.findById)
+organizacionRoutes.get('/:id', validateFindById, organizacionController.findById)
 organizacionRoutes.post('/', validateCreate, organizacionController.create)
 organizacionRoutes.put('/:id',auth, verifyRoles('ADMIN_ORG', 'ADMIN_SYS'), validateUpdateById, organizacionController.updateById)
 organizacionRoutes.delete('/:id',auth, verifyRoles('ADMIN_ORG' , 'ADMIN_SYS'), validateDeleteById, organizacionController.deleteById)

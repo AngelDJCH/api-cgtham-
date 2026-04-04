@@ -20,4 +20,13 @@ const deleteById = async (id) => {
     return inscripcion;
 }
 
-module.exports = { create, findByIdAndEstado, updateEstadoById, deleteById }
+const findByIdUsuario =  async (id_usuario) => {
+    
+}
+
+const findAllByIdOrganizacion = async (id_organizacion) => {
+    const inscripciones = await inscripcionRepository.findAllByIdOrganizacion(id_organizacion)
+    return inscripciones
+}
+
+module.exports = { create, findByIdAndEstado, updateEstadoById, deleteById, findAllByIdOrganizacion }

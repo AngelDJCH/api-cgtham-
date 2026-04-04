@@ -14,8 +14,8 @@ const create = async (req, res) => {
 
 const findByIdEvento = async (req, res) => {
     try {
-        const id = res.params.id
-        const fotos = await fotoService.findByIdEvento(id)
+        const id_evento = req.params.id_evento
+        const fotos = await fotoService.findByIdEvento(id_evento)
         res.status(200).json(fotos.map(foto => foto.toJSON()))
     } catch (error) {
         res.status(400).json({

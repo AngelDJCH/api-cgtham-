@@ -15,8 +15,8 @@ const findAllByIdUsuario = async (id_usuario) => {
     return comentarios;
 }
 
-const findAll = async () => {
-    const comentarios = await comentarioRepository.findAll()
+const findAll = async (estado, limite) => {
+    const comentarios = await comentarioRepository.findAll(estado, limite)
     return comentarios;
 }
 
@@ -36,4 +36,14 @@ const deleteById = async (id) => {
     return comentario;
 }
 
-module.exports = { create, findById, findAll, findAllByIdUsuario, updateContenidoById, updateEstadoById, deleteById }
+const findAllComentariosByAdministrador = async () => {
+    const comentarios = await comentarioRepository.findAllComentariosByAdministrador()
+    return comentarios
+}
+
+const findAllComentarios = async () => {
+    const comentarios = await comentarioRepository.findAllComentarios()
+    return comentarios
+}
+
+module.exports = { create, findById, findAll, findAllByIdUsuario, updateContenidoById, updateEstadoById, deleteById, findAllComentariosByAdministrador, findAllComentarios}

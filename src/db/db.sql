@@ -38,7 +38,7 @@ CREATE TABLE organizaciones(
     CONSTRAINT fk_organizaciones_direccion
     FOREIGN KEY (id_direccion)
     REFERENCES direciones(id)
-)
+);
 
 CREATE TABLE cloudinaryconfig(
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
@@ -63,6 +63,7 @@ CREATE TABLE usuarios(
     estado BOOLEAN NOT NULL,
     id_direccion UUID NOT NULL,
     id_contacto UUID NOT NULL,
+    id_organizacion UUID NOT NULL,
     CONSTRAINT fk_usuarios_direcciones
     FOREIGN KEY (id_direccion)
     REFERENCES direciones(id)
@@ -70,6 +71,10 @@ CREATE TABLE usuarios(
     CONSTRAINT fk_usuarios_contactos
     FOREIGN KEY (id_contacto)
     REFERENCES contactos(id)
+    ON DELETE CASCADE,
+    CONSTRAINT fk_usuarios_organizaciones
+    FOREIGN KEY (id_organizacion)
+    REFERENCES organizaciones(id)
     ON DELETE CASCADE
 );
 
@@ -94,7 +99,7 @@ CREATE TABLE empresas(
     ON DELETE CASCADE
 );
 
-CREATE TABLE escuela(
+CREATE TABLE escuelas(
     id UUID NOT NULL PRIMARY KEY,
     tipo_institucion VARCHAR(150) NOT NULL,
     url_sitio TEXT NOT NULL,
@@ -106,7 +111,7 @@ CREATE TABLE escuela(
 
 CREATE TABLE comentarios(
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
-    contenido TEXT NOT NULL,
+    contenido VARCHAR(70) NOT NULL,
     estado VARCHAR(150) NOT NULL,
     fecha DATE NOT NULL,
     id_usuario UUID NOT NULL,
@@ -118,7 +123,7 @@ CREATE TABLE comentarios(
     FOREIGN KEY (id_usuario)
     REFERENCES usuarios(id)
     ON DELETE CASCADE
-)
+);
 
 CREATE TABLE convenios(
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
@@ -174,10 +179,11 @@ CREATE TABLE empresacamara(
 );
 
 CREATE TABLE eventos(
-    id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
     titulo VARCHAR(254) NOT NULL,
     descripcion TEXT NOT NULL,
     tipo VARCHAR(150) NOT NULL,
+    estado VARCHAR(150) NOT NULL,
     id_organizacion UUID NOT NULL,
     fecha_inicio DATE NOT NULL,
     fecha_final DATE NOT NULL,
@@ -303,4 +309,4 @@ CREATE TABLE seguimientos(
     FOREIGN KEY (id_seguidor)
     REFERENCES usuarios(id)
     ON DELETE CASCADE
-)
+);

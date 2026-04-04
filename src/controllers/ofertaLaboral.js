@@ -80,4 +80,21 @@ const deleteById = async (req, res) => {
     }
 }
 
-module.exports = {create, findById, findAll, updateById, deleteById}
+const countOfertas = async (req, res) => {
+    try {
+        const countOfertas = await ofertaLaboralService.countOfertas()
+        res.status(200).json(
+            {
+                empleos : countOfertas
+            }
+        )
+    } catch (error) {
+        res.status(400).json(
+            {
+                error : error.message
+            }
+        )
+    }
+}
+
+module.exports = {create, findById, findAll, updateById, deleteById, countOfertas}

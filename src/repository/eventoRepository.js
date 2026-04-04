@@ -24,8 +24,52 @@ const queryDeleteById = `
     DELETE FROM eventos AS e WHERE e.id = $1 RETURNING *
 `
 
-const create = async (titulo, descripcion, tipo, id_organizacion, fecha_inicio, fecha_final, fecha_publicacion) => {
-    const result = await pool.query(queryCreate, [titulo, descripcion, tipo, id_organizacion, fecha_inicio, fecha_final, fecha_publicacion])
+const queryCountEventos = `
+    SELECT COUNT(*) AS total FROM eventos AS e WHERE e.estado = 'ACTIVO'
+`
+
+const queryFindAllByEstado = `
+    SELECT * FROM eventos AS e WHERE e.estado = $1 LIMIT $2
+`
+
+const queryFinAllEventos = `
+SELECT 
+    e.id AS id_evento, 
+    e.titulo, 
+    e.descripcion, 
+    e.tipo,
+    e.fecha_inicio, 
+    e.fecha_final, 
+    o.id AS id_organizacion, 
+    o.nombre_comercial, 
+    o.logo,
+    ARRAY_AGG(f.url_imagen) AS fotos
+FROM eventos AS e
+INNER JOIN fotos AS f ON f.id_evento = e.id
+INNER JOIN organizaciones AS o ON e.id_organizacion = o.id
+WHERE e.estado = 'ACTIVO'
+GROUP BY 
+    e.id, 
+    e.titulo, 
+    e.descripcion, 
+    e.tipo, 
+    e.fecha_inicio, 
+    e.fecha_final, 
+    o.id, 
+    o.nombre_comercial, 
+    o.logo
+LIMIT $1 OFFSET $2
+`
+
+const queryFindEventosByIdUsuario = `
+select e.titulo, e.fecha_inicio, o.nombre_comercial, o.logo from eventos as e
+inner join inscripciones as i on i.id_evento = e.id inner join usuarios
+as u on i.id_usuario = u.id inner join organizaciones as o on u.id_organizacion = o.id
+where u.id = $1 and i.estado = 'APROBADA'
+`
+
+const create = async (titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final, fecha_publicacion) => {
+    const result = await pool.query(queryCreate, [titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final, fecha_publicacion])
     if (result.rowCount === 0) throw new Error("Ocurrio un error al crear un nuevo evento");
     const row = result.rows[0]
     return new Evento(
@@ -33,6 +77,7 @@ const create = async (titulo, descripcion, tipo, id_organizacion, fecha_inicio, 
         row.titulo,
         row.descripcion,
         row.tipo,
+        row.estado,
         row.id_organizacion,
         row.fecha_inicio,
         row.fecha_final,
@@ -49,6 +94,7 @@ const findById = async (id) => {
         row.titulo,
         row.descripcion,
         row.tipo,
+        row.estado,
         row.id_organizacion,
         row.fecha_inicio,
         row.fecha_final,
@@ -65,6 +111,7 @@ const findAll = async () => {
             row.titulo,
             row.descripcion,
             row.tipo,
+            row.estado,
             row.id_organizacion,
             row.fecha_inicio,
             row.fecha_final,
@@ -82,6 +129,7 @@ const updateById = async (id, titulo, descripcion, tipo, fecha_inicio, fecha_fin
         row.titulo,
         row.descripcion,
         row.tipo,
+        row.estado,
         row.id_organizacion,
         row.fecha_inicio,
         row.fecha_final,
@@ -98,6 +146,7 @@ const deleteById = async (id) => {
         row.titulo,
         row.descripcion,
         row.tipo,
+        row.estado,
         row.id_organizacion,
         row.fecha_inicio,
         row.fecha_final,
@@ -105,4 +154,65 @@ const deleteById = async (id) => {
     )
 }
 
-module.exports = { create, findById, findAll, updateById, deleteById }
+const countEventos = async () => {
+    const result = await pool.query(queryCountEventos)
+    return result.rows[0] ? parseInt(result.rows[0].total) : 0
+}
+
+const findAllByEstado = async (estado, limite) => {
+    const result = await pool.query(queryFindAllByEstado, [estado, limite])
+    return result.rows.map(
+        row =>
+            new Evento(
+                row.id,
+                row.titulo,
+                row.descripcion,
+                row.tipo,
+                row.estado,
+                row.id_organizacion,
+                row.fecha_inicio,
+                row.fecha_final,
+                row.fecha_publicacion
+            )
+    )
+}
+
+const findAllEventos = async (limit, offset) => {
+    const result = await pool.query(queryFinAllEventos, [limit, offset])
+    const rows = result.rows
+    return rows.map(
+        row => {
+            return {
+                id : row.id_evento,
+                titulo : row.titulo,
+                descripcion : row.descripcion,
+                tipo : row.tipo,
+                fecha_inicio : row.fecha_inicio,
+                fecha_final : row.fecha_final,
+                organizacion : {
+                    id : row.id_organizacion,
+                    nombre: row.nombre_comercial,
+                    foto : row.logo
+                },
+                fotos : row.fotos
+            }
+        }
+    )
+}
+
+const findEventosByIdUsuario = async (id_usuario) => {
+    const result = await pool.query(queryFindEventosByIdUsuario, [id_usuario])
+    const rows =  result.rows
+    return rows.map(
+        row => {
+            return{
+                titulo : row.titulo,
+                fecha : row.fecha_inicio,
+                organizacion : row.nombre_comercial,
+                logo : row.logo
+            }
+        }
+    )
+}
+
+module.exports = { create, findById, findAll, updateById, deleteById, countEventos, findAllByEstado, findAllEventos, findEventosByIdUsuario }

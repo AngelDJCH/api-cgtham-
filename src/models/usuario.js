@@ -9,7 +9,8 @@ class Usuario {
     #estado;
     #id_direccion;
     #id_contacto;
-    constructor(id, nombre, apellido_paterno, apellido_materno, rfc, foto, banner, estado, id_direccion, id_contacto) {
+    #id_organizacion;
+    constructor(id, nombre, apellido_paterno, apellido_materno, rfc, foto, banner, estado, id_direccion, id_contacto, id_organizacion) {
         this.#id = id;
         this.#nombre = nombre;
         this.#apellido_paterno = apellido_paterno;
@@ -20,6 +21,7 @@ class Usuario {
         this.#estado = estado
         this.#id_direccion = id_direccion;
         this.#id_contacto = id_contacto;
+        this.#id_organizacion = id_organizacion;
     }
 
     set id(id) {
@@ -62,6 +64,10 @@ class Usuario {
         this.#id_contacto = id_contacto;
     }
 
+    set id_organizacion(id_organizacion){
+        this.#id_organizacion = id_organizacion;
+    }
+
     get id() {
         return this.#id;
     }
@@ -102,6 +108,10 @@ class Usuario {
         return this.#id_contacto;
     }
 
+    get id_organizacion(){
+        return this.#id_organizacion;
+    }
+
     toJSON() {
         return {
             id: this.#id,
@@ -113,7 +123,8 @@ class Usuario {
             banner: this.#banner,
             estado: this.#estado,
             id_direccion: this.#id_direccion,
-            id_contacto: this.#id_contacto
+            id_contacto: this.#id_contacto,
+            id_organizacion : this.#id_organizacion
         }
     }
 }

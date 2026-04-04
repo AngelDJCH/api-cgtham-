@@ -32,6 +32,10 @@ const queryDeleteById = `
     DELETE FROM ofertaslaborales AS ol WHERE ol.id = $1 RETURNING *
 `
 
+const queryFindAllCount = `
+    SELECT COUNT(*) AS total FROM ofertaslaborales AS ol WHERE ol.estado = 'ACTIVA'
+`
+
 const create = async (titulo, descripcion, salario, jornada, tipo_contrato, vacantes, beneficios,
     habilidades_tecnicas, habilidades_blandas, departamento_area, modalidad,
     experiencia, estado, fecha_publicacion, id_empresa) => {
@@ -163,4 +167,9 @@ const updateById = async (id, titulo, descripcion, salario, jornada, tipo_contra
     )
 }
 
-module.exports = {create, findById, findAll, updateById, deletById}
+const countOfertas = async () => {
+    const result = await pool.query(queryFindAllCount)
+    return result.rows[0] ? parseInt(result.rows[0].total) : 0
+}
+
+module.exports = {create, findById, findAll, updateById, deletById, countOfertas}

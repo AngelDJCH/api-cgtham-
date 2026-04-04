@@ -1,7 +1,7 @@
 const usuarioRepository = require('../repository/usuarioRepository')
 
-const create = async (nombre, apellido_paterno, apellido_materno, rfc, foto, banner, estado, id_direccion, id_contacto) => {
-    const usuario = await usuarioRepository.create(nombre, apellido_paterno, apellido_materno, rfc, foto, banner, estado, id_direccion, id_contacto);
+const create = async (nombre, apellido_paterno, apellido_materno, rfc, foto, banner, estado, id_direccion, id_contacto, id_organizacion) => {
+    const usuario = await usuarioRepository.create(nombre, apellido_paterno, apellido_materno, rfc, foto, banner, estado, id_direccion, id_contacto, id_organizacion);
     return usuario;
 }
 
@@ -30,4 +30,9 @@ const countUsuarios = async () => {
     return count_usuarios
 }
 
-module.exports = { create, findById, findAll, updateById, deleteById, countUsuarios }
+const findPerfilById = async (id_usuario) => {
+    const perfil = await usuarioRepository.findPerfilById(id_usuario)
+    return perfil
+}
+
+module.exports = { create, findById, findAll, updateById, deleteById, countUsuarios, findPerfilById}

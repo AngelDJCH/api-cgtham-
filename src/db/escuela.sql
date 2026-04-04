@@ -1,4 +1,4 @@
-CREATE TABLE escuela(
+CREATE TABLE escuelas(
     id UUID NOT NULL PRIMARY KEY,
     tipo_institucion VARCHAR(150) NOT NULL,
     url_sitio TEXT NOT NULL,

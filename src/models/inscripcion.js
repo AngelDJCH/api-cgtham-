@@ -62,3 +62,5 @@ class Inscripcion{
         }
     }
 }
+
+module.exports = Inscripcion

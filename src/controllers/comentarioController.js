@@ -44,7 +44,9 @@ const findAllByIdUsuario = async (req, res) => {
 
 const findAll = async (req, res) => {
     try {
-        const comentarios = await comentarioService.findAll()
+        const estado = req.params.estado
+        const limite = req.params.limite
+        const comentarios = await comentarioService.findAll(estado, limite)
         res.status(200).json(comentarios.map(comentario=>comentario.toJSON()))
     } catch (error) {
         res.status(400).json(
@@ -100,4 +102,30 @@ const deleteById = async (req, res) => {
     }
 }
 
-module.exports = {create, findById, findAllByIdUsuario, findAll, updateContenidoById, updateEstadoById, deleteById}
+const findAllComentariosByAdministrador = async (req, res) => {
+    try {
+        const comentarios = await comentarioService.findAllComentariosByAdministrador()
+        res.status(200).json(comentarios)
+    } catch (error) {
+        res.status(400).json(
+            {
+                message : error.message
+            }
+        )
+    }
+}
+
+const findAllComentarios = async (req, res) => {
+    try {
+        const comentarios = await comentarioService.findAllComentarios()
+        res.status(200).json(comentarios)
+    } catch (error) {
+        res.status(400).json(
+            {
+                message : error.message
+            }
+        )
+    }
+}
+
+module.exports = {create, findById, findAllByIdUsuario, findAll, updateContenidoById, updateEstadoById, deleteById,findAllComentarios, findAllComentariosByAdministrador}

@@ -35,4 +35,9 @@ const deletById = async (id) => {
     return oferta_laboral;
 }
 
-module.exports = { create, findAll, findById, updateById, deletById }
+const countOfertas = async () => {
+    const counts_ofertas = await ofertaLaboralRepository.countOfertas()
+    return counts_ofertas
+}
+
+module.exports = { create, findAll, findById, updateById, deletById, countOfertas }

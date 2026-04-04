@@ -5,6 +5,7 @@ const { validateCreate, validateDeleteById, validateFindById, validateUpdateById
 const auth = require('../midlewares/auth')
 const verifyRoles = require('../midlewares/verifyRoles')
 
+ofertaLaboralRoutes.get('/count', ofertaLaboralController.countOfertas)
 ofertaLaboralRoutes.get('/', ofertaLaboralController.findAll)
 ofertaLaboralRoutes.get('/:id', validateFindById, ofertaLaboralController.findById)
 ofertaLaboralRoutes.post('/',auth, verifyRoles('ADMIN_ORG', 'ADMIN_SYS'), validateCreate, ofertaLaboralController.create)

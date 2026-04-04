@@ -6,11 +6,11 @@ const queryCreate = `
 `
 
 const queryFindByIdEvento = `
-    SELECT * FROM fotos AS f WHERE s.id_evento = $1
+    SELECT * FROM fotos AS f WHERE f.id_evento = $1
 `
 
 const queryDeleteById = `
-    DELETE FROM fotos AS f WHERE f.id = $1
+    DELETE FROM fotos AS f WHERE f.id = $1 RETURNING *
 `
 
 const create = async (url_imagen, id_evento) => {

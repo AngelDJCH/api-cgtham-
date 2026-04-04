@@ -4,13 +4,16 @@ const swaggerUi = require('swagger-ui-express')
 const swaggerFile = require('./swagger_output.json')
 const cors = require('cors')
 const app = express()
+const cookie_parser = require('cookie-parser')
 
 // MIDLEWARES
 app.use(express.json({limit:'1gb'}))
 app.use(express.urlencoded({limit:'100mb', extended:true}))
-//app.use(cors({ origin: 'http://localhost:3000' }))
-app.use(cors()) //Acepta cualquier origien
+//app.use(cors({ origin: '*', credentials: true}))
+app.use(cors({origin : 'http://localhost:3000', credentials: true})) //Acepta cualquier origien
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+
+app.use(cookie_parser())
 
 /*ROUTES*/
 const direccionRoutes = require('./src/routes/direccionRoute')

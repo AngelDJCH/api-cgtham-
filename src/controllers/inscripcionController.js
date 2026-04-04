@@ -29,6 +29,20 @@ const findByIdAndEstado = async (req, res) => {
     }
 }
 
+const findAllByIdOrganizacion =  async (req, res) => {
+    try {
+        const id_organizacion = req.params.id_organizacion
+        const inscripciones = await inscripcionService.findAllByIdOrganizacion(id_organizacion)
+        res.status(200).json(inscripciones)        
+    } catch (error) {
+        res.status(400).json(
+            {
+                message : error.message
+            }
+        )
+    }
+}
+
 const updateEstadoById = async (req, res) => {
     try {
         const id = req.params.id
@@ -58,4 +72,4 @@ const deleteById = async (req, res) => {
     }
 }
 
-module.exports = {create, findByIdAndEstado, updateEstadoById, deleteById}
+module.exports = {create, findByIdAndEstado, updateEstadoById, deleteById,findAllByIdOrganizacion}

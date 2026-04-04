@@ -7,7 +7,8 @@ const pool = new Pool({
     host: process.env.HOST_DB || 'localhost',
     database: process.env.NAME_DB || 'cgtham',
     port: process.env.PORT_DB || 5432,
-    ssl: true
+    ssl: true // Se debe de comentar el SSL (Capa segura de socket) ya que de manera local no se ocupa 
+                // Pero en producción es necesario activarlo (esto en Render -> Host para DB en la nube Pg)
 });
 
 module.exports = pool;

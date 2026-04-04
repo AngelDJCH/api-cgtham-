@@ -3,6 +3,7 @@ CREATE TABLE eventos(
     titulo VARCHAR(254) NOT NULL,
     descripcion TEXT NOT NULL,
     tipo VARCHAR(150) NOT NULL,
+    estado VARCHAR(150) NOT NULL,
     id_organizacion UUID NOT NULL,
     fecha_inicio DATE NOT NULL,
     fecha_final DATE NOT NULL,
