@@ -5,9 +5,9 @@ const { generateToken, verifyToken } = require('../helpers/jwtToken')
 
 const create = async (req, res) => {
     try {
-        const { correo, contrasenia, roles, id_usuario } = req.body;
+        const { correo, contrasenia, roles, id_organizacion } = req.body;
         const contraseniaHash = await bcrypt.hashSync(contrasenia, 10)
-        const cuenta = await cuentaService.create(correo, contraseniaHash, roles, id_usuario);
+        const cuenta = await cuentaService.create(correo, contraseniaHash, roles, id_organizacion);
         res.status(201).json(cuenta.toJSON())
     } catch (error) {
         res.status(400).json(
@@ -36,12 +36,12 @@ const verificarSesion = async (req, res) => {
         const token = req.cookies.tk
         const decoded = verifyToken(token)
         const usuario = {
+            id : decoded.data.id,
             correo: decoded.data.correo,
             rol: decoded.data.rol,
-            usuario: {
-                id: decoded.data.usuario.id,
-                foto: decoded.data.usuario.foto
-            }
+            tipo : decoded.data.tipo,
+            organizacion : decoded.data.organizacion,
+            foto : decoded.data.logo
         }
 
         console.log(usuario)
@@ -114,4 +114,30 @@ const updateRolById = async (req, res) => {
     }
 }
 
-module.exports = { create, findById, updateRolById, login, logout, verificarSesion}
+const updateCorreoByIdOrganizacion = async (req, res) => {
+    try {
+        const id = req.params.id
+        const {correo} = req.body
+        // const contraseniaHash = await bcrypt.hashSync(contrasenia, 10)
+        // const cuenta = await cuentaService.updateByIdOrganizacion(correo, contraseniaHash, id)
+        const cuenta = await cuentaService.updateCorreoByIdOrganizacion(correo, id)
+        res.status(200).json(cuenta.toJSON())
+    } catch (error) {
+        res.status(404).json({message : error.message})
+    }
+}
+
+const updateContraseniaByIdOrganizacion = async (req, res) => {
+    try {
+        const id = req.params.id
+        const {contrasenia} = req.body
+        const contraseniaHash = await bcrypt.hashSync(contrasenia, 10)
+        // const cuenta = await cuentaService.updateByIdOrganizacion(correo, contraseniaHash, id)
+        const cuenta = await cuentaService.updateContraseniaByIdOrganizacion(contraseniaHash, id)
+        res.status(200).json(cuenta.toJSON())
+    } catch (error) {
+        res.status(404).json({message : error.message})
+    }
+}
+
+module.exports = { create, findById, updateRolById, login, logout, verificarSesion,updateCorreoByIdOrganizacion, updateContraseniaByIdOrganizacion}

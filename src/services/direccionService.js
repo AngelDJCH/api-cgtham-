@@ -7,6 +7,7 @@ const create = async (calle, numero, colonia, codigo_postal, ciudad, estado, pai
 
 const findById = async (id) => {
     const direccion = await direccionRepository.findById(id);
+    return direccion;
 }
 
 const updateById = async (id, calle, numero, colonia, codigo_postal, ciudad, estado, pais) => {

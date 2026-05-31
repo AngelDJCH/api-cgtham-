@@ -16,7 +16,7 @@ const findByIdEvento = async (req, res) => {
     try {
         const id_evento = req.params.id_evento
         const fotos = await fotoService.findByIdEvento(id_evento)
-        res.status(200).json(fotos.map(foto => foto.toJSON()))
+        res.status(200).json(fotos)
     } catch (error) {
         res.status(400).json({
             message: error.message

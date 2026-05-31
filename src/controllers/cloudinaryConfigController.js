@@ -14,7 +14,7 @@ const create = async (req, res) => {
 
 const findByIdOrganizacion = async (req, res) => {
     try {
-        const id_organizacion = req.params.id
+        const id_organizacion = req.params.id_organizacion
         const cloudinaryconfig = await cloudinaryConfigService.findByIdOrganizacion(id_organizacion)
         res.status(200).json(cloudinaryconfig.toJSON())
     } catch (error) {

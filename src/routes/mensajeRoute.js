@@ -6,6 +6,6 @@ const auth = require('../midlewares/auth')
 const verifyRoles = require('../midlewares/verifyRoles')
 
 mensajeRoutes.post('/', auth, verifyRoles('USER'),validateCreate,mensajeController.create)
-mensajeRoutes.post('/chat',auth, verifyRoles('USER'), validateFindAllByIdEmisorAndIdReceptor,mensajeController.findAllByIdEmisorAndIdReceptor)
+mensajeRoutes.post('/chat',auth, validateFindAllByIdEmisorAndIdReceptor,mensajeController.findAllByIdEmisorAndIdReceptor)
 
 module.exports = mensajeRoutes

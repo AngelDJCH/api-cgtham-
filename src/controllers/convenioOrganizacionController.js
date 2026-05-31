@@ -43,4 +43,56 @@ const updateRolById = async (req, res) => {
     }
 }
 
-module.exports = { create, findById, updateRolById}
+const updateEstadoById = async (req, res) => {
+    try {
+        const id = req.params.id
+        const {estado} =  req.body
+        const convenio_organizacion = await convenioorganizacionService.updateEstadoById(id,estado)
+        res.status(200).json(convenio_organizacion.toJSON())
+    } catch (error) {
+        res.status(400).json({
+            message : error.message
+        })
+    }
+}
+
+const findAll =  async (req, res) => {
+    try {
+        const convenioOrganizacion = await convenioorganizacionService.findAll()
+        res.status(200).json(convenioOrganizacion)
+    } catch (error) {
+        res.status(400).json(
+            {
+                message : error.message
+            }
+        )
+    }
+}
+
+const findAllParticipantesById = async (req, res) => {
+    try {
+        const id = req.params.id_convenio
+        const participantes = await convenioorganizacionService.findAllParticipantesById(id)
+        res.status(200).json(participantes)
+    } catch (error) {
+        res.status(400).json({
+            message : error.message
+        })
+    }
+}
+
+const deleteById = async (req, res) => {
+    try {
+        const id = req.params.id
+        const convenio_organizacion = await convenioorganizacionService.deleteById(id)
+        res.status(204).json({message : 'ELIMINADO'})        
+    } catch (error) {
+        res.status(400).json(
+            {
+                message :  error.message
+            }
+        )
+    }
+}
+
+module.exports = { create, findById, updateRolById, findAll, findAllParticipantesById, deleteById,updateEstadoById}

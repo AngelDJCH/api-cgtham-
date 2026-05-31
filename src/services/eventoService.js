@@ -1,7 +1,7 @@
 const eventoRepository = require('../repository/eventoRepository')
 
-const create = async (titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final, fecha_publicacion) => {
-    const evento = await eventoRepository.create(titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final, fecha_publicacion)
+const create = async (titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final) => {
+    const evento = await eventoRepository.create(titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final)
     return evento;
 }
 
@@ -45,4 +45,14 @@ const findEventosByIdUsuario = async (id_usuario) => {
     return eventos
 }
 
-module.exports = { create, findById, findAll, updateById, deleteById, countEventos, findAllByEstado, findAllEventos, findEventosByIdUsuario}
+const findAllByIdOrganizacion = async (id_organizacion) => {
+    const eventos = await eventoRepository.findAllByIdOrganizacion(id_organizacion)
+    return eventos
+}
+
+const dashEventosPorAño = async () => {
+    const dash = await eventoRepository.dashEventosPorAño()
+    return dash
+}
+
+module.exports = {dashEventosPorAño, create, findById, findAll, updateById, deleteById, countEventos, findAllByEstado, findAllEventos, findEventosByIdUsuario, findAllByIdOrganizacion}

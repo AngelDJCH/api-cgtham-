@@ -1,13 +1,15 @@
+const { verifyToken } = require('../helpers/jwtToken');
 const ofertaLaboralService = require('../services/ofertaLaboralService')
+const historicoOferta = require('../services/historicoOfertaService')
 
 const create = async (req, res) => {
     try {
         const { titulo, descripcion, salario, jornada, tipo_contrato, vacantes, beneficios,
             habilidades_tecnicas, habilidades_blandas, departamento_area, modalidad,
-            experiencia, estado, fecha_publicacion, id_empresa } = req.body;
+            experiencia, estado, id_empresa, documento } = req.body;
         const oferta_laboral = await ofertaLaboralService.create(titulo, descripcion, salario, jornada, tipo_contrato, vacantes, beneficios,
             habilidades_tecnicas, habilidades_blandas, departamento_area, modalidad,
-            experiencia, estado, fecha_publicacion, id_empresa)
+            experiencia, estado, id_empresa, documento)
         res.status(201).json(oferta_laboral.toJSON())
     } catch (error) {
         res.status(400).json(
@@ -35,9 +37,22 @@ const findById = async (req, res) => {
 const findAll = async (req, res) => {
     try {
         const ofertas_laborales = await ofertaLaboralService.findAll()
-        res.status(200).json(ofertas_laborales.map(
-            oferta_laboral => oferta_laboral.toJSON()
-        ))
+        res.status(200).json(ofertas_laborales)
+    } catch (error) {
+        res.status(400).json(
+            {
+                message: error.message
+            }
+        )
+    }
+}
+
+
+const findAllByIdOrganizacion = async (req, res) => {
+    try {
+        const id_organizacion = req.params.id_organizacion
+        const ofertas_laborales = await ofertaLaboralService.findAllByIdOrganziacion(id_organizacion)
+        res.status(200).json(ofertas_laborales)
     } catch (error) {
         res.status(400).json(
             {
@@ -69,8 +84,12 @@ const updateById = async (req, res) => {
 const deleteById = async (req, res) => {
     try {
         const id = req.params.id
+        const tk = req.cookies.tk
+        const token = verifyToken(tk)
+        const id_cuenta = token.data.id
+        const historico = await historicoOferta.create('ELIMINADO', id, id_cuenta)
         const oferta_laboral = await ofertaLaboralService.deletById(id)
-        res.status(204)
+        res.status(204).json({message : 'ELIMINADO'})
     } catch (error) {
         res.status(400).json(
             {
@@ -97,4 +116,4 @@ const countOfertas = async (req, res) => {
     }
 }
 
-module.exports = {create, findById, findAll, updateById, deleteById, countOfertas}
+module.exports = {create, findById, findAll, updateById, deleteById, countOfertas, findAllByIdOrganizacion}

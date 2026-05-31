@@ -9,16 +9,4 @@ cloudinary.config(
         secure: true
     }
 )
-
-const nubeCloud = (name, api_k, api_s, isSecure = true) => {
-    return cloudinary.config(
-        {
-            cloud_name: name,
-            api_key: api_k,
-            api_secret: api_s,
-            secure: isSecure
-        }
-    )
-}
-
 module.exports = cloudinary

@@ -19,7 +19,7 @@ const validateFindById = [
 
 const validateUpdateById = [
     check('id').exists().not().isEmpty().isUUID(),
-    check('rol').exists().not().isEmpty(),
+    check('rol').exists().not().isEmpty().isBoolean(),
     (req, res, next) => {
         validateResult(req, res, next)
     }

@@ -15,8 +15,8 @@ const findByIdOfertaLaboral = async (id_oferta_laboral) => {
     return postulacion;
 }
 
-const updateEstadoById = async (id, estado) => {
-    const postulacion = await postulacionRepository.updateEstadoById(id, estado)
+const updateEstadoById = async (id, estado, fecha_aprobacion) => {
+    const postulacion = await postulacionRepository.updateEstadoById(id, estado,fecha_aprobacion)
     return postulacion;
 }
 
@@ -25,4 +25,9 @@ const deleteById = async (id) => {
     return postulacion
 }
 
-module.exports = { create, findByIdUsuario, findByIdOfertaLaboral, updateEstadoById, deleteById }
+const experienciaByIdUsuario = async (id_usuario) => {
+    const experiencias = await postulacionRepository.experienciaByIdUsuario(id_usuario)
+    return experiencias
+}
+
+module.exports = { create, findByIdUsuario, findByIdOfertaLaboral, updateEstadoById, deleteById, experienciaByIdUsuario }

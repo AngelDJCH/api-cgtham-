@@ -32,7 +32,7 @@ const queryCountUsuarios = `
 const queryFindPerfilById = `
     select u.foto, u.banner, concat(u.nombre, ' ', 
 u.apellido_paterno, ' ', u.apellido_materno
-) as nombre_completo, o.nombre_comercial from cuentas as c
+) as nombre_completo, o.nombre_comercial, o.id as id_organizacion from cuentas as c
 inner join usuarios as u on c.id_usuario = u.id 
 inner join organizaciones as o on u.id_organizacion = o.id
 where u.id = $1
@@ -87,7 +87,10 @@ const findPerfilById =  async (id_usuario) => {
         foto :  row.foto,
         banner : row.banner,
         nombre_completo : row.nombre_completo,
-        organizacion : row.nombre_comercial
+        organizacion : {
+            id : row.id_organizacion,
+            nombre_comercial : row.nombre_comercial
+        }
     }
 }
 

@@ -5,7 +5,7 @@ const { create, findByIdOrganizacion, updateByIdOrganizacion } = require('../val
 const auth = require('../midlewares/auth')
 const verifyRoles = require('../midlewares/verifyRoles')
 
-cloudinaryConfigRoutes.get('/:id',auth, verifyRoles('ADMIN_ORG', 'ADMIN_SYS'), findByIdOrganizacion, cloudinaryConfigController.findByIdOrganizacion)
+cloudinaryConfigRoutes.get('/:id_organizacion',auth, verifyRoles('ADMIN_ORG', 'ADMIN_SYS'), findByIdOrganizacion, cloudinaryConfigController.findByIdOrganizacion)
 cloudinaryConfigRoutes.post('/', create, cloudinaryConfigController.create)
 cloudinaryConfigRoutes.put('/:id',auth, verifyRoles('ADMIN_ORG', 'ADMIN_SYS'), updateByIdOrganizacion, cloudinaryConfigController.updateByIdOrganizacion)
 

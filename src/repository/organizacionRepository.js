@@ -5,7 +5,7 @@ const queryCreate = `
     INSERT INTO organizaciones (
         nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, estado, id_contacto, id_direccion
     ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
+        $1, $2, $3, $4,$5, $6, $7,  $8, $9, false, $10, $11
     ) 
     RETURNING *
 `
@@ -15,7 +15,7 @@ const queryFindById = `
 `
 
 const queryFindAll = `
-    SELECT * FROM organizaciones
+    SELECT * FROM organizaciones where estado = true
 `
 
 const queryCountOrganizaciones = `
@@ -24,8 +24,8 @@ const queryCountOrganizaciones = `
 
 const queryUpdateById = `
     UPDATE organizaciones AS o SET 
-    nombre_comercial = $1, descripcion = $2, tipo = $3, sector = $4, tamaño = $5, giro = $6, rfc = $7, logo = $8, banner = $9
-    WHERE o.id = $10
+    nombre_comercial = $1, descripcion = $2, tipo = $3, sector = $4, tamaño = $5, giro = $6, rfc = $7
+    WHERE o.id = $8
     RETURNING *
 `
 
@@ -33,9 +33,140 @@ const queryDeleteById = `
     DELETE FROM organizaciones AS o WHERE o.id = $1
 `
 
+const queryUpdateLogoByIdOrganizacion = `
+    UPDATE organizaciones as o SET logo = $1 WHERE o.id = $2 RETURNING * 
+`
 
-const create = async (nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, estado, id_contacto, id_direccion) => {
-    const result = await pool.query(queryCreate, [nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, estado, id_contacto, id_direccion])
+const queryUpdateBannerByIdOrganizacion = `
+    UPDATE organizaciones as o SET banner = $1 WHERE o.id = $2 RETURNING * 
+`
+
+
+const queryFindAllNoAprobadas = `
+select 
+o.id as id_organizacion, o.nombre_comercial, o.descripcion, o.tipo, o.sector, o.tamaño,
+o.giro, o.rfc, o.logo, o.banner, o.estado as estado_organizacion, c.id as id_contacto,  c.correo, c.telefono,
+d.id as id_direccion, d.calle, d.numero, d.colonia, d.codigo_postal, d.ciudad, d.estado, d.pais,
+cc.id as id_cloud, cc.nombre, cc.clave, cc.clave_secreta
+from organizaciones as o
+inner join contactos as c on o.id_contacto = c.id
+inner join direcciones as d on o.id_direccion = d.id
+inner join cloudinaryconfig as cc on cc.id_organizacion = o.id
+`
+
+const queryFindByIdFast = `
+select 
+o.id as id_organizacion, o.nombre_comercial, o.descripcion, o.tipo, o.sector, o.tamaño,
+o.giro, o.rfc, o.logo, o.banner, o.estado as estado_organizacion, c.id as id_contacto,  c.correo, c.telefono,
+d.id as id_direccion, d.calle, d.numero, d.colonia, d.codigo_postal, d.ciudad, d.estado, d.pais,
+cc.id as id_cloud, cc.nombre, cc.clave, cc.clave_secreta
+from organizaciones as o
+inner join contactos as c on o.id_contacto = c.id
+inner join direcciones as d on o.id_direccion = d.id
+inner join cloudinaryconfig as cc on cc.id_organizacion = o.id where o.id = $1
+`
+
+const findByIdFast = async (id_organizacion) => {
+    const result = await pool.query(queryFindAllNoAprobadas)
+    const row = result.rows[0]
+    return {
+        organizacion: {
+            id: row.id_organizacion,
+            nombre: row.nombre_comercial,
+            descripcion: row.descripcion,
+            tipo: row.tipo,
+            sector: row.sector,
+            tamaño: row.tamaño,
+            giro: row.giro,
+            rfc: row.rfc,
+            logo: row.log,
+            banner: row.banner,
+            estado: row.estado_organizacion
+        },
+        contacto: {
+            id: row.id_contacto,
+            correo: row.correo,
+            telefono: row.telefono
+        },
+        direccion: {
+            id: row.id_direccion,
+            calle: row.calle,
+            numero: row.numero,
+            colonia: row.colonia,
+            codigo_postal: row.codigo_postal,
+            ciudad: row.ciudad,
+            estado: row.estado,
+            pais: row.pais
+        },
+        cloud: {
+            id: row.id_cloud,
+            nombre: row.nombre,
+            clave: row.clave,
+            clave_secreta: row.clave_secreta
+        }
+    }
+}
+
+
+const findAllNoAprobadas = async () => {
+    const result = await pool.query(queryFindAllNoAprobadas)
+    const rows = result.rows
+    return rows.map(
+        row => {
+            return {
+                organizacion: {
+                    id: row.id_organizacion,
+                    nombre: row.nombre_comercial,
+                    descripcion: row.descripcion,
+                    tipo: row.tipo,
+                    sector: row.sector,
+                    tamaño: row.tamaño,
+                    giro: row.giro,
+                    rfc: row.rfc,
+                    logo: row.log,
+                    banner: row.banner,
+                    estado: row.estado_organizacion
+                },
+                contacto: {
+                    id: row.id_contacto,
+                    correo: row.correo,
+                    telefono: row.telefono
+                },
+                direccion: {
+                    id: row.id_direccion,
+                    calle: row.calle,
+                    numero: row.numero,
+                    colonia: row.colonia,
+                    codigo_postal: row.codigo_postal,
+                    ciudad: row.ciudad,
+                    estado: row.estado,
+                    pais: row.pais
+                },
+                cloud: {
+                    id: row.id_cloud,
+                    nombre: row.nombre,
+                    clave: row.clave,
+                    clave_secreta: row.clave_secreta
+                }
+            }
+        }
+    )
+}
+
+const updateLogoByIdOrganizacion = async (logo, id_organizacion) => {
+    const result = await pool.query(queryUpdateLogoByIdOrganizacion, [logo, id_organizacion])
+    return result.rowCount > 0 ? true : false
+}
+
+
+const updateBannerByIdOrganizacion = async (banner, id_organizacion) => {
+    const result = await pool.query(queryUpdateBannerByIdOrganizacion, [banner, id_organizacion])
+    return result.rowCount > 0 ? true : false
+}
+
+
+const create = async (nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, id_contacto, id_direccion) => {
+    const result = await pool.query(queryCreate, [nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, id_contacto, id_direccion])
     const row = result.rows[0]
     return new Organizacion(
         row.id,
@@ -68,6 +199,7 @@ const findById = async (id) => {
         row.rfc,
         row.logo,
         row.banner,
+        row.estado,
         row.id_contacto,
         row.id_direccion
     )
@@ -94,8 +226,8 @@ const findAll = async () => {
     return organizaciones;
 }
 
-const updateById = async (id, nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner) => {
-    const result = await pool.query(queryUpdateById, [nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, id])
+const updateById = async (id, nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc) => {
+    const result = await pool.query(queryUpdateById, [nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, id])
     if (result.rowCount === 0) throw new Error(`Ocurrio un error al actualizar los daots de la ID: ${id}`)
     const row = result.rows[0]
     return new Organizacion(
@@ -139,8 +271,8 @@ const deleteById = async (id) => {
 
 const countOrganizaciones = async () => {
     const result = await pool.query(queryCountOrganizaciones)
-    return result.rows[0] ?  parseInt(result.rows[0].total) : 0
+    return result.rows[0] ? parseInt(result.rows[0].total) : 0
 }
 
 
-module.exports = { create, findById, findAll, updateById, deleteById, countOrganizaciones}
+module.exports = {findByIdFast, findAllNoAprobadas, create, findById, findAll, updateById, deleteById, countOrganizaciones, updateLogoByIdOrganizacion, updateBannerByIdOrganizacion }

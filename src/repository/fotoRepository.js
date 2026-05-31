@@ -6,7 +6,7 @@ const queryCreate = `
 `
 
 const queryFindByIdEvento = `
-    SELECT * FROM fotos AS f WHERE f.id_evento = $1
+    select array_agg(url_imagen)  as fotos from fotos as f where f.id_evento = $1
 `
 
 const queryDeleteById = `
@@ -27,14 +27,8 @@ const create = async (url_imagen, id_evento) => {
 const findByIdEvento = async (id_evento) => {
     const result = await pool.query(queryFindByIdEvento, [id_evento])
     if (result.rowCount === 0) throw new Error('Ocurrio un error al obtener las fotos del evento')
-    const rows = result.rows
-    return rows.map(
-        row => new Foto(
-            row.id,
-            row.url_imagen,
-            row.id_evento
-        )
-    )
+    const row = result.rows[0]
+    return row.fotos
 }
 
 const deleteById = async (id) => {
@@ -48,4 +42,4 @@ const deleteById = async (id) => {
     )
 }
 
-module.exports = {create, findByIdEvento, deleteById}
+module.exports = { create, findByIdEvento, deleteById }

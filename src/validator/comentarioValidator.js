@@ -1,11 +1,10 @@
-const { check } = require('express-validator')
+const { check, param } = require('express-validator')
 const validateResult = require('../helpers/validateResult')
 
 const validateCreate = [
     check('contenido').exists().not().isEmpty(),
     check('estado').exists().not().isEmpty(),
     check('id_usuario').exists().not().isEmpty().isUUID(),
-    check('fecha').exists().not().isEmpty().isDate(),
     (req, res, next) => {
         validateResult(req, res, next)
     }
@@ -19,7 +18,7 @@ const validateFindById = [
 ]
 
 const validateFindAllByIdUsuario = [
-    check('id_usuario').exists().not().isEmpty().isUUID(),
+    param('id_organizacion').exists().not().isEmpty().isUUID(),
     (req, res, next) => {
         validateResult(req, res, next)
     }

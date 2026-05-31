@@ -5,11 +5,11 @@ const { validateCreate, validateFindById, validateUpdateById, validateDeleteById
 const auth = require('../midlewares/auth')
 const verifyRoles = require('../midlewares/verifyRoles')
 
+usuarioRoutes.post('/', validateCreate, usuarioController.create);
 usuarioRoutes.get('/perfil/:id', auth, usuarioController.findPerfilById)
 usuarioRoutes.get('/count', usuarioController.countUsuarios)
 usuarioRoutes.get('/', auth, verifyRoles('ADMIN_ORG', 'ADMIN_SYS'), usuarioController.findAll);
 usuarioRoutes.get('/:id', validateFindById, usuarioController.findById);
-usuarioRoutes.post('/', validateCreate, usuarioController.create);
 usuarioRoutes.put('/:id', auth, validateUpdateById, usuarioController.updateById);
 usuarioRoutes.delete('/:id', auth, validateDeleteById, usuarioController.deleteById)
 

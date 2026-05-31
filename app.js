@@ -10,7 +10,7 @@ const cookie_parser = require('cookie-parser')
 app.use(express.json({limit:'1gb'}))
 app.use(express.urlencoded({limit:'100mb', extended:true}))
 //app.use(cors({ origin: '*', credentials: true}))
-app.use(cors({origin : 'https://api-cgtham.onrender.com', credentials: true})) //Acepta cualquier origien
+app.use(cors({origin : 'http://localhost:3000', credentials: true})) //Acepta cualquier origien // https://api-cgtham.onrender.com
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 app.use(cookie_parser())
@@ -39,6 +39,11 @@ const historicoEventoRoutes = require('./src/routes/historicoEventoRoute')
 const uploadRoute = require('./src/routes/uploadRoute')
 const cloudinaryConfigRoutes = require('./src/routes/cloudinaryConfigRoute')
 const fotoRoutes = require('./src/routes/fotoRoute')
+const cursoRoutes = require('./src/routes/cursoRoute')
+const visitaRoute = require('./src/routes/visitaRoute')
+const ofertaeducativaRoutes = require('./src/routes/ofertaEducativaRoute')
+const ofertaEducativaRoutes = require('./src/routes/ofertaEducativaRoute')
+const chatRoutes = require('./src/routes/chatRoute')
 
 
 //ROUTES IN USE
@@ -65,5 +70,9 @@ app.use('/api/v1/historicoseventos', historicoEventoRoutes)
 app.use('/api/v1/uploadCloudinary', uploadRoute)
 app.use('/api/v1/cloudinaryConfigs', cloudinaryConfigRoutes)
 app.use('/api/v1/fotos', fotoRoutes)
+app.use('/api/v1/cursos', cursoRoutes)
+app.use('/api/v1/visitas', visitaRoute)
+app.use('/api/v1/ofertaseducativas', ofertaEducativaRoutes)
+app.use('/api/v1/chat', chatRoutes)
 
 module.exports = app

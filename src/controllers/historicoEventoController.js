@@ -42,4 +42,28 @@ const findByIdEvento = async (req, res) => {
     }
 }
 
-module.exports = {create, findById, findByIdEvento}
+const countHistoricosEventos = async (req, res) => {
+    try {
+        const historicos = await historicoEventoService.countHistoricosEventos()
+        res.status(200).json(historicos)
+    } catch (error) {
+        res.status(400).json({
+            message : error.message
+        })
+    }
+}
+
+const findAll = async (req, res) => {
+    try {
+        const historicos = await historicoEventoService.findAll()
+        res.status(200).json(
+            historicos
+        )
+    } catch (error) {
+        res.status(400).json({
+            message : error.message
+        })
+    }
+}
+
+module.exports = {create, findById, findByIdEvento, countHistoricosEventos, findAll}

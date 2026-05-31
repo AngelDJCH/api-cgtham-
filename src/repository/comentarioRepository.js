@@ -2,24 +2,29 @@ const pool = require('../config/postgres')
 const Comentario = require('../models/comentario')
 
 const queryCreate = `
-    INSERT INTO comentarios (contenido, estado, id_administrador, id_usuario, fecha)
-    VALUES ($1,$2,$3,$4,$5) RETURNING *
+    INSERT INTO comentarios (contenido, estado, id_organizacion, fecha)
+    VALUES ($1,$2,$3,now()) RETURNING *
 `
 const queryFindById = `
     SELECT * FROM comentarios AS c WHERE c.id = $1
 `
 const queryFindAllByUsuario = `
-    SELECT * FROM comentarios AS c WHERE c.id_usuario = $1
+    SELECT * FROM comentarios WHERE id_organizacion = $1
 `
 
+const queryComentariosByIdOrganizacion = `
+    SELECT * FROM comentarios as c 
+    WHERE c.id_organizacion = $1
+`;
+
 const queryFindAllComentariosByAdministrador = `
-    select u.id as id_usuario, u.nombre, c.id as id_comentario, c.contenido, c.fecha, c.estado from comentarios as c inner join usuarios as u on c.id_usuario = u.id where c.estado = 'Pendiente' and c.id_administrador is null
+    select o.id as id_organizacion, o.nombre_comercial, c.id as id_comentario, c.contenido, c.fecha, c.estado from comentarios as c inner join organizaciones as o on c.id_organizacion = o.id where c.estado = 'Pendiente' and c.id_administrador is null
+	order by c.fecha desc
 `
 
 const queryFindAllComentarios = `
-    select u.foto, u.nombre, o.nombre_comercial, c.fecha, c.contenido from comentarios as c 
-    inner join usuarios as u on c.id_usuario = u.id inner join organizaciones as o 
-    on u.id_organizacion = o.id where c.estado = 'Aprobado' order by fecha desc limit 3 
+    select o.logo, o.nombre_comercial, c.fecha, c.contenido from comentarios as c 
+    inner join organizaciones as o on c.id_organizacion = o.id where c.estado = 'Aprobado' order by fecha desc limit 3 
 `
 
 
@@ -28,7 +33,7 @@ const queryFindAll = `
 `
 
 const queryUpdateContenidoById = `
-    UPDATE comentarios AS c SET contenido = $1 WHERE c.id = $1 RETURNING *
+    UPDATE comentarios AS c SET contenido = $1 WHERE c.id = $2 RETURNING *
 `
 
 const queryUpdateEstadoById = `
@@ -39,8 +44,11 @@ const queryDeleteById = `
     DELETE FROM comentarios AS c WHERE c.id = $1 RETURNING *
 `
 
-const create = async (contenido, estado, id_administrador, id_usuario, fecha) => {
-    const result = await pool.query(queryCreate, [contenido, estado, id_administrador, id_usuario, fecha])
+const queryCount = `select count(*) as total from comentarios`
+
+
+const create = async (contenido, estado, id_usuario) => {
+    const result = await pool.query(queryCreate, [contenido, estado, id_usuario])
     if (result.rowCount === 0) throw new Error('Ocurrio un error al crear un comentario')
     const row = result.rows[0]
     return new Comentario(
@@ -48,7 +56,7 @@ const create = async (contenido, estado, id_administrador, id_usuario, fecha) =>
         row.contenido,
         row.estado,
         row.id_administrador,
-        row.id_usuario,
+        row.id_organizacion,
         row.fecha
     )
 }
@@ -67,8 +75,8 @@ const findById = async (id) => {
     )
 }
 
-const findAllByIdUsuario = async (id_usuario) => {
-    const result = await pool.query(queryFindAllByUsuario, [id_usuario])
+const findAllByIdUsuario = async (id_organizacion) => {
+    const result = await pool.query(queryComentariosByIdOrganizacion, [id_organizacion])
     if (result.rowCount === 0) throw new Error('Ocurrio un error al obtener los comentarios del usuario')
     const rows = result.rows
     return rows.map(
@@ -77,7 +85,7 @@ const findAllByIdUsuario = async (id_usuario) => {
             row.contenido,
             row.estado,
             row.id_administrador,
-            row.id_usuario,
+            row.id_organizacion,
             row.fecha
         )
     )
@@ -146,9 +154,9 @@ const findAllComentariosByAdministrador = async () => {
     return rows.map(
         row => {
             return {
-                usuario: {
-                    id: row.id_usuario,
-                    nombre: row.nombre
+                organizacion: {
+                    id: row.id_organizacion,
+                    nombre: row.nombre_comercial
                 },
                 comentario: {
                     id: row.id_comentario,
@@ -167,12 +175,9 @@ const findAllComentarios = async () => {
     return rows.map(
         row => {
             return{
-                usuario : {
-                    nombre : row.nombre,
-                    foto : row.foto
-                },
                 organizacion : {
-                    nombre :  row.nombre_comercial
+                    nombre : row.nombre_comercial,
+                    foto : row.logo
                 },
                 comentario : {
                     fecha : row.fecha,

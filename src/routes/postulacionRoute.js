@@ -5,6 +5,7 @@ const { validateCreate, validateDeleteById, validateFindByIdOfertaLaboral, valid
 const auth = require('../midlewares/auth')
 const verifyRoles = require('../midlewares/verifyRoles')
 
+postulacionRoutes.get('/experiencia/:id_usuario', auth, postulacionController.experienciaByIdUsuario)
 postulacionRoutes.post('/',auth, verifyRoles('USER'), validateCreate, postulacionController.create)
 postulacionRoutes.get('/usuario/:id',auth, verifyRoles('USER'), validateFindByIdUsuario, postulacionController.findByIdUsuario)
 postulacionRoutes.get('/ofertalaboral/:id',auth, validateFindByIdOfertaLaboral, postulacionController.findByIdOfertaLaboral)

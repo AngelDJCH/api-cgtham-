@@ -14,7 +14,6 @@ const validateCreate = [
     check('departamento_area').exists().not().isEmpty().isLength({ min: 1, max: 50 }),
     check('modalidad').exists().not().isEmpty().isLength({ min: 1, max: 150 }),
     check('estado').exists().not().isEmpty().isLength({ min: 1, max: 150 }),
-    check('fecha_publicacion').exists().not().isEmpty().isDate(),
     check('id_empresa').exists().not().isEmpty().isUUID(),
     (req, res, next) => {
         validateResult(req, res, next)

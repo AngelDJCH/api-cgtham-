@@ -2,12 +2,14 @@ class Postulacion{
     #id;
     #estado;
     #fecha_postulacion;
+    #fecha_aprobacion;
     #id_oferta_laboral;
     #id_usuario;
-    constructor(id, estado, fecha_postulacion, id_oferta_laboral, id_usuario){
+    constructor(id, estado, fecha_postulacion,fecha_aprobacion, id_oferta_laboral, id_usuario){
         this.#id = id;
         this.#estado = estado;
         this.#fecha_postulacion = fecha_postulacion;
+        this.#fecha_aprobacion = fecha_aprobacion;
         this.#id_oferta_laboral = id_oferta_laboral;
         this.#id_usuario = id_usuario;
     }
@@ -22,6 +24,10 @@ class Postulacion{
 
     set fecha_postulacion(fecha_postulacion){
         this.#fecha_postulacion = fecha_postulacion;
+    }
+
+    set fecha_aprobacion(fecha_aprobacion){
+        this.#fecha_aprobacion = fecha_aprobacion;
     }
 
     set id_oferta_laboral(id_oferta_laboral){
@@ -44,6 +50,10 @@ class Postulacion{
         return this.#fecha_postulacion;
     }
 
+    get fecha_aprobacion(){
+        return this.#fecha_aprobacion;
+    }
+
     get id_oferta_laboral(){
         return this.#id_oferta_laboral;
     }
@@ -57,6 +67,7 @@ class Postulacion{
             id : this.#id,
             estado : this.estado,
             fecha_postulacion : this.#fecha_postulacion,
+            fecha_aprobacion : this.#fecha_aprobacion,
             id_oferta_laboral : this.#id_oferta_laboral,
             id_usuario : this.#id_usuario
         }

@@ -44,4 +44,24 @@ const findByIdOferta = async (req, res) => {
     }
 }
 
-module.exports = {create, findById, findByIdOferta}
+const countHistoricosOfertas = async (req, res) => {
+    try {
+        const historicos = await historicoOfertaService.countHistoricosOfertas()
+        res.status(200).json(historicos)
+    } catch (error) {
+        res.status(400).json({
+            message : error.message
+        })
+    }
+}
+
+const findAll = async (req, res) => {
+    try {
+        const historicos = await historicoOfertaService.findAllHistoricos()
+        res.status(200).json(historicos)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+module.exports = {create, findById, findByIdOferta, countHistoricosOfertas, findAll}

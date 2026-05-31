@@ -1,9 +1,12 @@
+const { verifyToken } = require('../helpers/jwtToken');
 const eventService = require('../services/eventoService')
+const historicoEvento = require('../services/historicoEventoService')
+
 
 const create = async (req, res) => {
     try {
-        const { titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final, fecha_publicacion } = req.body;
-        const evento = await eventService.create(titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final, fecha_publicacion)
+        const { titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final } = req.body;
+        const evento = await eventService.create(titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final)
         res.status(200).json(evento.toJSON())
     } catch (error) {
         res.status(400).json(
@@ -63,8 +66,14 @@ const updateById = async (req, res) => {
 const deleteById = async (req, res) => {
     try {
         const id = req.params.id
+        const tk = req.cookies.tk
+        const token = verifyToken(tk)
+        const id_cuenta = token.data.id
+        const historico = await historicoEvento.create('ELIMINADO', id, id_cuenta)
         const evento = await eventService.deleteById(id)
-        res.status(204)
+        res.status(204).json({
+            message: 'ELIMINADO'
+        })
     } catch (error) {
         res.status(400).json(
             {
@@ -117,26 +126,50 @@ const findAllEventos = async (req, res) => {
     } catch (error) {
         res.status(400).json(
             {
-                message : error.message
+                message: error.message
             }
         )
     }
 }
 
-const findEventosByIdUsuario = async (req, res) => {
+// const findEventosByIdUsuario = async (req, res) => {
+//     try {
+//         const id = req.params.id
+//         const eventos = await eventService.findEventosByIdUsuario(id)
+//         res.status(200).json(
+//             eventos
+//         )
+//     } catch (error) {
+//         res.status(400).json(
+//             {
+//                 message: error.message
+//             }
+//         )
+//     }
+// }
+
+const findAllByIdOrganizacion = async (req, res) => {
     try {
-        const id = req.params.id
-        const eventos = await eventService.findEventosByIdUsuario(id)
-        res.status(200).json(
-            eventos
-        )        
+        const id_organizacion = req.params.id_organizacion
+        const eventos = await eventService.findAllByIdOrganizacion(id_organizacion)
+        res.status(200).json(eventos.map(evento => evento.toJSON()))
     } catch (error) {
-        res.status(400).json(
+        console.log(
             {
-                message : error.message
+                message: error.message
             }
         )
     }
 }
 
-module.exports = { create, findById, findAll, updateById, deleteById, countEventos, findAllByEstado, findAllEventos, findEventosByIdUsuario}
+const dashEventosPorAño = async (req, res) => {
+    try {
+        const dash = await eventService.dashEventosPorAño()
+        res.status(200).json(dash)
+    } catch (error) {
+        res.status(200).json({error:error.message})
+    }
+}
+
+//findEventosByIdUsuario
+module.exports = {dashEventosPorAño, create, findById, findAll, updateById, deleteById, countEventos, findAllByEstado, findAllEventos, findAllByIdOrganizacion }

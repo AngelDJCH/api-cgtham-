@@ -4,9 +4,11 @@ const convenioOrganizacionRoutes = express.Router()
 const { validateCreate, validateFindById, validateUpdateById } = require('../validator/convenioOrganizacionValidator')
 const auth = require('../midlewares/auth')
 const verifyRoles = require('../midlewares/verifyRoles')
-
+convenioOrganizacionRoutes.get('/participantes/:id_convenio', auth, convenioOrganizacionController.findAllParticipantesById)
+convenioOrganizacionRoutes.get('', auth, convenioOrganizacionController.findAll)
 convenioOrganizacionRoutes.get('/:id',auth, validateFindById, convenioOrganizacionController.findById)
-convenioOrganizacionRoutes.post('/',auth, verifyRoles('ADMIN_ORG', 'ADMIN_SYS'), validateCreate, convenioOrganizacionController.create)
+convenioOrganizacionRoutes.post('/',auth, validateCreate, convenioOrganizacionController.create)
+convenioOrganizacionRoutes.put('/estado/:id', auth, convenioOrganizacionController.updateEstadoById)
 convenioOrganizacionRoutes.put('/rol/:id',auth, verifyRoles('ADMIN_ORG', 'ADMIN_SYS'), validateUpdateById, convenioOrganizacionController.updateRolById)
-
+convenioOrganizacionRoutes.delete('/:id', auth, convenioOrganizacionController.deleteById)
 module.exports = convenioOrganizacionRoutes

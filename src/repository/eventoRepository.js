@@ -2,8 +2,8 @@ const pool = require('../config/postgres')
 const Evento = require('../models/evento')
 
 const queryCreate = `
-    INSERT INTO eventos (titulo, descripcion, tipo, id_organizacion,
-    fecha_inicio, fecha_final, fecha_publicacion) VALUES ($1,$2,$3,$4,$5,$6)
+    INSERT INTO eventos (titulo, descripcion, tipo, estado, id_organizacion,
+    fecha_inicio, fecha_final, fecha_publicacion) VALUES ($1,$2,$3,$4,$5,$6,$7,now())
     RETURNING * 
 `
 
@@ -17,11 +17,11 @@ const queryFindAll = `
 
 const queryUpdateById = `
     UPDATE eventos AS e SET titulo = $1, descripcion = $2, tipo = $3,
-    fecha_inicio = $4, fecha_final = $6 WHERE e.id = $7 RETURNING * 
+    fecha_inicio = $4, fecha_final = $5 WHERE e.id = $6 RETURNING * 
 `
 
 const queryDeleteById = `
-    DELETE FROM eventos AS e WHERE e.id = $1 RETURNING *
+    UPDATE eventos AS e SET estado = 'ELIMINADO' WHERE e.id = $1 RETURNING *
 `
 
 const queryCountEventos = `
@@ -32,6 +32,10 @@ const queryFindAllByEstado = `
     SELECT * FROM eventos AS e WHERE e.estado = $1 LIMIT $2
 `
 
+const queryFindAllByIdOrganizacion = `
+    select * from eventos as e where e.id_organizacion = $1 and e.estado = 'ACTIVO'
+`
+
 const queryFinAllEventos = `
 SELECT 
     e.id AS id_evento, 
@@ -39,7 +43,8 @@ SELECT
     e.descripcion, 
     e.tipo,
     e.fecha_inicio, 
-    e.fecha_final, 
+    e.fecha_final,
+    e.fecha_publicacion, 
     o.id AS id_organizacion, 
     o.nombre_comercial, 
     o.logo,
@@ -68,8 +73,26 @@ as u on i.id_usuario = u.id inner join organizaciones as o on u.id_organizacion 
 where u.id = $1 and i.estado = 'APROBADA'
 `
 
-const create = async (titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final, fecha_publicacion) => {
-    const result = await pool.query(queryCreate, [titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final, fecha_publicacion])
+const queryDashEventosPorAño = `
+    select count(fecha_inicio) as value, extract(year from fecha_inicio) as año from eventos
+    group by extract(year from fecha_inicio) order by extract(year from fecha_inicio) asc
+`
+
+const dashEventosPorAño = async () => {
+    const result = await pool.query(queryDashEventosPorAño)
+    const rows = result.rows
+    return rows.map(
+        row =>{
+            return {
+                año : row.año,
+                value : row.value
+            }
+        }
+    )
+}
+
+const create = async (titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final) => {
+    const result = await pool.query(queryCreate, [titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final])
     if (result.rowCount === 0) throw new Error("Ocurrio un error al crear un nuevo evento");
     const row = result.rows[0]
     return new Evento(
@@ -183,18 +206,19 @@ const findAllEventos = async (limit, offset) => {
     return rows.map(
         row => {
             return {
-                id : row.id_evento,
-                titulo : row.titulo,
-                descripcion : row.descripcion,
-                tipo : row.tipo,
-                fecha_inicio : row.fecha_inicio,
-                fecha_final : row.fecha_final,
-                organizacion : {
-                    id : row.id_organizacion,
+                id: row.id_evento,
+                titulo: row.titulo,
+                descripcion: row.descripcion,
+                tipo: row.tipo,
+                fecha_inicio: row.fecha_inicio,
+                fecha_final: row.fecha_final,
+                fecha_publicacion: row.fecha_publicacion,
+                organizacion: {
+                    id: row.id_organizacion,
                     nombre: row.nombre_comercial,
-                    foto : row.logo
+                    foto: row.logo
                 },
-                fotos : row.fotos
+                fotos: row.fotos
             }
         }
     )
@@ -202,17 +226,35 @@ const findAllEventos = async (limit, offset) => {
 
 const findEventosByIdUsuario = async (id_usuario) => {
     const result = await pool.query(queryFindEventosByIdUsuario, [id_usuario])
-    const rows =  result.rows
+    const rows = result.rows
     return rows.map(
         row => {
-            return{
-                titulo : row.titulo,
-                fecha : row.fecha_inicio,
-                organizacion : row.nombre_comercial,
-                logo : row.logo
+            return {
+                titulo: row.titulo,
+                fecha: row.fecha_inicio,
+                organizacion: row.nombre_comercial,
+                logo: row.logo
             }
         }
     )
 }
 
-module.exports = { create, findById, findAll, updateById, deleteById, countEventos, findAllByEstado, findAllEventos, findEventosByIdUsuario }
+const findAllByIdOrganizacion = async (id_organizacion) => {
+    const result = await pool.query(queryFindAllByIdOrganizacion, [id_organizacion])
+    const rows = result.rows
+    return rows.map(
+        row => new Evento(
+            row.id,
+            row.titulo,
+            row.descripcion,
+            row.tipo,
+            row.estado,
+            row.id_organizacion,
+            row.fecha_inicio,
+            row.fecha_final,
+            row.fecha_publicacion
+        )
+    )
+}
+
+module.exports = {dashEventosPorAño, create, findById, findAll, updateById, deleteById, countEventos, findAllByEstado, findAllEventos, findEventosByIdUsuario, findAllByIdOrganizacion }

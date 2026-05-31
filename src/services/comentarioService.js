@@ -1,7 +1,7 @@
 const comentarioRepository = require('../repository/comentarioRepository')
 
-const create = async (contenido, estado, id_administrador, id_usuario, fecha) => {
-    const comentario = await comentarioRepository.create(contenido, estado, id_administrador, id_usuario, fecha)
+const create = async (contenido, estado, id_usuario) => {
+    const comentario = await comentarioRepository.create(contenido, estado, id_usuario)
     return comentario;
 }
 
@@ -10,8 +10,8 @@ const findById = async (id) => {
     return comentario;
 }
 
-const findAllByIdUsuario = async (id_usuario) => {
-    const comentarios = await comentarioRepository.findAllByIdUsuario(id_usuario)
+const findAllByIdUsuario = async (id_organizacion) => {
+    const comentarios = await comentarioRepository.findAllByIdUsuario(id_organizacion)
     return comentarios;
 }
 

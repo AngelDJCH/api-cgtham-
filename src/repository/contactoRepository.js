@@ -23,7 +23,7 @@ const findById= async (id) => {
     const result = await pool.query(queryFindById, [id]);
     const count = result.rowCount;
     const row = result.rows[0]
-    if(count === 0){throw new Error(`No se encontro un contacto con el ID ${id}`)}
+    //if(count === 0){throw new Error(`No se encontro un contacto con el ID ${id}`)}
     return new Contacto(row.id, row.correo, row.telefono)
 }
 

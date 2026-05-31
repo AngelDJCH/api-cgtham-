@@ -70,8 +70,8 @@ const findAll = async (req, res) => {
 const updateById = async (req, res) => {
     try {
         const id = req.params.id;
-        const { nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner } = req.body;
-        const organizacion = await organizacionService.updateById(id, nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner)
+        const { nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc} = req.body;
+        const organizacion = await organizacionService.updateById(id, nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc)
         res.status(200).json(organizacion.toJSON())
     } catch (error) {
         res.status(404).json(
@@ -113,4 +113,27 @@ const countOrganizaciones = async (req, res) => {
     }
 }
 
-module.exports = { create, findById, findAll, updateById, deleteById, countOrganizaciones }
+const findAllNoAprobadas = async (req, res) => {
+    try {
+        const organizaciones = await organizacionService.findAllNoAprobadas()
+        res.status(200).json(organizaciones)        
+    } catch (error) {
+        res.status(400).json({
+            message : error.message
+        })
+    }
+}
+
+const findByIdFast = async (req, res) => {
+    try {
+        const id_organizacion = req.params.id_organizacion
+        const organizacion = await organizacionService.findByIdFast(id_organizacion)
+        res.status(200).json(organizacion)
+    } catch (error) {
+        res.status(400).json({
+            message : error.message
+        })
+    }
+}
+
+module.exports = { create, findById, findAll, updateById, deleteById, countOrganizaciones, findAllNoAprobadas,findByIdFast}

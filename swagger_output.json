@@ -5,10 +5,10 @@
     "description": "Documentación de la API para la gestión de datos de la comisión de gestión de talento humano de las altas montañas",
     "version": "1.0.0"
   },
-  "host": "api-cgtham.onrender.com",
+  "host": "localhost:80",
   "basePath": "/",
   "schemes": [
-    "https"
+    "http"
   ],
   "paths": {
     "/api/v1/direcciones/{id}": {
@@ -235,64 +235,7 @@
         }
       }
     },
-    "/api/v1/usuarios/perfil/{id}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      }
-    },
-    "/api/v1/usuarios/count": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
     "/api/v1/usuarios/": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      },
       "post": {
         "description": "",
         "parameters": [
@@ -339,6 +282,63 @@
         "responses": {
           "201": {
             "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/usuarios/perfil/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/usuarios/count": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "400": {
             "description": "Bad Request"
@@ -525,6 +525,19 @@
         }
       }
     },
+    "/api/v1/organizaciones/pendientes/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
     "/api/v1/organizaciones/{id}": {
       "get": {
         "description": "",
@@ -628,6 +641,27 @@
           },
           "404": {
             "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/organizaciones/fast/{id_organizacion}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_organizacion",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
       }
@@ -1067,6 +1101,42 @@
         }
       }
     },
+    "/api/v1/cuentas/": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "correo": {
+                  "example": "any"
+                },
+                "contrasenia": {
+                  "example": "any"
+                },
+                "roles": {
+                  "example": "any"
+                },
+                "id_organizacion": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
     "/api/v1/cuentas/verify": {
       "get": {
         "description": "",
@@ -1146,42 +1216,6 @@
           },
           "404": {
             "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/api/v1/cuentas/": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "correo": {
-                  "example": "any"
-                },
-                "contrasenia": {
-                  "example": "any"
-                },
-                "roles": {
-                  "example": "any"
-                },
-                "id_usuario": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
           }
         }
       }
@@ -1383,12 +1417,12 @@
         }
       }
     },
-    "/api/v1/seguimientos/seguidores/{id}": {
+    "/api/v1/seguimientos/seguidores/{id_seguido}": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "id",
+            "name": "id_seguido",
             "in": "path",
             "required": true,
             "type": "string"
@@ -1410,12 +1444,12 @@
         }
       }
     },
-    "/api/v1/seguimientos/seguidos/{id}": {
+    "/api/v1/seguimientos/seguidos/{id_seguidor}": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "id",
+            "name": "id_seguidor",
             "in": "path",
             "required": true,
             "type": "string"
@@ -1508,9 +1542,6 @@
                   "example": "any"
                 },
                 "estado": {
-                  "example": "any"
-                },
-                "fecha_publicacion": {
                   "example": "any"
                 },
                 "id_empresa": {
@@ -1651,6 +1682,27 @@
           },
           "403": {
             "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/ofertaslaborales/organizacion/{id_organizacion}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_organizacion",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
       }
@@ -1805,10 +1857,10 @@
                 "tipo": {
                   "example": "any"
                 },
-                "estado": {
+                "subtipo": {
                   "example": "any"
                 },
-                "fecha_registro": {
+                "estado": {
                   "example": "any"
                 },
                 "fecha_inicio": {
@@ -1827,6 +1879,30 @@
           },
           "400": {
             "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/eventos/organizacion/{id_organizacion}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_organizacion",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "401": {
             "description": "Unauthorized"
@@ -2241,6 +2317,33 @@
         }
       }
     },
+    "/api/v1/conveniosOrganizaciones/participantes/{id_convenio}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_convenio",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/v1/conveniosOrganizaciones/{id}": {
       "get": {
         "description": "",
@@ -2264,6 +2367,31 @@
           },
           "404": {
             "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
@@ -2294,6 +2422,45 @@
         "responses": {
           "201": {
             "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/conveniosOrganizaciones/estado/{id}": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "estado": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "400": {
             "description": "Bad Request"
@@ -2342,6 +2509,54 @@
           },
           "404": {
             "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/inscripciones/evento/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/v1/inscripciones/participantes/{id_evento}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_evento",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
@@ -2456,7 +2671,7 @@
                 "id_evento": {
                   "example": "any"
                 },
-                "id_usuario": {
+                "id_organizacion": {
                   "example": "any"
                 }
               }
@@ -2502,6 +2717,60 @@
           },
           "404": {
             "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/inscripciones/usuario/{id_usuario}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_usuario",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/postulaciones/experiencia/{id_usuario}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_usuario",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
@@ -2620,6 +2889,9 @@
               "properties": {
                 "estado": {
                   "example": "any"
+                },
+                "fecha_aprobacion": {
+                  "example": "any"
                 }
               }
             }
@@ -2679,79 +2951,17 @@
         }
       }
     },
-    "/api/v1/comentarios/{estado}/{limite}": {
+    "/api/v1/comentarios/organizacion/{id_organizacion}": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "estado",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "limite",
+            "name": "id_organizacion",
             "in": "path",
             "required": true,
             "type": "string"
           }
         ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/api/v1/comentarios/": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "contenido": {
-                  "example": "any"
-                },
-                "estado": {
-                  "example": "any"
-                },
-                "id_administrador": {
-                  "example": "any"
-                },
-                "id_usuario": {
-                  "example": "any"
-                },
-                "fecha": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      },
-      "get": {
-        "description": "",
         "responses": {
           "200": {
             "description": "OK"
@@ -2805,9 +3015,6 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
           "204": {
             "description": "No Content"
           },
@@ -2823,8 +3030,8 @@
         }
       }
     },
-    "/api/v1/comentarios/usuarios/{id}": {
-      "get": {
+    "/api/v1/comentarios/contenido/{id}": {
+      "put": {
         "description": "",
         "parameters": [
           {
@@ -2832,8 +3039,79 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contenido": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/comentarios/": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contenido": {
+                  "example": "any"
+                },
+                "estado": {
+                  "example": "any"
+                },
+                "id_usuario": {
+                  "example": "any"
+                },
+                "fecha": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
+      "get": {
+        "description": "",
         "responses": {
           "200": {
             "description": "OK"
@@ -2892,35 +3170,25 @@
         }
       }
     },
-    "/api/v1/comentarios/contenido/{id}": {
-      "put": {
+    "/api/v1/historicosofertaslaborales/count": {
+      "get": {
         "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "contenido": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
           },
           "400": {
             "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/v1/historicosofertaslaborales/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "401": {
             "description": "Unauthorized"
@@ -2929,9 +3197,7 @@
             "description": "Forbidden"
           }
         }
-      }
-    },
-    "/api/v1/historicosofertaslaborales/": {
+      },
       "post": {
         "description": "",
         "parameters": [
@@ -3028,6 +3294,23 @@
       }
     },
     "/api/v1/historicoseventos/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
       "post": {
         "description": "",
         "parameters": [
@@ -3065,6 +3348,19 @@
           },
           "403": {
             "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/historicoseventos/count": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
       }
@@ -3150,58 +3446,75 @@
         }
       }
     },
-    "/api/v1/cloudinaryConfigs/{id}": {
-      "get": {
+    "/api/v1/uploadCloudinary/upload/logo/": {
+      "post": {
         "description": "",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
           {
             "name": "body",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
-                "nombre": {
+                "id_organizacion": {
                   "example": "any"
                 },
-                "clave": {
-                  "example": "any"
-                },
-                "clave_secreta": {
+                "imagen_url": {
                   "example": "any"
                 }
               }
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/v1/uploadCloudinary/upload/banner/": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id_organizacion": {
+                  "example": "any"
+                },
+                "imagen_url": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/v1/cloudinaryConfigs/{id_organizacion}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_organizacion",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {
@@ -3252,6 +3565,51 @@
           },
           "400": {
             "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/v1/cloudinaryConfigs/{id}": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nombre": {
+                  "example": "any"
+                },
+                "clave": {
+                  "example": "any"
+                },
+                "clave_secreta": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -3336,6 +3694,174 @@
           },
           "403": {
             "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/cursos/": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "titulo": {
+                  "example": "any"
+                },
+                "descripcion": {
+                  "example": "any"
+                },
+                "fecha_inicio": {
+                  "example": "any"
+                },
+                "fecha_final": {
+                  "example": "any"
+                },
+                "estado": {
+                  "example": "any"
+                },
+                "id_organizacion": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/cursos/empresas/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/cursos/escuelas/{id_organizacion}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_organizacion",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/v1/cursos/{id_curso}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_curso",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_curso",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "titulo": {
+                  "example": "any"
+                },
+                "descripcion": {
+                  "example": "any"
+                },
+                "inicio": {
+                  "example": "any"
+                },
+                "final": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id_curso",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
       }

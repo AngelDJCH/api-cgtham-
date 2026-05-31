@@ -1,7 +1,7 @@
 const cuentaRepository = require('../repository/cuentaRepository')
 
-const create = async (correo, contrasenia, roles, id_usuario) => {
-    const cuenta = await cuentaRepository.create(correo, contrasenia, roles, id_usuario)
+const create = async (correo, contrasenia, roles, id_organizacion) => {
+    const cuenta = await cuentaRepository.create(correo, contrasenia, roles, id_organizacion)
     return cuenta;
 }
 
@@ -20,4 +20,14 @@ const login = async (correo) => {
     return cuenta;
 }
 
-module.exports = { create, findById, updateRolById, login}
+const updateCorreoByIdOrganizacion = async (correo, id_organizacion) => {
+    const cuenta = await cuentaRepository.updateCorreoByIdOrganizacion(correo, id_organizacion)
+    return cuenta
+}
+
+const updateContraseniaByIdOrganizacion = async (contrasenia, id_organizacion) => {
+    const cuenta = await cuentaRepository.updateContraseniaByIdOrganizacion(contrasenia, id_organizacion)
+    return cuenta
+}
+
+module.exports = { create, findById, updateRolById, login,updateCorreoByIdOrganizacion, updateContraseniaByIdOrganizacion}

@@ -2,8 +2,8 @@ const comentarioService = require('../services/comentarioService')
 
 const create = async (req, res) => {
     try {
-        const { contenido, estado, id_administrador, id_usuario, fecha } = req.body
-        const comentario = await comentarioService.create(contenido, estado, id_administrador, id_usuario, fecha)
+        const { contenido, estado, id_usuario } = req.body
+        const comentario = await comentarioService.create(contenido, estado, id_usuario)
         res.status(201).json(comentario.toJSON())
     } catch (error) {
         res.status(400).json(
@@ -30,8 +30,8 @@ const findById = async (req, res) => {
 
 const findAllByIdUsuario = async (req, res) => {
     try {
-        const id_usuario = req.params.id
-        const comentarios = await comentarioService.findAllByIdUsuario(id_usuario)
+        const id_organizacion = req.params.id_organizacion
+        const comentarios = await comentarioService.findAllByIdUsuario(id_organizacion)
         res.status(200).json(comentarios.map(comentario=>comentario.toJSON()))
     } catch (error) {
         res.status(400).json(
@@ -91,8 +91,7 @@ const deleteById = async (req, res) => {
     try {
         const id = req.params.id
         const comentario = await comentarioService.deleteById(id)
-        res.status(200).json(comentario.toJSON())
-        res.status(204)
+        res.status(204).json(comentario.toJSON())
     } catch (error) {
         res.status(400).json(
             {

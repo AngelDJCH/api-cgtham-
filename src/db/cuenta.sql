@@ -6,9 +6,9 @@ CREATE TABLE cuentas(
     correo VARCHAR(254) NOT NULL UNIQUE,
     contrasenia VARCHAR(255) NOT NULL,
     roles TEXT[] NOT NULL,
-    id_usuario UUID NOT NULL,
-    CONSTRAINT fk_cuentas_usuarios
-    FOREIGN KEY (id_usuario)
-    REFERENCES usuarios(id)
+    id_organizacion UUID NOT NULL,
+    CONSTRAINT fk_cuentas_organizaciones
+    FOREIGN KEY (id_organizacion)
+    REFERENCES organizaciones(id)
     ON DELETE CASCADE
 );

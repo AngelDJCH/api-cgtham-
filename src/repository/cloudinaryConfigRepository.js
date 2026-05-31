@@ -1,4 +1,5 @@
 const pool = require('../config/postgres')
+const CloudinaryConfig = require('../models/cloudinaryConfig')
 
 const queryCreate = `
     INSERT INTO cloudinaryconfig (nombre, clave, clave_secreta, id_organizacion)
@@ -29,7 +30,6 @@ const create = async (nombre, clave, clave_secreta, id_organizacion) => {
 
 const findByIdOrganizacion = async (id_organizacion) => {
     const result = await pool.query(queryFindByIdOrganizacion, [id_organizacion])
-    if (result.rowCount === 0) throw new Error('Ocurrio un error al obtener la configuracion de cloud')
     const row = result.rows[0]
     return new CloudinaryConfig(
         row.id,

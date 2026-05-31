@@ -5,7 +5,7 @@ const validateCreate = [
     check('correo').exists().not().isEmpty().isEmail(),
     check('contrasenia').exists().not().isEmpty(),
     check('roles').exists().not().isEmpty().isArray(),
-    check('id_usuario').not().isEmpty().isUUID(),
+    check('id_organizacion').not().isEmpty().isUUID(),
     (req, res, next) => {
         validateResult(req, res, next)
     }

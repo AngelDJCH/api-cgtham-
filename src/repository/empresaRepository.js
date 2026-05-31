@@ -15,7 +15,7 @@ const queryFindAll = `
 `
 
 const queryUpdateById = `
-    UPDATE empresas AS e SET razon_social = $1, regimen_fiscal = $2, direccion_fiscal = $3 WHERE e.id = $4
+    UPDATE empresas SET razon_social = $1, regimen_fiscal = $2, direccion_fiscal = $3 WHERE id = $4 RETURNING *
 `
 
 const queryDeleteById = `
@@ -63,8 +63,6 @@ const findAll = async () => {
 }
 
 const updateById = async (id_organizacion, razon_social, regimen_fiscal, direccion_fiscal) => {
-    const exist = await pool.query(queryFindById, [id_organizacion])
-    if (exist.rowCount === 0) throw new Error(`El id ${id} no se encontro`)
     const result = await pool.query(queryUpdateById, [razon_social, regimen_fiscal, direccion_fiscal, id_organizacion])
     const row = result.rows[0]
     return new Empresa(

@@ -64,3 +64,5 @@ class CloudinaryConfig{
     }
 
 }
+
+module.exports = CloudinaryConfig

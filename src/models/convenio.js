@@ -3,16 +3,20 @@ class Convenio{
     #titulo;
     #descripcion;
     #tipo;
+    #subtipo;
     #estado;
+    #archivo;
     #fecha_registro;
     #fecha_inicio;
     #fecha_final;
-    constructor(id, titulo, descripcion, tipo, estado, fecha_registro, fecha_inicio, fecha_final){
+    constructor(id, titulo, descripcion, tipo, subtipo, estado, archivo, fecha_registro, fecha_inicio, fecha_final){
         this.#id = id;
         this.#titulo = titulo;
         this.#descripcion =  descripcion;
         this.#tipo = tipo;
+        this.#subtipo = subtipo;
         this.#estado =  estado;
+        this.#archivo = archivo
         this.#fecha_registro = fecha_registro;
         this.#fecha_inicio = fecha_inicio;
         this.#fecha_final = fecha_final;
@@ -32,6 +36,10 @@ class Convenio{
 
     set tipo(tipo){
         this.#tipo = tipo;
+    }
+
+    set subtipo(subtipo){
+        this.#subtipo = subtipo;
     }
 
     set estado(estado){
@@ -66,6 +74,10 @@ class Convenio{
         return this.#tipo;
     }
 
+    get subtipo (){
+        return this.#subtipo;
+    }
+
     get estado(){
         return this.#estado;
     }
@@ -88,7 +100,9 @@ class Convenio{
             titulo : this.#titulo,
             descripcion  : this.#descripcion,
             tipo : this.#tipo,
+            subtipo : this.#subtipo,
             estado : this.#estado,
+            archivo : this.#archivo,
             fecha_registro : this.#fecha_registro,
             fecha_inicio : this.#fecha_inicio,
             fecha_final : this.#fecha_final

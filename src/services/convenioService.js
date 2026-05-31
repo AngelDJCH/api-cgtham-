@@ -1,7 +1,7 @@
 const convenioRepository = require('../repository/convenioRepository')
 
-const create = async (titulo, descripcion, tipo, estado, fecha_registro, fecha_inicio, fecha_final) => {
-    const convenio = await convenioRepository.create(titulo, descripcion, tipo, estado, fecha_registro, fecha_inicio, fecha_final);
+const create = async (titulo, descripcion, tipo, subtipo, estado, archivo, fecha_inicio, fecha_final) => {
+    const convenio = await convenioRepository.create(titulo, descripcion, tipo, subtipo, estado, archivo, fecha_inicio, fecha_final);
     return convenio;
 }
 
@@ -30,4 +30,9 @@ const countConvenios = async () => {
     return count_convenios
 }
 
-module.exports = {create, findAll, findById, updateById, deleteById, countConvenios}
+const dashCantidadConveniosPorTipo = async () => {
+    const dash =  await convenioRepository.dashCantidadConveniosPorTipo()
+    return dash
+}
+
+module.exports = { create, findAll, findById, updateById, deleteById, countConvenios,dashCantidadConveniosPorTipo }

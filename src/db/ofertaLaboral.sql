@@ -18,4 +18,6 @@ CREATE TABLE ofertaslaborales(
     CONSTRAINT fk_ofertaslaborales_empresa
     FOREIGN KEY (id_empresa)
     REFERENCES empresas(id)
-)
+);
+
+ALTER TABLE ofertaslaborales ADD COLUMN documento TEXT;

@@ -2,18 +2,18 @@ const Direccion = require("../models/direccion");
 const pool = require("../config/postgres");
 
 const queryCreate = `
-INSERT INTO direciones
+INSERT INTO direcciones
 (calle, numero, colonia, codigo_postal, ciudad, estado, pais)
 VALUES ($1,$2,$3,$4,$5,$6,$7)
 RETURNING *
 `;
 
 const queryFindById = `
-SELECT * FROM direciones WHERE id = $1
+	select * from direcciones where id= $1
 `;
 
 const queryUpdate = `
-UPDATE direciones
+UPDATE direcciones
 SET calle = $1,
     numero = $2,
     colonia = $3,

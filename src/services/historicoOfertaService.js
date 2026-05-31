@@ -1,7 +1,7 @@
 const historicoOfertaRepository = require('../repository/historicoOfertaRepository')
 
-const create = async (fecha, accion, id_oferta, id_usuario) => {
-    const historicoOferta = await historicoOfertaRepository.create(fecha, accion, id_oferta, id_usuario)
+const create = async (accion, id_oferta, id_usuario) => {
+    const historicoOferta = await historicoOfertaRepository.create( accion, id_oferta, id_usuario)
     return historicoOferta;
 }
 
@@ -15,4 +15,14 @@ const findByIdOferta = async (id_oferta) => {
     return historicoOferta;
 }
 
-module.exports = {create, findById, findByIdOferta}
+const countHistoricosOfertas = async () => {
+    const historicosOfertas = await historicoOfertaRepository.countHistoricosOfertas()
+    return historicosOfertas
+}
+
+const findAllHistoricos = async () => {
+    const historicosOfertas = await historicoOfertaRepository.findAllHistoricos()
+    return historicosOfertas
+}
+
+module.exports = { create, findById, findByIdOferta, countHistoricosOfertas, findAllHistoricos }

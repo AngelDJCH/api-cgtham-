@@ -1,9 +1,10 @@
 const convenioService = require('../services/convenioService')
+const convenioOrganizacionRepository = require('../repository/convenioOrganizacionRepository')
 
 const create = async (req, res) => {
     try {
-        const {titulo, descripcion, tipo, estado, fecha_registro, fecha_inicio, fecha_final} = req.body;
-        const convenio = await convenioService.create(titulo, descripcion, tipo, estado, fecha_registro, fecha_inicio, fecha_final)
+        const { titulo, descripcion, tipo, subtipo, estado, archivo,fecha_inicio, fecha_final } = req.body;
+        const convenio = await convenioService.create(titulo, descripcion, tipo, subtipo, estado, archivo, fecha_inicio, fecha_final)
         res.status(201).json(convenio.toJSON())
     } catch (error) {
         res.status(400).json(
@@ -31,9 +32,8 @@ const findById = async (req, res) => {
 const findAll = async (req, res) => {
     try {
         const convenios = await convenioService.findAll()
-        res.status(200).json(convenios.map(
-            convenio => convenio.toJSON()
-        ))
+        res.status(200).json(convenios
+        )
     } catch (error) {
         res.status(400).json(
             {
@@ -46,8 +46,8 @@ const findAll = async (req, res) => {
 const updateById = async (req, res) => {
     try {
         const id = req.params.id
-        const {titulo, descripcion, tipo, fecha_inicio, fecha_final} = req.body
-        const convenio = await convenioService.updateById(id,titulo, descripcion, tipo, fecha_inicio, fecha_final)
+        const { titulo, descripcion, tipo, fecha_inicio, fecha_final } = req.body
+        const convenio = await convenioService.updateById(id, titulo, descripcion, tipo, fecha_inicio, fecha_final)
         res.status(200).json(convenio.toJSON())
     } catch (error) {
         res.status(400).json(
@@ -62,11 +62,13 @@ const deleteById = async (req, res) => {
     try {
         const id = req.params.id
         const convenio = await convenioService.deleteById(id)
-        res.status(204)
+        res.status(204).json({
+            message: 'ELIMINADO'
+        })
     } catch (error) {
         res.status(400).json(
             {
-                messsage: error.messsage
+                messsage: error.message
             }
         )
     }
@@ -89,5 +91,16 @@ const countConvenios = async (req, res) => {
     }
 }
 
+const dashCantidadConveniosPorTipo = async (req, res) => {
+    try {
+        const dash = await convenioService.dashCantidadConveniosPorTipo()
+        res.status(200).json(dash)
+    } catch (error) {
+        res.status(400).json({
+            message : error.message
+        })
+    }
+}
 
-module.exports = {create, findAll, findById, updateById, deleteById, countConvenios}
+
+module.exports = { create, findAll, findById, updateById, deleteById, countConvenios,dashCantidadConveniosPorTipo }

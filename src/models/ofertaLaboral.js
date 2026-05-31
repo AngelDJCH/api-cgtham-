@@ -15,7 +15,8 @@ class OfertaLaboral{
     #estado;
     #fecha_publicacion;
     #id_empresa;
-    constructor(id, titulo, descripcion, salario, jornada, tipo_contrato, vacantes, beneficios, habilidades_tecnicas, habilidades_blandas, departamento_area, modalidad, experiencia, estado, fecha_publicacion, id_empresa){
+    #documento;
+    constructor(id, titulo, descripcion, salario, jornada, tipo_contrato, vacantes, beneficios, habilidades_tecnicas, habilidades_blandas, departamento_area, modalidad, experiencia, estado, fecha_publicacion, id_empresa, documento){
         this.#id = id;
         this.#titulo = titulo;
         this.#descripcion = descripcion;
@@ -32,6 +33,7 @@ class OfertaLaboral{
         this.#estado = estado;
         this.#fecha_publicacion = fecha_publicacion;
         this.#id_empresa = id_empresa;
+        this.#documento = documento
     }
 
     set id(id){
@@ -178,7 +180,8 @@ class OfertaLaboral{
             modalidad : this.modalidad,
             experiencia : this.experiencia,
             fecha_publicacion : this.fecha_publicacion,
-            id_empresa : this.id_empresa
+            id_empresa : this.id_empresa,
+            documento : this.#documento
         }
     }
 

@@ -3,14 +3,14 @@ class Comentario {
     #contenido;
     #estado;
     #id_administrador;
-    #id_usuario;
+    #id_organizacion;
     #fecha;
-    constructor(id, contenido, estado, id_administrador, id_usuario, fecha) {
+    constructor(id, contenido, estado, id_administrador, id_organizacion, fecha) {
         this.#id = id;
         this.#contenido = contenido;
         this.#estado = estado;
         this.#id_administrador = id_administrador;
-        this.#id_usuario = id_usuario;
+        this.#id_organizacion = id_organizacion;
         this.#fecha = fecha
     }
 
@@ -30,8 +30,8 @@ class Comentario {
         this.#id_administrador = id_administrador;
     }
 
-    set id_usuario(id_usuario) {
-        this.#id_usuario = id_usuario;
+    set id_organizacion(id_organizacion) {
+        this.#id_organizacion = id_organizacion;
     }
 
     set fecha(fecha) {
@@ -54,8 +54,8 @@ class Comentario {
         return this.#id_administrador;
     }
 
-    get id_usuario() {
-        return this.#id_usuario;
+    get id_organizacion() {
+        return this.#id_organizacion;
     }
 
     get fecha() {
@@ -68,7 +68,7 @@ class Comentario {
             contenido: this.#contenido,
             estado: this.#estado,
             id_administrador: this.#id_administrador,
-            id_usuario: this.#id_usuario,
+            id_usuario: this.#id_organizacion,
             fecha: this.#fecha
         }
     }

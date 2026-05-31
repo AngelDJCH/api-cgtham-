@@ -6,7 +6,6 @@ const validateCreate = [
     check('descripcion').exists().not().isEmpty(),
     check('tipo').exists().not().isEmpty(),
     check('estado').exists().not().isEmpty(),
-    check('fecha_registro').exists().not().isEmpty().isDate(),
     check('fecha_inicio').exists().not().isEmpty().isDate(),
     check('fecha_final').exists().not().isEmpty().isDate(),
     (req, res, next) => {

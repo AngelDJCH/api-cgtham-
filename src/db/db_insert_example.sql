@@ -1,360 +1,225 @@
--- Consultas generadas con IA para ejemplos locales
+-- Insertar algunos contactos de ejemplo
+INSERT INTO contactos (id, correo, telefono) VALUES 
+(gen_random_uuid(), 'contacto@tyasa.com', '2721234567'),
+(gen_random_uuid(), 'vinculacion@ito.edu.mx', '2727654321'),
+(gen_random_uuid(), 'presidencia@canaco-orizaba.com', '2720001122');
+
+-- Insertar algunas direcciones de ejemplo
+INSERT INTO direcciones (id, calle, numero, colonia, codigo_postal, ciudad, estado, pais) VALUES 
+(gen_random_uuid(), 'Autopista Mex-Ver', 'KM 272', 'Zona Industrial', '94450', 'Ixtaczoquitlán', 'Veracruz', 'México'),
+(gen_random_uuid(), 'Av. Tecnológico', '952', 'Emiliano Zapata', '94320', 'Orizaba', 'Veracruz', 'México'),
+(gen_random_uuid(), 'Calle Real', '123', 'Centro', '94300', 'Orizaba', 'Veracruz', 'México');
 
 DO $$ 
 DECLARE 
-    -- Variables para guardar IDs temporales
-    v_dir_id UUID;
-    v_con_id UUID;
-    v_org_id UUID;
+    v_cont_tyasa UUID; v_dir_tyasa UUID;
+    v_cont_ito UUID; v_dir_ito UUID;
+    v_cont_canaco UUID; v_dir_canaco UUID;
+    v_id_tyasa UUID := gen_random_uuid();
+    v_id_ito UUID := gen_random_uuid();
+    v_id_canaco UUID := gen_random_uuid();
 BEGIN
+    -- Obtener IDs creados arriba (o crear nuevos para este ejemplo)
+    INSERT INTO contactos (correo, telefono) VALUES ('info@tyasa.com', '2721001010') RETURNING id INTO v_cont_tyasa;
+    INSERT INTO direcciones (calle, numero, colonia, codigo_postal, ciudad, estado, pais) 
+    VALUES ('Carr. Federal', 'S/N', 'Parque Industrial', '94450', 'Ixtac', 'Veracruz', 'México') RETURNING id INTO v_dir_tyasa;
 
---------------------------------------------------------------------------------
--- 1. EMPRESAS (13 TOTAL)
---------------------------------------------------------------------------------
--- Ejemplo para AKWEL (Se repite la lógica para las demás)
--- Nota: He simplificado datos como RFC o Calle para el ejemplo masivo.
+    -- 1. INSERTAR EN ORGANIZACIONES
+    INSERT INTO organizaciones (id, nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, estado, id_contacto, id_direccion)
+    VALUES (v_id_tyasa, 'TYASA', 'Siderúrgica de alta tecnología', 'Empresa', 'Siderurgia', 2000, 'Industrial', 'TYA800101ABC', 'logo_tyasa.png', 'banner_tyasa.jpg', true, v_cont_tyasa, v_dir_tyasa);
 
-FOR i IN 1..13 LOOP
-    -- Crear Dirección
-    INSERT INTO direciones (calle, numero, colonia, codigo_postal, ciudad, estado, pais)
-    VALUES ('Av. Principal Industrial', i, 'Parque Industrial', '94470', 'Ixtaczoquitlán', 'Veracruz', 'México')
-    RETURNING id INTO v_dir_id;
-
-    -- Crear Contacto
-    INSERT INTO contactos (correo, telefono)
-    VALUES ('contacto' || i || '@empresa.com', '272123456' || i)
-    RETURNING id INTO v_con_id;
-
-    -- Crear Organización Base
-    INSERT INTO organizaciones (nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, estado, id_contacto, id_direccion)
-    VALUES (
-        CASE i 
-            WHEN 1 THEN 'AKWEL' WHEN 2 THEN 'ALCOHOLERA' WHEN 3 THEN 'COMERVIC' 
-            WHEN 4 THEN 'FLETES HESA' WHEN 5 THEN 'GRUPO MINERONI' WHEN 6 THEN 'HOLCIM' 
-            WHEN 7 THEN 'KIMBERLY CLARK DE MÉXICO' WHEN 8 THEN 'LIVERPOOL ORIZABA' 
-            WHEN 9 THEN 'PLAZA VALLE' WHEN 10 THEN 'ROVIANDA' WHEN 11 THEN 'TIUSA' 
-            WHEN 12 THEN 'TVEO' WHEN 13 THEN 'TYASA' 
-        END,
-        'Empresa líder en su sector ubicada en la región de las Altas Montañas.',
-        'EMPRESA', 'Industrial/Comercial', 500, 'Manufactura y Servicios', 'RFC' || i || 'XYZ123', 'logo.png', 'banner.png', TRUE, v_con_id, v_dir_id
-    )
-    RETURNING id INTO v_org_id;
-
-    -- Especialización en tabla EMPRESAS
+    -- 2. INSERTAR EN EMPRESAS (Especialización)
     INSERT INTO empresas (id, razon_social, regimen_fiscal, direccion_fiscal)
-    VALUES (v_org_id, 'Razón Social de ' || i, 'Régimen General de Ley Personas Morales', 'Domicilio Fiscal Conocido');
-END LOOP;
+    VALUES (v_id_tyasa, 'Talleres y Aceros S.A. de C.V.', 'Régimen General de Ley Personas Morales', 'Misma que dirección comercial');
 
---------------------------------------------------------------------------------
--- 2. INSTITUCIONES EDUCATIVAS (6 TOTAL)
---------------------------------------------------------------------------------
-FOR i IN 1..6 LOOP
-    INSERT INTO direciones (calle, numero, colonia, codigo_postal, ciudad, estado, pais)
-    VALUES ('Av. de la Educación', i, 'Centro', '94300', 'Orizaba', 'Veracruz', 'México')
-    RETURNING id INTO v_dir_id;
+    -- Repetir para Institución Educativa (ITO)
+    INSERT INTO contactos (correo, telefono) VALUES ('difusion@orizaba.tecnm.mx', '2727244016') RETURNING id INTO v_cont_ito;
+    INSERT INTO direcciones (calle, numero, colonia, codigo_postal, ciudad, estado, pais) 
+    VALUES ('Av. Tecnológico', '952', 'Zapata', '94320', 'Orizaba', 'Veracruz', 'México') RETURNING id INTO v_dir_ito;
 
-    INSERT INTO contactos (correo, telefono)
-    VALUES ('vinculacion' || i || '@escuela.edu.mx', '272724000' || i)
-    RETURNING id INTO v_con_id;
+    INSERT INTO organizaciones (id, nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, estado, id_contacto, id_direccion)
+    VALUES (v_id_ito, 'Instituto Tecnológico de Orizaba', 'Institución de educación superior tecnológica', 'Escuela', 'Educación', 500, 'Educativo', 'ITO123456HJR', 'logo_ito.png', 'banner_ito.jpg', true, v_cont_ito, v_dir_ito);
 
-    INSERT INTO organizaciones (nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, estado, id_contacto, id_direccion)
-    VALUES (
-        CASE i 
-            WHEN 1 THEN 'CBTIS 142' WHEN 2 THEN 'CECATI 170' WHEN 3 THEN 'CONALEP' 
-            WHEN 4 THEN 'Comunidad Morelos (CM)' WHEN 5 THEN 'Instituto Tecnológico de Orizaba (ITO)' 
-            WHEN 6 THEN 'Instituto Tecnológico Superior de Zongolica (ITSZ)' 
-        END,
-        'Institución educativa de prestigio dedicada a la formación profesional.',
-        'ESCUELA', 'Educación', 2000, 'Educación Superior/Media Superior', 'RFC_EDU' || i, 'escuela_logo.png', 'escuela_banner.png', TRUE, v_con_id, v_dir_id
-    )
-    RETURNING id INTO v_org_id;
+    INSERT INTO escuelas (id, tipo_institucion, url_sitio)
+    VALUES (v_id_ito, 'Pública', 'https://www.orizaba.tecnm.mx');
 
-    -- Especialización en tabla ESCUELA
-    INSERT INTO escuela (id, tipo_institucion, url_sitio)
-    VALUES (v_org_id, 'Pública', 'https://www.' || i || '.edu.mx');
-END LOOP;
+    -- Repetir para Cámara (CANACO)
+    INSERT INTO contactos (correo, telefono) VALUES ('canaco@prodigy.net.mx', '2727251234') RETURNING id INTO v_cont_canaco;
+    INSERT INTO direcciones (calle, numero, colonia, codigo_postal, ciudad, estado, pais) 
+    VALUES ('Madero Norte', '505', 'Centro', '94300', 'Orizaba', 'Veracruz', 'México') RETURNING id INTO v_dir_canaco;
 
---------------------------------------------------------------------------------
--- 3. CÁMARAS DE TRABAJO (3 TOTAL)
---------------------------------------------------------------------------------
-FOR i IN 1..3 LOOP
-    INSERT INTO direciones (calle, numero, colonia, codigo_postal, ciudad, estado, pais)
-    VALUES ('Calle Real', i + 100, 'Centro', '94300', 'Orizaba', 'Veracruz', 'México')
-    RETURNING id INTO v_dir_id;
+    INSERT INTO organizaciones (id, nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, estado, id_contacto, id_direccion)
+    VALUES (v_id_canaco, 'CANACO ORIZABA', 'Cámara de comercio local', 'Cámara', 'Comercio', 50, 'Gremial', 'CAN700505XYZ', 'logo_canaco.png', 'banner_canaco.jpg', true, v_cont_canaco, v_dir_canaco);
 
-    INSERT INTO contactos (correo, telefono)
-    VALUES ('info' || i || '@camara.org.mx', '272725555' || i)
-    RETURNING id INTO v_con_id;
-
-    INSERT INTO organizaciones (nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, estado, id_contacto, id_direccion)
-    VALUES (
-        CASE i 
-            WHEN 1 THEN 'CANACO Orizaba' WHEN 2 THEN 'CANACINTRA Orizaba' WHEN 3 THEN 'CANIRAC Orizaba' 
-        END,
-        'Cámara empresarial dedicada a la gestión y fomento del comercio y la industria.',
-        'CAMARA', 'Gremial', 50, 'Asociación Civil', 'RFC_CAM' || i, 'camara_logo.png', 'camara_banner.png', TRUE, v_con_id, v_dir_id
-    )
-    RETURNING id INTO v_org_id;
-
-    -- Especialización en tabla CAMARAS
     INSERT INTO camaras (id, nombre, presidente)
-    VALUES (v_org_id, 'Cámara ' || i, 'Presidente en Turno ' || i);
-END LOOP;
+    VALUES (v_id_canaco, 'Cámara Nacional de Comercio Orizaba', 'Lic. Juan Pérez Pérez');
 
 END $$;
 
+INSERT INTO ofertaslaborales (
+    titulo, descripcion, salario, jornada, tipo_contrato, vacantes, beneficios, 
+    habilidades_tecnicas, habilidades_blandas, departamento_area, modalidad, 
+    experiencia, estado, fecha_publicacion, id_empresa
+)
+SELECT 
+    'Ingeniero de Mantenimiento', 
+    'Encargado de mantenimiento preventivo de hornos', 
+    25000.00, 'Completa', 'Indefinido', 2, 'Seguro de vida, Vales de despensa', 
+    'PLC, Mecatrónica', 'Liderazgo, Trabajo en equipo', 'Producción', 'Presencial', 
+    '3 años', 'Activa', CURRENT_DATE, id 
+FROM organizaciones WHERE nombre_comercial = 'TYASA';
 
-DO $$ 
-DECLARE 
-    v_conv_id UUID;
-    v_org_ids UUID[];
-    v_total_orgs INT;
-    v_i INT;
-    v_org_a UUID;
-    v_org_b UUID;
-BEGIN
-    -- 1. Obtenemos todos los IDs de las organizaciones existentes en un array
-    v_org_ids := ARRAY(SELECT id FROM organizaciones);
-    v_total_orgs := array_length(v_org_ids, 1);
+-- =============================================================================
+-- INSERCIÓN DE COMENTARIOS CON UUIDS PROPORCIONADOS
+-- =============================================================================
 
-    -- 2. Bucle para crear 39 convenios
-    FOR v_i IN 1..39 LOOP
-        -- Insertar el convenio base
-        INSERT INTO convenios (
-            titulo, 
-            descripcion, 
-            tipo, 
-            estado, 
-            fecha_registro, 
-            fecha_inicio, 
-            fecha_final
-        )
-        VALUES (
-            'Convenio de Colaboración #' || v_i,
-            'Acuerdo estratégico para el desarrollo de proyectos en la región de las Altas Montañas.',
-            CASE WHEN v_i % 2 = 0 THEN 'Académico' ELSE 'Industrial' END,
-            TRUE,
-            CURRENT_DATE - (v_i || ' days')::INTERVAL,
-            CURRENT_DATE,
-            CURRENT_DATE + '1 year'::INTERVAL
-        )
-        RETURNING id INTO v_conv_id;
+-- 1. Comentario para la Organización 1 (Estado: Aprobado)
+INSERT INTO comentarios (contenido, estado, fecha, id_organizacion, id_administrador)
+VALUES (
+    'Excelente vinculación con el sector industrial de la región.', 
+    'Aprobado', 
+    '2024-03-25', 
+    '486ce60a-a866-4f3c-bf1f-d6e42a72ae1a', 
+    NULL -- Se deja en NULL si aún no tienes IDs de la tabla 'cuentas'
+);
 
-        -- 3. Crear la relación entre DOS organizaciones para este convenio
-        -- Elegimos dos organizaciones distintas usando el índice del bucle
-        v_org_a := v_org_ids[(v_i % v_total_orgs) + 1];
-        v_org_b := v_org_ids[((v_i + 5) % v_total_orgs) + 1];
+-- 2. Comentario para la Organización 2 (Estado: Pendiente)
+INSERT INTO comentarios (contenido, estado, fecha, id_organizacion, id_administrador)
+VALUES (
+    'Las instalaciones son adecuadas para los eventos de capacitación.', 
+    'Pendiente', 
+    '2024-03-26', 
+    'a9fc7507-14d9-4663-a6e4-03ec6dad2695', 
+    NULL
+);
 
-        -- Relación Organización A (Rol: Prestador)
-        INSERT INTO convenioorganizacion (rol, id_convenio, id_organizacion)
-        VALUES ('Prestador de Servicios', v_conv_id, v_org_a);
+-- 3. Comentario para la Organización 3 (Estado: Borrador)
+INSERT INTO comentarios (contenido, estado, fecha, id_organizacion, id_administrador)
+VALUES (
+    'Pendiente revisar convenio de colaboración para este semestre.', 
+    'Borrador', 
+    '2024-03-27', 
+    '1d7462d1-1e40-4dc0-9a6d-c9f754040b19', 
+    NULL
+);
 
-        -- Relación Organización B (Rol: Receptor/Beneficiario)
-        INSERT INTO convenioorganizacion (rol, id_convenio, id_organizacion)
-        VALUES ('Receptor', v_conv_id, v_org_b);
-        
-    END LOOP;
+-- 4. Comentario Adicional para la Organización 1 (Estado: Aprobado)
+INSERT INTO comentarios (contenido, estado, fecha, id_organizacion, id_administrador)
+VALUES (
+    'Líder en innovación y desarrollo de talento local.', 
+    'Aprobado', 
+    '2024-03-28', 
+    '486ce60a-a866-4f3c-bf1f-d6e42a72ae1a', 
+    NULL
+);
 
-    RAISE NOTICE 'Se han creado 39 convenios y sus respectivas relaciones.';
-END $$;
+-- =============================================================================
+-- INSERCIÓN DE 10 EVENTOS
+-- IDs Organizaciones: 
+-- Org 1: 486ce60a-a866-4f3c-bf1f-d6e42a72ae1a
+-- Org 2: a9fc7507-14d9-4663-a6e4-03ec6dad2695
+-- Org 3: 1d7462d1-1e40-4dc0-9a6d-c9f754040b19
+-- =============================================================================
 
-DO $$ 
-DECLARE 
-    v_dir_id UUID;
-    v_con_id UUID;
-    v_user_id UUID;
-    v_org_ids UUID[];
-    v_total_orgs INT;
-    v_i INT;
-    v_org_id UUID;
-    v_nombre TEXT;
-    v_apellido TEXT;
-BEGIN
-    -- 1. Obtener los IDs de las 22 organizaciones de Orizaba
-    v_org_ids := ARRAY(SELECT id FROM organizaciones);
-    v_total_orgs := array_length(v_org_ids, 1);
+INSERT INTO eventos (titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final, fecha_publicacion) VALUES
+-- Eventos para Organización 1
+(
+    'Feria de Reclutamiento Industrial 2024', 
+    'Evento masivo para la captación de talento en áreas de ingeniería y mantenimiento.', 
+    'Reclutamiento', 'Publicado', '486ce60a-a866-4f3c-bf1f-d6e42a72ae1a', 
+    '2024-05-15', '2024-05-16', '2024-04-01'
+),
+(
+    'Taller de Seguridad en Alturas', 
+    'Capacitación técnica obligatoria para personal de mantenimiento y contratistas externos.', 
+    'Capacitación', 'Activo', '486ce60a-a866-4f3c-bf1f-d6e42a72ae1a', 
+    '2024-06-10', '2024-06-12', '2024-05-20'
+),
+(
+    'Simulacro Nacional de Protección Civil', 
+    'Ejercicio de evacuación y respuesta ante emergencias en planta industrial.', 
+    'Seguridad', 'Borrador', '486ce60a-a866-4f3c-bf1f-d6e42a72ae1a', 
+    '2024-09-19', '2024-09-19', '2024-09-01'
+),
 
-    -- 2. Bucle para generar 300 registros
-    FOR v_i IN 1..300 LOOP
-        -- Seleccionar organización de forma circular
-        v_org_id := v_org_ids[(v_i % v_total_orgs) + 1];
-        
-        v_nombre := 'Usuario_' || v_i;
-        v_apellido := 'Apellido_' || v_i;
+-- Eventos para Organización 2
+(
+    'Congreso de Innovación Tecnológica', 
+    'Ciclo de conferencias sobre inteligencia artificial aplicada a la manufactura.', 
+    'Conferencia', 'Publicado', 'a9fc7507-14d9-4663-a6e4-03ec6dad2695', 
+    '2024-07-20', '2024-07-22', '2024-06-01'
+),
+(
+    'Open House Universitario', 
+    'Recorrido por las instalaciones y laboratorios para estudiantes de bachillerato.', 
+    'Vinculación', 'Publicado', 'a9fc7507-14d9-4663-a6e4-03ec6dad2695', 
+    '2024-04-25', '2024-04-25', '2024-03-15'
+),
+(
+    'Torneo de Robótica Regional', 
+    'Competencia estudiantil de diseño y programación de prototipos automatizados.', 
+    'Competencia', 'Pendiente', 'a9fc7507-14d9-4663-a6e4-03ec6dad2695', 
+    '2024-08-05', '2024-08-07', '2024-07-01'
+),
 
-        -- A. Crear Dirección
-        INSERT INTO direciones (calle, numero, colonia, codigo_postal, ciudad, estado, pais)
-        VALUES ('Calle Ejemplo ' || v_i, v_i, 'Colonia Centro', '94300', 'Orizaba', 'Veracruz', 'México')
-        RETURNING id INTO v_dir_id;
+-- Eventos para Organización 3
+(
+    'Networking Empresarial Orizaba', 
+    'Cena de negocios para fortalecer alianzas entre proveedores y empresas locales.', 
+    'Networking', 'Publicado', '1d7462d1-1e40-4dc0-9a6d-c9f754040b19', 
+    '2024-05-30', '2024-05-30', '2024-05-01'
+),
+(
+    'Seminario de Actualización Fiscal', 
+    'Charla sobre las nuevas disposiciones del SAT para el ejercicio 2024.', 
+    'Legal', 'Publicado', '1d7462d1-1e40-4dc0-9a6d-c9f754040b19', 
+    '2024-04-12', '2024-04-12', '2024-03-20'
+),
+(
+    'Expo Proveedores de la Región', 
+    'Muestra comercial de servicios y productos industriales para el sector manufacturero.', 
+    'Exposición', 'Finalizado', '1d7462d1-1e40-4dc0-9a6d-c9f754040b19', 
+    '2024-02-15', '2024-02-17', '2024-01-15'
+),
+(
+    'Foro de Sustentabilidad Ambiental', 
+    'Discusión sobre el manejo de residuos y huella de carbono en la industria local.', 
+    'Foro', 'Publicado', '1d7462d1-1e40-4dc0-9a6d-c9f754040b19', 
+    '2024-11-05', '2024-11-06', '2024-10-01'
+);
 
-        -- B. Crear Contacto
-        INSERT INTO contactos (correo, telefono)
-        VALUES ('user' || v_i || '@ejemplo.com', '272' || LPAD(v_i::text, 7, '0'))
-        RETURNING id INTO v_con_id;
+-- =============================================================================
+-- INSERCIÓN DE DATOS EN LA TABLA: fotos
+-- Vinculando las 3 URLs de Unsplash a los 10 IDs de eventos proporcionados
+-- =============================================================================
 
-        -- C. Crear Usuario (Vinculado a su organización correspondiente)
-        INSERT INTO usuarios (
-            nombre, apellido_paterno, apellido_materno, rfc, foto, banner, 
-            estado, id_direccion, id_contacto, id_organizacion
-        )
-        VALUES (
-            v_nombre, v_apellido, 'Materno', 'RFC' || v_i || 'USR', 
-            'https://ui-avatars.com/api/?name=' || v_nombre, 'user_banner.png', 
-            TRUE, v_dir_id, v_con_id, v_org_id
-        )
-        RETURNING id INTO v_user_id;
+INSERT INTO fotos (url_imagen, id_evento) VALUES 
+-- Evento 1
+('https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', '81f0020f-09f4-400a-be57-cdbd75703ab9'),
 
-        -- D. Crear Cuenta (SIN CIFRADO)
-        INSERT INTO cuentas (correo, contrasenia, roles, id_usuario)
-        VALUES (
-            'login' || v_i || '@sistema.com', 
-            'pass123', -- Contraseña en texto plano para el ejemplo
-            ARRAY['USER'], 
-            v_user_id
-        );
+-- Evento 2
+('https://images.unsplash.com/photo-1531058020387-3be344556be6?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', '9441521d-3e6a-4b84-87b1-1be1becb2cb9'),
 
-    END LOOP;
+-- Evento 3
+('https://images.unsplash.com/photo-1478147427282-58a87a120781?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', '3908bcbd-0564-4d1a-962f-6a7667e1d402'),
 
-    RAISE NOTICE '¡Listo! 300 usuarios creados y repartidos entre las 22 organizaciones.';
-END $$;
+-- Evento 4
+('https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', '56688d7d-20cd-4148-b15d-738880dafc43'),
 
-DO $$ 
-DECLARE 
-    v_emp_ids UUID[];
-    v_total_emps INT;
-    v_i INT;
-    v_emp_id UUID;
-BEGIN
-    -- Obtener IDs de organizaciones que son EMPRESAS
-    v_emp_ids := ARRAY(SELECT id FROM empresas);
-    v_total_emps := array_length(v_emp_ids, 1);
+-- Evento 5
+('https://images.unsplash.com/photo-1531058020387-3be344556be6?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 'f8f1f902-6793-4de2-813b-15f3be65f625'),
 
-    FOR v_i IN 1..120 LOOP
-        v_emp_id := v_emp_ids[(v_i % v_total_emps) + 1];
+-- Evento 6
+('https://images.unsplash.com/photo-1478147427282-58a87a120781?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 'ea3e2873-9569-4d02-b535-205100deedb7'),
 
-        INSERT INTO ofertaslaborales (
-            titulo, descripcion, salario, jornada, tipo_contrato, vacantes, 
-            beneficios, habilidades_tecnicas, habilidades_blandas, 
-            departamento_area, modalidad, experiencia, estado, fecha_publicacion, id_empresa
-        )
-        VALUES (
-            'Vacante de ' || (CASE WHEN v_i % 2 = 0 THEN 'Ingeniería' ELSE 'Administración' END) || ' #' || v_i,
-            'Únete a nuestro equipo en la región de Orizaba. Buscamos talento proactivo.',
-            15000 + (v_i * 100), -- Salario variable para el ejemplo
-            'Tiempo Completo',
-            'Indefinido',
-            (v_i % 5) + 1,
-            'Prestaciones de ley, seguro de gastos médicos, vales de despensa.',
-            'SQL, JavaScript, Gestión de Proyectos',
-            'Liderazgo, Comunicación, Trabajo en equipo',
-            'Operaciones',
-            'Presencial',
-            '2 años',
-            'Activa',
-            CURRENT_DATE - (v_i % 30 || ' days')::INTERVAL,
-            v_emp_id
-        );
-    END LOOP;
+-- Evento 7
+('https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 'ab5fdf19-8e11-471b-972c-8b1cb9fd0cc4'),
 
-    RAISE NOTICE '120 Ofertas laborales creadas exitosamente.';
-END $$;
+-- Evento 8
+('https://images.unsplash.com/photo-1531058020387-3be344556be6?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', '4c1d903d-48c0-4a7e-98cd-6d64c2966e6b'),
 
-DO $$ 
-DECLARE 
-    v_org_ids UUID[];
-    v_total_orgs INT;
-    v_i INT;
-    v_org_id UUID;
-    v_event_id UUID;
-BEGIN
-    -- Obtener todas las organizaciones
-    v_org_ids := ARRAY(SELECT id FROM organizaciones);
-    v_total_orgs := array_length(v_org_ids, 1);
+-- Evento 9
+('https://images.unsplash.com/photo-1478147427282-58a87a120781?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', '9199cc8b-0528-4748-8ab9-6e526ce1eddc'),
 
-    FOR v_i IN 1..220 LOOP
-        v_org_id := v_org_ids[(v_i % v_total_orgs) + 1];
-
-        INSERT INTO eventos (
-            titulo, descripcion, tipo, estado, id_organizacion, 
-            fecha_inicio, fecha_final, fecha_publicacion
-        )
-        VALUES (
-            'Evento Regional: ' || (CASE 
-                WHEN v_i % 3 = 0 THEN 'Capacitación Industrial' 
-                WHEN v_i % 3 = 1 THEN 'Foro Educativo' 
-                ELSE 'Asamblea Gremial' END) || ' #' || v_i,
-            'Evento organizado para fortalecer el networking y el conocimiento en las Altas Montañas.',
-            'Presencial',
-            'Programado',
-            v_org_id,
-            CURRENT_DATE + (v_i % 60 || ' days')::INTERVAL, -- Fechas a futuro
-            CURRENT_DATE + (v_i % 60 || ' days')::INTERVAL + '4 hours'::INTERVAL,
-            CURRENT_DATE
-        )
-        RETURNING id INTO v_event_id;
-
-        -- Opcional: Crear una foto por cada evento para que no se vea vacío
-        INSERT INTO fotos (url_imagen, id_evento)
-        VALUES ('https://picsum.photos/seed/' || v_i || '/800/600', v_event_id);
-
-    END LOOP;
-
-    RAISE NOTICE '220 Eventos creados con sus respectivas fotos de portada.';
-END $$;
-
-DO $$ 
-DECLARE 
-    v_user_ids UUID[];
-    v_admin_id UUID;
-    v_total_users INT;
-    v_i INT;
-    v_usuario_random UUID;
-    v_contenido TEXT;
-    v_estado TEXT;
-BEGIN
-    -- 1. Obtener todos los IDs de usuarios para que comenten
-    v_user_ids := ARRAY(SELECT id FROM usuarios);
-    v_total_users := array_length(v_user_ids, 1);
-    
-    -- 2. Seleccionar un usuario al azar para que actúe como "Administrador" moderador
-    v_admin_id := v_user_ids[1]; 
-
-    -- 3. Bucle para generar 450 comentarios
-    FOR v_i IN 1..450 LOOP
-        -- Seleccionar un autor aleatorio del array
-        v_usuario_random := v_user_ids[(v_i % v_total_users) + 1];
-
-        -- Variedad de contenido
-        v_contenido := CASE 
-            WHEN v_i % 5 = 0 THEN 'Excelente oportunidad laboral, muy recomendada.'
-            WHEN v_i % 5 = 1 THEN '¿Alguien sabe si el evento del ' || (CURRENT_DATE + 5) || ' será presencial?'
-            WHEN v_i % 5 = 2 THEN 'Me gustaría recibir más información sobre los convenios vigentes.'
-            WHEN v_i % 5 = 3 THEN 'Gran iniciativa de la cámara de comercio, felicidades.'
-            ELSE 'Espero que sigan publicando vacantes para el sector industrial de Orizaba.'
-        END;
-
-        -- Variedad de estados
-        v_estado := CASE 
-            WHEN v_i % 10 = 0 THEN 'Pendiente'
-            WHEN v_i % 10 = 1 THEN 'Rechazado'
-            ELSE 'Aprobado'
-        END;
-
-        INSERT INTO comentarios (
-            contenido, 
-            estado, 
-            fecha, 
-            id_usuario, 
-            id_administrador
-        )
-        VALUES (
-            v_contenido,
-            v_estado,
-            CURRENT_DATE - (v_i % 60 || ' days')::INTERVAL, -- Comentarios de los últimos 2 meses
-            v_usuario_random,
-            CASE WHEN v_estado = 'Aprobado' THEN v_admin_id ELSE NULL END -- Solo los aprobados tienen admin
-        );
-    END LOOP;
-
-    RAISE NOTICE '¡Hecho! 450 comentarios generados con éxito.';
-END $$;
+-- Evento 10
+('https://images.unsplash.com/photo-1527529482837-4698179dc6ce?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 'fabcbc7b-a5f6-4260-b815-fea0c3fb4f6e');

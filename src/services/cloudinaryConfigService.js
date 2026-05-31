@@ -11,7 +11,7 @@ const findByIdOrganizacion = async (id_organizacion) => {
 }
 
 const updateByIdOrganizacion =  async (nombre, clave, clave_secreta, id_organizacion) => {
-    const cloudinaryconfig = await cloudinaryConfigRepository.findByIdOrganizacion(nombre, clave, clave_secreta, id_organizacion)
+    const cloudinaryconfig = await cloudinaryConfigRepository.updateByIdOrganizacion(nombre, clave, clave_secreta, id_organizacion)
     return cloudinaryconfig
 }
 

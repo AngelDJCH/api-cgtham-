@@ -3,13 +3,13 @@ CREATE TABLE comentarios(
     contenido VARCHAR(70) NOT NULL,
     estado VARCHAR(150) NOT NULL,
     fecha DATE NOT NULL,
-    id_usuario UUID NOT NULL,
+    id_organizacion UUID NOT NULL,
     id_administrador UUID,
-    CONSTRAINT fk_comentarios_usuarios
+    CONSTRAINT fk_comentarios_cuentas
     FOREIGN KEY (id_administrador)
-    REFERENCES usuarios(id),
-    CONSTRAINT fk_comentarios_usuario
-    FOREIGN KEY (id_usuario)
-    REFERENCES usuarios(id)
+    REFERENCES cuentas(id),
+    CONSTRAINT fk_comentarios_organizaciones
+    FOREIGN KEY (id_organizacion)
+    REFERENCES organizaciones(id)
     ON DELETE CASCADE
 );

@@ -16,12 +16,10 @@ const create = async (req, res) => {
 
 const findAllSeguidoresById = async (req, res) => {
     try {
-        const id_seguido = req.params.id;
+        const id_seguido = req.params.id_seguido;
         const seguidores = await seguimientoService.findAllSeguidoresById(id_seguido)
         res.status(200).json(
-            seguidores.map(
-                seguidor => seguidor.toJSON()
-            )
+            seguidores
         )
     } catch (error) {
         res.status(404).json(
@@ -34,7 +32,7 @@ const findAllSeguidoresById = async (req, res) => {
 
 const findAllSeguidosById = async (req, res) => {
     try {
-        const id_seguidor = req.params.id;
+        const id_seguidor = req.params.id_seguidor;
         const seguidos = await seguimientoService.findAllSeguidosById(id_seguidor)
         res.status(200).json(
             seguidos.map(

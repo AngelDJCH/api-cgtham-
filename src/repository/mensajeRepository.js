@@ -24,7 +24,6 @@ const create = async (contenido, id_emisor, id_receptor) => {
 
 const findAllByIdEmisorAndIdReceptor = async (id_emisor, id_receptor) => {
     const result = await pool.query(queryfindAllByIdEmisorAndIdReceptor, [id_emisor, id_receptor])
-    if(result.rowCount === 0) throw new Error(`Ocurrio un error al obtener los mensajes de este chat`)
     const rows =  result.rows
     return rows.map(
         row => new Mensaje(

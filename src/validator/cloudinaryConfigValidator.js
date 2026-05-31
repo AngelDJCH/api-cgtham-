@@ -19,7 +19,6 @@ const findByIdOrganizacion = [
 ]
 
 const updateByIdOrganizacion = [
-    check('id_organizacion').exists().not().isEmpty().isUUID(),
     check('nombre').exists().not().isEmpty(),
     check('clave').exists().not().isEmpty(),
     check('clave_secreta').exists().not().isEmpty(),

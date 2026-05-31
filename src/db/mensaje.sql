@@ -3,10 +3,14 @@ CREATE TABLE mensajes(
     contenido TEXT NOT NULL,
     id_emisor UUID NOT NULL,
     id_receptor UUID NOT NULL,
+	id_chat UUID NOT NULL,
     CONSTRAINT fk_mensajes_usuario_emisor
     FOREIGN KEY (id_emisor)
-    REFERENCES usuarios(id),
+    REFERENCES organizaciones(id),
     CONSTRAINT fk_mensajes_usuarios_receptor
     FOREIGN KEY (id_receptor)
-    REFERENCES usuarios(id)
+    REFERENCES organizaciones(id),
+	CONSTRAINT fk_chat_mensajes
+	FOREIGN KEY (id_chat)
+	REFERENCES chat(id)
 )

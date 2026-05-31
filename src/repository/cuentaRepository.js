@@ -2,7 +2,7 @@ const pool = require('../config/postgres')
 const Cuenta = require('../models/cuenta')
 
 const queryCreate = `
-    INSERT INTO cuentas (correo, contrasenia, roles, id_usuario)
+    INSERT INTO cuentas (correo, contrasenia, roles, id_organizacion)
     VALUES ($1,$2,$3,$4)
     RETURNING *
 `
@@ -17,13 +17,48 @@ const queryUpdateRol = `
 `
 
 const queryLogin = `
-        SELECT c.correo, c.contrasenia,
-	c.roles, u.id as id_usuario, u.foto
-	FROM cuentas AS c inner join usuarios as u on c.id_usuario = u.id WHERE c.correo = $1
+	    SELECT c.id as id_cuenta,c.correo, c.contrasenia,
+	c.roles, o.id as id_organizacion, o.logo, o.tipo
+	FROM cuentas AS c inner join organizaciones as o on c.id_organizacion = o.id
+	WHERE c.correo = $1 and o.estado = true
 `
 
-const create = async (correo, contrasenia, roles, id_usuario) => {
-    const result = await pool.query(queryCreate, [correo, contrasenia, roles, id_usuario])
+const queryUpdateCorreoByIdOrganizacion = `
+    UPDATE cuentas SET correo = $1 WHERE id_organizacion = $2 RETURNING *
+`
+
+const queryUpdateContraseniaByIdOrganizacion = `
+    UPDATE cuentas SET contrasenia = $1 WHERE id_organizacion = $2 RETURNING *
+`
+
+const updateCorreoByIdOrganizacion = async (correo, id_organizacion) => {
+    const result = await pool.query(queryUpdateCorreoByIdOrganizacion, [correo, id_organizacion])
+    const row = result.rows[0]
+    return new Cuenta(
+        row.id,
+        row.correo,
+        row.contrasenia,
+        row.roles,
+        row.id_usuario
+    )
+}
+
+
+const updateContraseniaByIdOrganizacion = async (contrasenia, id_organizacion) => {
+    const result = await pool.query(queryUpdateContraseniaByIdOrganizacion, [contrasenia, id_organizacion])
+    const row = result.rows[0]
+    return new Cuenta(
+        row.id,
+        row.correo,
+        row.contrasenia,
+        row.roles,
+        row.id_usuario
+    )
+}
+
+
+const create = async (correo, contrasenia, roles, id_organizacion) => {
+    const result = await pool.query(queryCreate, [correo, contrasenia, roles, id_organizacion])
     if (result.rowCount === 0) throw new Error(`Ocurrio un error al crear una cuenta`)
     const row = result.rows[0]
     return new Cuenta(
@@ -66,14 +101,14 @@ const login = async (correo) => {
     if (result.rowCount === 0) throw new Error('El correo ingresado es incorrecto')
     const row = result.rows[0]
     return {
-        correo : row.correo,
-        contraseña : row.contrasenia,
-        rol : row.roles,
-        usuario : {
-            id : row.id_usuario,
-            foto : row.foto
-        }
+        id: row.id_cuenta,
+        correo: row.correo,
+        contraseña: row.contrasenia,
+        rol: row.roles,
+        tipo: row.tipo,
+        organizacion: row.id_organizacion,
+        logo: row.logo
     }
 }
 
-module.exports = { create, findById, updateRolById, login}
+module.exports = { create, findById, updateRolById, login, updateCorreoByIdOrganizacion, updateContraseniaByIdOrganizacion }

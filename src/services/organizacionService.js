@@ -15,8 +15,8 @@ const findAll = async () => {
     return organizaciones;
 }
 
-const updateById = async (id, nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner) => {
-    const organizacion = await organizacionRepository.updateById(id, nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner)
+const updateById = async (id, nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc) => {
+    const organizacion = await organizacionRepository.updateById(id, nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc)
     return organizacion;
 }
 
@@ -30,4 +30,14 @@ const countOrganizaciones = async () => {
     return count_organizaciones;
 }
 
-module.exports = { create, findById, findAll, updateById, deleteById, countOrganizaciones }
+const findAllNoAprobadas = async () => {
+    const organizaciones = await organizacionRepository.findAllNoAprobadas()
+    return organizaciones
+}
+
+const findByIdFast = async (id_organizacion) => {
+    const organizacion = await organizacionRepository.findByIdFast(id_organizacion)
+    return organizacion
+}
+
+module.exports = { create, findById, findAll, updateById, deleteById, countOrganizaciones, findAllNoAprobadas,findByIdFast }

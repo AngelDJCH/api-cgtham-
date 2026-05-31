@@ -11,14 +11,14 @@ const validateCreate = [
 ]
 
 const validateFindById = [
-    check('id_organizacion').exists().not().isEmpty(),
+    check('id').exists().not().isEmpty(),
     (req, res, next) => {
         validateResult(req, res, next)
     }
 ]
 
 const validateUpdateById = [
-    check('id_organizacion').exists().not().isEmpty().isUUID(),
+    check('id').exists().not().isEmpty().isUUID(),
     check('tipo_institucion').exists().not().isEmpty(),
     check('url_sitio').exists().not().isEmpty(),
     (req, res, next) => {

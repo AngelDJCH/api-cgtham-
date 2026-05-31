@@ -3,10 +3,10 @@ const ofertaLaboralRepository = require('../repository/ofertaLaboral')
 
 const create = async (titulo, descripcion, salario, jornada, tipo_contrato, vacantes, beneficios,
     habilidades_tecnicas, habilidades_blandas, departamento_area, modalidad,
-    experiencia, estado, fecha_publicacion, id_empresa) => {
+    experiencia, estado, id_empresa, documento) => {
     const oferta_laboral = await ofertaLaboralRepository.create(titulo, descripcion, salario, jornada, tipo_contrato, vacantes, beneficios,
         habilidades_tecnicas, habilidades_blandas, departamento_area, modalidad,
-        experiencia, estado, fecha_publicacion, id_empresa)
+        experiencia, estado, id_empresa,documento)
     return oferta_laboral;
 }
 
@@ -31,7 +31,7 @@ const updateById = async (id, titulo, descripcion, salario, jornada, tipo_contra
 
 const deletById = async (id) => {
     if (!id) throw new Error(`ID invalido`)
-    const oferta_laboral = await ofertaLaboralRepository.deletById(oferta_laboral);
+    const oferta_laboral = await ofertaLaboralRepository.deletById(id);
     return oferta_laboral;
 }
 
@@ -40,4 +40,14 @@ const countOfertas = async () => {
     return counts_ofertas
 }
 
-module.exports = { create, findAll, findById, updateById, deletById, countOfertas }
+const findAllHistoricos = async() =>{
+    const historicosOfetas = await ofertaLaboralRepository.findAllHistoricos()
+    return historicosOfetas
+}
+
+const findAllByIdOrganziacion = async (id_organizacion) => {
+    const ofertas = await ofertaLaboralRepository.findAllByIdOrganizacion(id_organizacion)
+    return ofertas
+}
+
+module.exports = { create, findAll, findById, updateById, deletById, countOfertas,findAllByIdOrganziacion }

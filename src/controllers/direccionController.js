@@ -14,7 +14,8 @@ const create = async (req, res) => {
 
 const findById = async (req, res) => {
     try {
-        const direccion = await direccionService.findById(req.params.id)
+        const id = req.params.id
+        const direccion = await direccionService.findById(id)
         res.status(200).json(direccion.toJSON())
     } catch (error) {
         res.status(404).json({

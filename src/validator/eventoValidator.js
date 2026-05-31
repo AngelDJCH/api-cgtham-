@@ -10,7 +10,6 @@ const validateCreate = [
     check('id_organizacion').exists().not().isEmpty().isUUID(),
     check('fecha_inicio').exists().not().isEmpty().isDate(),
     check('fecha_final').exists().not().isEmpty().isDate(),
-    check('fecha_publicacion').exists().not().isEmpty().isDate(),
     (req, res, next) => {
         validateResult(req, res, next)
     }
@@ -28,10 +27,8 @@ const validateUpdateById = [
     check('titulo').exists().not().isEmpty(),
     check('descripcion').exists().not().isEmpty(),
     check('tipo').exists().not().isEmpty(),
-    check('id_organizacion').exists().not().isEmpty().isUUID(),
     check('fecha_inicio').exists().not().isEmpty().isDate(),
     check('fecha_final').exists().not().isEmpty().isDate(),
-    check('fecha_publicacion').exists().not().isEmpty().isDate(),
     (req, res, next) => {
         validateResult(req, res, next)
     }

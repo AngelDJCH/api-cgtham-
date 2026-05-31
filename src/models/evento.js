@@ -99,6 +99,7 @@ class Evento {
             titulo: this.#titulo,
             descripcion: this.#descripcion,
             tipo: this.#tipo,
+            estado : this.#estado,
             id_organizacion: this.#id_organizacion,
             fecha_inicio: this.#fecha_inicio,
             fecha_final: this.#fecha_final,

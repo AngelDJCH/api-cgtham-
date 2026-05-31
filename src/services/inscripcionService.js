@@ -1,7 +1,7 @@
 const inscripcionRepository = require('../repository/inscripcionRepository')
 
-const create = async (estado, fecha, id_evento, id_usuario) => {
-    const inscripcion = await inscripcionRepository.create(estado, fecha, id_evento, id_usuario)
+const create = async (estado, fecha, id_evento, id_organizacion) => {
+    const inscripcion = await inscripcionRepository.create(estado, fecha, id_evento, id_organizacion)
     return inscripcion;
 }
 
@@ -20,13 +20,35 @@ const deleteById = async (id) => {
     return inscripcion;
 }
 
-const findByIdUsuario =  async (id_usuario) => {
-    
-}
+// const findByIdUsuario =  async (id_usuario) => {
+//     const inscripciones = await inscripcionRepository.findByIdUsuario(id_usuario)
+//     return inscripciones
+// }
 
 const findAllByIdOrganizacion = async (id_organizacion) => {
     const inscripciones = await inscripcionRepository.findAllByIdOrganizacion(id_organizacion)
     return inscripciones
 }
 
-module.exports = { create, findByIdAndEstado, updateEstadoById, deleteById, findAllByIdOrganizacion }
+const findOrganizacionesParticipantesByIdInscripcion = async (id_evento) => {
+    const participantes = await inscripcionRepository.findOrganizacionesParticipantesByIdInscripcion(id_evento)
+    return participantes
+}
+
+const findInscripcionesByIdEvento = async (id_evento) => {
+    const inscripciones = await inscripcionRepository.findInscripcionesByIdEvento(id_evento)
+    return inscripciones
+}
+
+const findOrganizacionesEventoInscripciones = async (id_evento) => {
+    const inscripciones = await inscripcionRepository.findOrganizacionesEventoInscripciones(id_evento)
+    return inscripciones
+}
+
+const findParticipantesPendientesByIdInscripcion = async (id_evento) => {
+    const inscripciones = await inscripcionRepository.findParticipantesPendientesByIdInscripcion(id_evento)
+    return inscripciones
+}
+
+//findByIdUsuario
+module.exports = {findParticipantesPendientesByIdInscripcion, create, findByIdAndEstado, updateEstadoById, deleteById, findAllByIdOrganizacion, findOrganizacionesParticipantesByIdInscripcion,findInscripcionesByIdEvento}

@@ -1,11 +1,13 @@
 class ConvenioOrganizacion{
     #id;
     #rol;
+    #estado;
     #id_convenio;
     #id_organizacion;
-    constructor(id, rol, id_convenio, id_organizacion){
+    constructor(id, rol, estado, id_convenio, id_organizacion){
         this.#id = id;
         this.#rol = rol;
+        this.#estado = estado;
         this.#id_convenio = id_convenio;
         this.#id_organizacion = id_organizacion;
     }
@@ -16,6 +18,10 @@ class ConvenioOrganizacion{
 
     set rol(rol){
         this.#rol = rol;
+    }
+
+    set estado(estado){
+        this.#estado = estado;
     }
 
     set id_convenio(id_convenio){
@@ -34,6 +40,10 @@ class ConvenioOrganizacion{
         return this.#rol;
     }
 
+    get estado(){
+        return this.#estado;
+    }
+
     get id_convenio(){
         return this.#id_convenio;
     }
@@ -46,6 +56,7 @@ class ConvenioOrganizacion{
         return {
             id : this.#id,
             rol :  this.#rol,
+            estado : this.#estado,
             id_convenio :  this.#id_convenio,
             id_organizacion :  this.#id_organizacion
         }
