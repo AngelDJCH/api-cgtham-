@@ -1,6 +1,6 @@
 // index.js o server.js
 const app = require('./app'); 
-const pool = require('./src/config/db'); 
+const pool = require('./src/config/postgres'); 
 const { levantarCGTHAM } = require('./src/seeds/cgthamSeed'); 
 
 const PORT = process.env.PORT || 3000;
