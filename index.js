@@ -1,12 +1,7 @@
-// index.js o server.js
-const app = require('./app'); 
-const pool = require('./src/config/postgres'); 
-const { levantarCGTHAM } = require('./src/seeds/cgthamSeed'); 
+const app = require('./app')
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT_API_LISTENING || 3001;
 
-app.listen(PORT, async () => {
-    console.log(`Servidor corriendo en el puerto ${PORT}`);
-    
-    await levantarCGTHAM(pool);
-});
+app.listen(PORT, () => {
+    console.log("Aplicacion corriendo en el puerto: " + PORT)
+})
