@@ -10,7 +10,7 @@ const cookie_parser = require('cookie-parser')
 app.use(express.json({limit:'1gb'}))
 app.use(express.urlencoded({limit:'100mb', extended:true}))
 //app.use(cors({ origin: '*', credentials: true}))
-app.use(cors({origin : 'http://localhost:3000', credentials: true})) //Acepta cualquier origien // https://api-cgtham.onrender.com
+app.use(cors({origin : 'https://cheery-donut-20af10.netlify.app/', credentials: true})) //Acepta cualquier origien // https://api-cgtham.onrender.com
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 app.use(cookie_parser())
 
