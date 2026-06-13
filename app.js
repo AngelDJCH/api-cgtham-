@@ -9,7 +9,7 @@ const cookie_parser = require('cookie-parser')
 // MIDLEWARES
 app.use(express.json({limit:'1gb'}))
 app.use(express.urlencoded({limit:'100mb', extended:true}))
-//app.use(cors({ origin: '*', credentials: true}))
+//app.use(cors({ origin: '*', credentials: true})) https://cheery-donut-20af10.netlify.app
 app.use(cors({origin : 'https://cheery-donut-20af10.netlify.app', credentials: true})) //Acepta cualquier origien // https://api-cgtham.onrender.com
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 app.use(cookie_parser())
@@ -76,12 +76,21 @@ app.use('/api/v1/ofertaseducativas', ofertaEducativaRoutes)
 app.use('/api/v1/chat', chatRoutes)
 app.use('/api/v1/inscripcionCurso', isncripcionCursoRoutes)
 
-app.use((err, req, res, next)=>{
-    if(err.statusCode === 500){console.log('Error inesperado',err)}
-    res.status(err.statusCode).json({
-        message : err.message
-    })
-    next()
-})
+app.use((err, req, res, next) => {
+    // 1. Respaldar con un código 500 si statusCode viene indefinido
+    const status = err.statusCode || 500;
+
+    // 2. Ahora comparas con la variable 'status' que ya tiene un número seguro
+    if (status === 500) {
+        console.log('Error inesperado:', err);
+    }
+
+    // 3. Envías la respuesta usando la variable segura
+    res.status(status).json({
+        message: err.message || 'Ocurrió un error interno en el servidor'
+    });
+
+    // NOTA sobre next(): Lee abajo por qué es mejor quitarlo o cambiarlo.
+});
 
 module.exports = app
