@@ -13,3 +13,15 @@ CREATE TABLE eventos(
     REFERENCES organizaciones(id)
     ON DELETE CASCADE
 )
+
+
+-- 1. Eliminamos la restricción que te está bloqueando
+ALTER TABLE fotos 
+DROP CONSTRAINT fk_eventos_fotoss;
+
+-- 2. La volvemos a crear incluyendo el ON DELETE CASCADE
+ALTER TABLE fotos 
+ADD CONSTRAINT fk_eventos_fotoss
+FOREIGN KEY (id_evento) -- <-- Asegúrate de que este sea el nombre real de la columna en tu tabla fotos
+REFERENCES eventos(id) 
+ON DELETE CASCADE;

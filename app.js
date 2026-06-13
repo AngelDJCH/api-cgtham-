@@ -10,9 +10,8 @@ const cookie_parser = require('cookie-parser')
 app.use(express.json({limit:'1gb'}))
 app.use(express.urlencoded({limit:'100mb', extended:true}))
 //app.use(cors({ origin: '*', credentials: true}))
-app.use(cors({origin : 'http://localhost:3000', credentials: true})) //Acepta cualquier origien // https://api-cgtham.onrender.com
+app.use(cors({origin : '*', credentials: true})) //Acepta cualquier origien // https://api-cgtham.onrender.com
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
-
 app.use(cookie_parser())
 
 /*ROUTES*/
@@ -44,6 +43,7 @@ const visitaRoute = require('./src/routes/visitaRoute')
 const ofertaeducativaRoutes = require('./src/routes/ofertaEducativaRoute')
 const ofertaEducativaRoutes = require('./src/routes/ofertaEducativaRoute')
 const chatRoutes = require('./src/routes/chatRoute')
+const isncripcionCursoRoutes = require('./src/routes/inscripcionCursoRoute')
 
 
 //ROUTES IN USE
@@ -74,5 +74,14 @@ app.use('/api/v1/cursos', cursoRoutes)
 app.use('/api/v1/visitas', visitaRoute)
 app.use('/api/v1/ofertaseducativas', ofertaEducativaRoutes)
 app.use('/api/v1/chat', chatRoutes)
+app.use('/api/v1/inscripcionCurso', isncripcionCursoRoutes)
+
+app.use((err, req, res, next)=>{
+    if(err.statusCode === 500){console.log('Error inesperado',err)}
+    res.status(err.statusCode).json({
+        message : err.message
+    })
+    next()
+})
 
 module.exports = app

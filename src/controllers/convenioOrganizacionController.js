@@ -1,16 +1,12 @@
 const convenioorganizacionService = require('../services/convenioOrganizacionService')
 
-const create = async (req, res) => {
+const create = async (req, res, next) => {
     try {
         const { rol, id_convenio, id_organizacion } = req.body
         const convenioOrganizacion = await convenioorganizacionService.create(rol, id_convenio, id_organizacion)
         res.status(201).json(convenioOrganizacion.toJSON())
     } catch (error) {
-        res.status(400).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 

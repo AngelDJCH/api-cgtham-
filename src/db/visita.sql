@@ -8,8 +8,10 @@ CREATE TABLE visitas(
     estado VARCHAR(100) NOT NULL,
     CONSTRAINT fk_visitas_escuela
     FOREIGN KEY (id_escuela)
-    REFERENCES organizaciones(id),
+    REFERENCES organizaciones(id)
+    ON DELETE CASCADE,
     CONSTRAINT fk_visitas_empresa
     FOREIGN KEY (id_empresa)
     REFERENCES organizaciones(id)
+    ON DELETE CASCADE
 )

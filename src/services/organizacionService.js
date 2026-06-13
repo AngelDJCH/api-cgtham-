@@ -40,4 +40,14 @@ const findByIdFast = async (id_organizacion) => {
     return organizacion
 }
 
-module.exports = { create, findById, findAll, updateById, deleteById, countOrganizaciones, findAllNoAprobadas,findByIdFast }
+const updateEstadoById = async (id, estado) => {
+    const organizacion = await organizacionRepository.updateEstadoById(id, estado)
+    return organizacion
+}
+
+const findLogoByIdOrganizacion = async (id) => {
+    const logo = await organizacionRepository.findLogoByIdOrganizacion(id)
+    return logo
+}
+
+module.exports = {findLogoByIdOrganizacion,updateEstadoById, create, findById, findAll, updateById, deleteById, countOrganizaciones, findAllNoAprobadas,findByIdFast }

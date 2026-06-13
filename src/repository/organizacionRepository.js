@@ -66,8 +66,34 @@ inner join direcciones as d on o.id_direccion = d.id
 inner join cloudinaryconfig as cc on cc.id_organizacion = o.id where o.id = $1
 `
 
+const queryFindLogoByIdOrganizacion = `
+    SELECT logo FROM organizaciones WHERE id = $1
+`
+
+
+const queryUpdateEstadoById = `
+    UPDATE organizaciones SET estado = $1 WHERE id = $2
+`
+
+const findLogoByIdOrganizacion = async (id) => {
+    const result = await pool.query(queryFindLogoByIdOrganizacion, [id])
+    const row = result.rows[0]
+    return {
+        logo : row.logo
+    }
+}
+
+const updateEstadoById = async (id, estado) => {
+    const result = await pool.query(queryUpdateEstadoById, [estado, id])
+    const row = result.rows[0]
+    return {
+        id : row.id,
+        estado : row.estado
+    }
+}
+
 const findByIdFast = async (id_organizacion) => {
-    const result = await pool.query(queryFindAllNoAprobadas)
+    const result = await pool.query(queryFindByIdFast, [id_organizacion])
     const row = result.rows[0]
     return {
         organizacion: {
@@ -79,7 +105,7 @@ const findByIdFast = async (id_organizacion) => {
             tamaño: row.tamaño,
             giro: row.giro,
             rfc: row.rfc,
-            logo: row.log,
+            logo: row.logo,
             banner: row.banner,
             estado: row.estado_organizacion
         },
@@ -275,4 +301,4 @@ const countOrganizaciones = async () => {
 }
 
 
-module.exports = {findByIdFast, findAllNoAprobadas, create, findById, findAll, updateById, deleteById, countOrganizaciones, updateLogoByIdOrganizacion, updateBannerByIdOrganizacion }
+module.exports = {findLogoByIdOrganizacion, updateEstadoById, findByIdFast, findAllNoAprobadas, create, findById, findAll, updateById, deleteById, countOrganizaciones, updateLogoByIdOrganizacion, updateBannerByIdOrganizacion }

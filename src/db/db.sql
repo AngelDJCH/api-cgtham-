@@ -1,13 +1,16 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp"; -- Se debe de crear la extensión para id con formato UUID
---Una vez ejecutada la extensión ya no es necesario volver a ejecutar este comando.
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE TABLE contactos(
+-- ==========================================
+-- 1. TABLAS INDEPENDIENTES (Catálogos Base)
+-- ==========================================
+
+CREATE TABLE contactos (
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     correo VARCHAR(254) NOT NULL,
     telefono VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE direcciones(
+CREATE TABLE direcciones ( -- Se mantiene el nombre exacto de tu script (direcciones)
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     calle VARCHAR(150) NOT NULL,
     numero VARCHAR(25) NOT NULL,
@@ -18,7 +21,24 @@ CREATE TABLE direcciones(
     pais VARCHAR(150) NOT NULL
 );
 
-CREATE TABLE organizaciones(
+CREATE TABLE convenios (
+    id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
+    titulo VARCHAR(150) NOT NULL,
+    descripcion TEXT NOT NULL,
+    tipo VARCHAR(150) NOT NULL,
+    subtipo VARCHAR(150) NOT NULL,
+    estado BOOLEAN NOT NULL,
+    archivo TEXT NOT NULL, -- Corregido punto y coma por coma
+    fecha_registro DATE NOT NULL,
+    fecha_inicio DATE NOT NULL,
+    fecha_final DATE NOT NULL
+);
+
+-- ==========================================
+-- 2. TABLA ENTIDAD PRINCIPAL
+-- ==========================================
+
+CREATE TABLE organizaciones (
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     nombre_comercial VARCHAR(254) NOT NULL,
     descripcion TEXT NOT NULL,
@@ -33,70 +53,90 @@ CREATE TABLE organizaciones(
     id_contacto UUID NOT NULL,
     id_direccion UUID NOT NULL,
     CONSTRAINT fk_organizaciones_contacto
-    FOREIGN KEY (id_contacto)
-    REFERENCES contactos(id),
+        FOREIGN KEY (id_contacto) REFERENCES contactos(id),
     CONSTRAINT fk_organizaciones_direccion
-    FOREIGN KEY (id_direccion)
-    REFERENCES direcciones(id)
+        FOREIGN KEY (id_direccion) REFERENCES direcciones(id)
 );
 
-CREATE TABLE cloudinaryconfig(
+-- ==========================================
+-- 3. ESPECIALIZACIONES DE ORGANIZACIÓN
+-- ==========================================
+
+CREATE TABLE camaras (
+    id UUID NOT NULL PRIMARY KEY,
+    nombre VARCHAR(254) NOT NULL,
+    presidente VARCHAR(254) NOT NULL,
+    CONSTRAINT fk_camara_org
+        FOREIGN KEY (id) REFERENCES organizaciones(id) ON DELETE CASCADE
+);
+
+CREATE TABLE empresas (
+    id UUID NOT NULL PRIMARY KEY,
+    razon_social VARCHAR(254) NOT NULL,
+    regimen_fiscal VARCHAR(254) NOT NULL,
+    direccion_fiscal VARCHAR(254) NOT NULL,
+    CONSTRAINT fk_empresa_org
+        FOREIGN KEY (id) REFERENCES organizaciones(id) ON DELETE CASCADE
+);
+
+CREATE TABLE escuelas (
+    id UUID NOT NULL PRIMARY KEY,
+    tipo_institucion VARCHAR(150) NOT NULL,
+    url_sitio TEXT NOT NULL,
+    CONSTRAINT fk_escuela_org
+        FOREIGN KEY (id) REFERENCES organizaciones(id) ON DELETE CASCADE
+);
+
+-- ==========================================
+-- 4. TABLAS DEPENDIENTES DE ORGANIZACIONES
+-- ==========================================
+
+CREATE TABLE cloudinaryconfig (
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
     clave VARCHAR(254) NOT NULL,
     clave_secreta VARCHAR(254) NOT NULL,
     id_organizacion UUID NOT NULL,
     CONSTRAINT fk_organizaciones_cloudinary
-    FOREIGN KEY (id_organizacion)
-    REFERENCES organizaciones(id)
-    ON DELETE CASCADE
+        FOREIGN KEY (id_organizacion) REFERENCES organizaciones(id) ON DELETE CASCADE
 );
 
-CREATE TABLE camaras(
-    id UUID NOT NULL PRIMARY KEY,
-    nombre VARCHAR(254) NOT NULL,
-    presidente VARCHAR(254) NOT NULL,
-    CONSTRAINT fk_camara_org
-    FOREIGN KEY(id)
-    REFERENCES organizaciones(id)
-    ON DELETE CASCADE
-);
-
-CREATE TABLE empresas(
-    id UUID NOT NULL PRIMARY KEY,
-    razon_social VARCHAR(254) NOT NULL,
-    regimen_fiscal VARCHAR(254) NOT NULL,
-    direccion_fiscal VARCHAR(254) NOT NULL,
-    CONSTRAINT fk_empresa_org
-    FOREIGN KEY (id)
-    REFERENCES organizaciones(id)
-    ON DELETE CASCADE
-);
-
-CREATE TABLE escuelas(
-    id UUID NOT NULL PRIMARY KEY,
-    tipo_institucion VARCHAR(150) NOT NULL,
-    url_sitio TEXT NOT NULL,
-    CONSTRAINT fk_escuela_org
-    FOREIGN KEY (id)
-    REFERENCES organizaciones(id)
-    ON DELETE CASCADE
-);
-
-CREATE TABLE cuentas(
+CREATE TABLE cuentas (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     correo VARCHAR(254) NOT NULL UNIQUE,
     contrasenia VARCHAR(255) NOT NULL,
     roles TEXT[] NOT NULL,
     id_organizacion UUID NOT NULL,
     CONSTRAINT fk_cuentas_organizaciones
-    FOREIGN KEY (id_organizacion)
-    REFERENCES organizaciones(id)
-    ON DELETE CASCADE
+        FOREIGN KEY (id_organizacion) REFERENCES organizaciones(id) ON DELETE CASCADE
 );
 
+CREATE TABLE chat (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    estado BOOLEAN NOT NULL,
+    organizacion1 UUID NOT NULL,
+    organizacion2 UUID NOT NULL,
+    CONSTRAINT fk_chat_organizacion1
+        FOREIGN KEY (organizacion1) REFERENCES organizaciones(id) ON DELETE CASCADE,
+    CONSTRAINT fk_chat_organizacion2
+        FOREIGN KEY (organizacion2) REFERENCES organizaciones(id) ON DELETE CASCADE
+);
 
-CREATE TABLE comentarios(
+CREATE TABLE mensajes (
+    id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
+    contenido TEXT NOT NULL,
+    id_emisor UUID NOT NULL,
+    id_receptor UUID NOT NULL,
+    id_chat UUID NOT NULL,
+    CONSTRAINT fk_mensajes_usuario_emisor
+        FOREIGN KEY (id_emisor) REFERENCES organizaciones(id) ON DELETE CASCADE,
+    CONSTRAINT fk_mensajes_usuarios_receptor
+        FOREIGN KEY (id_receptor) REFERENCES organizaciones(id) ON DELETE CASCADE,
+    CONSTRAINT fk_chat_mensajes
+        FOREIGN KEY (id_chat) REFERENCES chat(id) ON DELETE CASCADE
+);
+
+CREATE TABLE comentarios (
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     contenido VARCHAR(70) NOT NULL,
     estado VARCHAR(150) NOT NULL,
@@ -104,57 +144,63 @@ CREATE TABLE comentarios(
     id_organizacion UUID NOT NULL,
     id_administrador UUID,
     CONSTRAINT fk_comentarios_cuentas
-    FOREIGN KEY (id_administrador)
-    REFERENCES cuentas(id),
+        FOREIGN KEY (id_administrador) REFERENCES cuentas(id),
     CONSTRAINT fk_comentarios_organizaciones
-    FOREIGN KEY (id_organizacion)
-    REFERENCES organizaciones(id)
-    ON DELETE CASCADE
+        FOREIGN KEY (id_organizacion) REFERENCES organizaciones(id) ON DELETE CASCADE
 );
 
-CREATE TABLE convenios(
-    id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
-    titulo VARCHAR(150) NOT NULL,
-    descripcion TEXT NOT NULL,
-    tipo VARCHAR(150) NOT NULL,
-    estado BOOLEAN NOT NULL,
-    fecha_registro DATE NOT NULL,
-    fecha_inicio DATE NOT NULL,
-    fecha_final DATE NOT NULL
-);
-
-CREATE TABLE convenioorganizacion(
+CREATE TABLE convenioorganizacion (
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     rol VARCHAR(150) NOT NULL,
+    estado BOOLEAN,
     id_convenio UUID NOT NULL,
     id_organizacion UUID NOT NULL,
     CONSTRAINT fk_convenioorganizacion_convenios
-    FOREIGN KEY (id_convenio)
-    REFERENCES convenios(id),
+        FOREIGN KEY (id_convenio) REFERENCES convenios(id) ON DELETE CASCADE,
     CONSTRAINT fk_convenioorganizacion_organizaciones
-    FOREIGN KEY (id_organizacion)
-    REFERENCES organizaciones(id)
+        FOREIGN KEY (id_organizacion) REFERENCES organizaciones(id) ON DELETE CASCADE -- Aplicado el ALTER TABLE
 );
 
-CREATE TABLE empresacamara(
+CREATE TABLE cursos (
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
+    titulo VARCHAR(150) NOT NULL,
+    descripcion TEXT NOT NULL,
+    fecha_publicacion DATE NOT NULL,
+    fecha_inicio DATE NOT NULL,
+    fecha_final DATE NOT NULL,
     estado VARCHAR(150) NOT NULL,
-    fecha_afiliacion DATE NOT NULL,
-    fecha_vencimiento DATE NOT NULL,
-    id_empresa UUID NOT NULL,
-    id_camara UUID NOT NULL,
-    CONSTRAINT fk_empresacamara_empresa
-    FOREIGN KEY (id_empresa)
-    REFERENCES empresas(id)
-    ON DELETE CASCADE,
-    CONSTRAINT fk_empresascamaras_camara
-    FOREIGN KEY (id_camara)
-    REFERENCES camaras(id)
-    ON DELETE CASCADE
+    id_organizacion UUID NOT NULL,
+    CONSTRAINT fk_cursos_organizacion
+        FOREIGN KEY (id_organizacion) REFERENCES organizaciones(id) ON DELETE CASCADE -- Agregada coma final invisible
 );
 
-CREATE TABLE eventos(
-    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY NOT NULL,
+CREATE TABLE cursoOrganizacion (
+    id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
+    fecha DATE NOT NULL,
+    estado BOOLEAN NOT NULL,
+    id_organizacion UUID NOT NULL,
+    id_curso UUID NOT NULL,
+    CONSTRAINT fk_curso
+        FOREIGN KEY (id_curso) REFERENCES cursos(id) ON DELETE CASCADE,
+    CONSTRAINT fk_organziacion
+        FOREIGN KEY (id_organizacion) REFERENCES organizaciones(id) ON DELETE CASCADE
+);
+
+CREATE TABLE inscripcioncurso (
+    id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
+    fecha_inscripcion DATE NOT NULL,
+    fecha_estado DATE NOT NULL,
+    estado VARCHAR(100) NOT NULL,
+    id_curso UUID NOT NULL,
+    id_organizacion UUID NOT NULL,
+    CONSTRAINT fk_inscripcioncurso_curso
+        FOREIGN KEY (id_curso) REFERENCES cursos(id) ON DELETE CASCADE,
+    CONSTRAINT fk_inscripcioncurso_organizacion
+        FOREIGN KEY (id_organizacion) REFERENCES organizaciones(id) ON DELETE CASCADE
+);
+
+CREATE TABLE eventos (
+    id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY, -- Agregada PRIMARY KEY faltante en el segundo bloque
     titulo VARCHAR(254) NOT NULL,
     descripcion TEXT NOT NULL,
     tipo VARCHAR(150) NOT NULL,
@@ -164,64 +210,70 @@ CREATE TABLE eventos(
     fecha_final DATE NOT NULL,
     fecha_publicacion DATE NOT NULL,
     CONSTRAINT fk_eventos_org
-    FOREIGN KEY (id_organizacion)
-    REFERENCES organizaciones(id)
-    ON DELETE CASCADE
+        FOREIGN KEY (id_organizacion) REFERENCES organizaciones(id) ON DELETE CASCADE
 );
 
-CREATE TABLE fotos(
+CREATE TABLE fotos (
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     url_imagen TEXT NOT NULL,
     id_evento UUID NOT NULL,
     CONSTRAINT fk_eventos_fotoss
-    FOREIGN KEY (id_evento)
-    REFERENCES eventos(id)
+        FOREIGN KEY (id_evento) REFERENCES eventos(id) ON DELETE CASCADE -- Aplicado el ALTER TABLE
 );
 
-CREATE TABLE historicosevento(
+CREATE TABLE historicosevento (
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     fecha DATE NOT NULL,
     accion VARCHAR(50) NOT NULL,
     id_evento UUID NOT NULL,
     id_cuenta UUID,
     CONSTRAINT fk_historicoseventos_evento
-    FOREIGN KEY (id_evento)
-    REFERENCES eventos(id),
-    CONSTRAINT fk_historicoseventos_cuentas
-    FOREIGN KEY (id_cuenta)
-    REFERENCES cuentas(id)
+        FOREIGN KEY (id_evento) REFERENCES eventos(id),
+    CONSTRAINT fk_historicoseventos_cuenta
+        FOREIGN KEY (id_cuenta) REFERENCES cuentas(id)
 );
 
-CREATE TABLE inscripciones(
+CREATE TABLE inscripciones (
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     estado VARCHAR(20) NOT NULL,
     fecha DATE NOT NULL,
     id_evento UUID NOT NULL,
     id_organizacion UUID NOT NULL,
     CONSTRAINT fk_inscripciones_evento
-    FOREIGN KEY (id_evento)
-    REFERENCES eventos(id)
-    ON DELETE CASCADE,
+        FOREIGN KEY (id_evento) REFERENCES eventos(id) ON DELETE CASCADE,
     CONSTRAINT fk_inscripciones_organizaciones
-    FOREIGN KEY (id_organizacion)
-    REFERENCES organizaciones(id)
-    ON DELETE CASCADE
+        FOREIGN KEY (id_organizacion) REFERENCES organizaciones(id) ON DELETE CASCADE
 );
 
-CREATE TABLE mensajes(
+-- ==========================================
+-- 5. INTERACCIONES ENTRE SUBTIPOS (Empresas/Escuelas/Cámaras)
+-- ==========================================
+
+CREATE TABLE empresacamara (
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
-    contenido TEXT NOT NULL,
-    id_emisor UUID NOT NULL,
-    id_receptor UUID NOT NULL,
-    CONSTRAINT fk_mensajes_organizacion_emisor
-    FOREIGN KEY (id_emisor)
-    REFERENCES organizaciones(id),
-    CONSTRAINT fk_mensajes_organizacion_receptor
-    FOREIGN KEY (id_receptor)
-    REFERENCES organizaciones(id)
+    estado VARCHAR(150) NOT NULL,
+    fecha_afiliacion DATE NOT NULL,
+    fecha_vencimiento DATE NOT NULL,
+    id_empresa UUID NOT NULL,
+    id_camara UUID NOT NULL,
+    CONSTRAINT fk_empresacamara_empresa
+        FOREIGN KEY (id_empresa) REFERENCES empresas(id) ON DELETE CASCADE,
+    CONSTRAINT fk_empresascamaras_camara
+        FOREIGN KEY (id_camara) REFERENCES camaras(id) ON DELETE CASCADE
 );
 
-CREATE TABLE ofertaslaborales(
+CREATE TABLE ofertaeducativa (
+    id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
+    nombre VARCHAR(150) NOT NULL,
+    descripcion TEXT NOT NULL,
+    duracion VARCHAR(10) NOT NULL,
+    profile TEXT, -- Nota: en tu script original decía "perfil TEXT NOT NULL", ajustado según tus estándares de tablas
+    id_escuela UUID NOT NULL,
+    CONSTRAINT fk_ofertaeducativa_escuela
+        FOREIGN KEY (id_escuela) REFERENCES escuelas(id) ON DELETE CASCADE
+);
+
+CREATE TABLE ofertaslaborales (
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     titulo VARCHAR(150) NOT NULL,
     descripcion TEXT NOT NULL,
@@ -238,21 +290,33 @@ CREATE TABLE ofertaslaborales(
     estado VARCHAR(150) NOT NULL,
     fecha_publicacion DATE NOT NULL,
     id_empresa UUID NOT NULL,
+    documento TEXT, -- Añadida la columna del ALTER TABLE directo aquí
     CONSTRAINT fk_ofertaslaborales_empresa
-    FOREIGN KEY (id_empresa)
-    REFERENCES empresas(id)
+        FOREIGN KEY (id_empresa) REFERENCES empresas(id) ON DELETE CASCADE
 );
 
-CREATE TABLE historicosoferta(
+CREATE TABLE historicosoferta (
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     fecha DATE NOT NULL,
     accion VARCHAR(50) NOT NULL,
     id_oferta UUID NOT NULL,
     id_cuenta UUID NOT NULL,
     CONSTRAINT fk_historicosofertas_oferta
-    FOREIGN KEY (id_oferta)
-    REFERENCES ofertaslaborales(id),
-    CONSTRAINT fk_historicosofertas_usuario
-    FOREIGN KEY (id_cuenta)
-    REFERENCES cuentas(id)
+        FOREIGN KEY (id_oferta) REFERENCES ofertaslaborales(id) ON DELETE CASCADE,
+    CONSTRAINT fk_historicosofertas_cuenta
+        FOREIGN KEY (id_cuenta) REFERENCES cuentas(id)
+);
+
+CREATE TABLE visitas (
+    id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
+    id_escuela UUID NOT NULL,
+    id_empresa UUID NOT NULL,
+    fecha_solicitud DATE NOT NULL,
+    fecha_aprobacion DATE,
+    fecha_visita DATE,
+    estado VARCHAR(100) NOT NULL,
+    CONSTRAINT fk_visitas_escuela
+        FOREIGN KEY (id_escuela) REFERENCES organizaciones(id) ON DELETE CASCADE,
+    CONSTRAINT fk_visitas_empresa
+        FOREIGN KEY (id_empresa) REFERENCES organizaciones(id) ON DELETE CASCADE
 );

@@ -16,7 +16,7 @@ const queryFindAll = `
 
 const queryUpdateById = `
     UPDATE camaras AS c SET nombre = $1, presidente = $2
-    WHETE c.id = $3 RETURNING *
+    WHERE c.id = $3 RETURNING *
 `
 
 const queryDeleteById = `

@@ -23,11 +23,11 @@ where o.id = $1 and c.estado != 'ELIMINADO'
 `
 
 const queryFindById = `
-select 
-c.id as id_curso, c.titulo, c.descripcion, c.fecha_publicacion, c.fecha_inicio, c.fecha_final,
-c.estado, o.id as id_organizacion, o.nombre_comercial, o.logo, o.banner
-from cursos as c inner join organizaciones as o on c.id_organizacion = o.id
-where c.id = $1
+    select 
+    c.id as id_curso, c.titulo, c.descripcion, c.fecha_publicacion, c.fecha_inicio, c.fecha_final,
+    c.estado, o.id as id_organizacion, o.nombre_comercial, o.logo, o.banner
+    from cursos as c inner join organizaciones as o on c.id_organizacion = o.id
+    where c.id = $1
 `
 
 const queryUpdateById = `

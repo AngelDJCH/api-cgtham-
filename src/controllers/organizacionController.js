@@ -136,4 +136,27 @@ const findByIdFast = async (req, res) => {
     }
 }
 
-module.exports = { create, findById, findAll, updateById, deleteById, countOrganizaciones, findAllNoAprobadas,findByIdFast}
+const updateEstadoById = async (req, res) => {
+    try {
+        const id = req.params.id
+        const {estado} = req.body
+        const organizacion = await organizacionService.updateEstadoById(id, estado)
+        res.status(200).json(organizacion)
+    } catch (error) {
+        res.status(404).json({
+            message : error.message
+        })
+    }
+}
+
+const findLogoByIdOrganizacion = async (req, res) => {
+    try {
+        const id = req.params.id
+        const logo = await organizacionService.findLogoByIdOrganizacion(id)
+        res.status(200).json(logo)
+    } catch (error) {
+        res.status(404).json({message:error.message})
+    }
+}
+
+module.exports = {findLogoByIdOrganizacion,updateEstadoById, create, findById, findAll, updateById, deleteById, countOrganizaciones, findAllNoAprobadas,findByIdFast}

@@ -11,8 +11,7 @@ const validateCreate = [
 ]
 
 const validateFindAllByIdEmisorAndIdReceptor = [
-    check('id_emisor').exists().not().isEmpty().isUUID(),
-    check('id_receptor').exists().not().isEmpty().isUUID(),
+    check('id').exists().not().isEmpty().isUUID(),
     (req, res, next) => {
         validateResult(req, res, next)
     }

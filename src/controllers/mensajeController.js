@@ -2,8 +2,8 @@ const mensajeService = require('../services/mensajeService')
 
 const create = async (req, res) => {
     try {
-        const {contenido, id_emisor, id_receptor} = req.body;
-        const mensaje = await mensajeService.create(contenido, id_emisor, id_receptor)
+        const {contenido, id_emisor, id_receptor, id_chat} = req.body;
+        const mensaje = await mensajeService.create(contenido, id_emisor, id_receptor, id_chat)
         res.status(201).json(mensaje.toJSON())
     } catch (error) {
         res.status(400).json(
@@ -14,10 +14,10 @@ const create = async (req, res) => {
     }
 }
 
-const findAllByIdEmisorAndIdReceptor = async (req, res) => {
+const findAllByIdChat = async (req, res) => {
     try {
-        const {id_emisor, id_receptor} = req.body
-        const mensajes = await mensajeService.findAllByIdEmisorAndIdReceptor(id_emisor, id_receptor)
+        const {id} = req.body
+        const mensajes = await mensajeService.findAllByIdChat(id)
         res.status(200).json(
             mensajes.map(
                 mensaje => mensaje.toJSON()
@@ -32,4 +32,4 @@ const findAllByIdEmisorAndIdReceptor = async (req, res) => {
     }
 }
 
-module.exports = {create, findAllByIdEmisorAndIdReceptor}
+module.exports = {create, findAllByIdChat}

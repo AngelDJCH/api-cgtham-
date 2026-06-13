@@ -1,16 +1,12 @@
 const inscripcionService = require('../services/inscripcionService')
 
-const create = async (req, res) => {
+const create = async (req, res, next) => {
     try {
         const {estado, fecha, id_evento, id_organizacion} = req.body;
         const inscripcion = await inscripcionService.create(estado, fecha, id_evento, id_organizacion)
         res.status(201).json(inscripcion.toJSON())
     } catch (error) {
-        res.status(400).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 

@@ -1,6 +1,12 @@
 const convenioOrganizacionRepository = require('../repository/convenioOrganizacionRepository')
+const CustomError = require('../midlewares/customError')
 
 const create = async (rol, id_convenio, id_organizacion) => {
+    const yaEstaInscrito = await convenioOrganizacionRepository.inscripcion(id_convenio, id_organizacion);
+    
+    if (yaEstaInscrito) {
+        throw new CustomError('EL USUARIO YA ESTA INSCRITO', 409)
+    }    
     const convenioOrganizacion = await convenioOrganizacionRepository.create(rol, id_convenio, id_organizacion)
     return convenioOrganizacion;
 }

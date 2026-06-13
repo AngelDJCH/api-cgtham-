@@ -6,11 +6,14 @@ CREATE TABLE mensajes(
 	id_chat UUID NOT NULL,
     CONSTRAINT fk_mensajes_usuario_emisor
     FOREIGN KEY (id_emisor)
-    REFERENCES organizaciones(id),
+    REFERENCES organizaciones(id)
+    ON DELETE CASCADE,
     CONSTRAINT fk_mensajes_usuarios_receptor
     FOREIGN KEY (id_receptor)
-    REFERENCES organizaciones(id),
+    REFERENCES organizaciones(id)
+    ON DELETE CASCADE,
 	CONSTRAINT fk_chat_mensajes
 	FOREIGN KEY (id_chat)
 	REFERENCES chat(id)
+    ON DELETE CASCADE
 )

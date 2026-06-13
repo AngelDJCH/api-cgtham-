@@ -1,6 +1,11 @@
 const inscripcionRepository = require('../repository/inscripcionRepository')
+const CustomError = require('../midlewares/customError')
 
 const create = async (estado, fecha, id_evento, id_organizacion) => {
+    const existeInscripcion = await inscripcionRepository.existeInscripcion(id_evento,id_organizacion)
+    if(existeInscripcion){
+        throw new CustomError('YA EXISTE LA INSCRIPCION', 409)
+    }
     const inscripcion = await inscripcionRepository.create(estado, fecha, id_evento, id_organizacion)
     return inscripcion;
 }

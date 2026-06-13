@@ -1,3 +1,4 @@
+const { query } = require('express-validator')
 const pool = require('../config/postgres')
 const ConvenioOrganizacion = require('../models/convenioOrganizacion')
 
@@ -33,6 +34,15 @@ where c.rol = 'PARTICIPANTE' and c.id_convenio = $1
 const queryUpdateEstadoById = `
     UPDATE convenioorganizacion set estado = $1 where id = $2 RETURNING *
 `
+
+const queryInscripcion = `
+select * from convenioorganizacion where id_convenio = $1 and id_organizacion = $2
+`
+
+const inscripcion = async (id_convenio, id_organizacion) => {
+    const result = await pool.query(queryInscripcion, [id_convenio, id_organizacion])
+    return result.rowCount > 0
+}
 
 const findAllParticipantesById = async (id_convenio) => {
     const result = await pool.query(queryParticipantesById, [id_convenio])
@@ -155,4 +165,4 @@ const deleteByIdConvenio = async (id_convenio) => {
     return eliminados
 }
 
-module.exports = { create, findById, updateRolById, findAll, findAllParticipantesById,deleteById, updateEstadoById, deleteByIdConvenio}
+module.exports = {inscripcion, create, findById, updateRolById, findAll, findAllParticipantesById,deleteById, updateEstadoById, deleteByIdConvenio}

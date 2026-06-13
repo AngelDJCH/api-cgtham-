@@ -31,6 +31,15 @@ const queryFindAllByIdOrganizacion = `
     e.id_organizacion = o.id where i.id_organizacion= $1
 `
 
+const queryExisteInscripcion = `
+    select * from inscripciones where id_evento = $1 and id_organizacion = $2
+`
+
+const existeInscripcion = async (id_evento, id_organizacion) => {
+    const result = await pool.query(queryExisteInscripcion, [id_evento, id_organizacion])
+    return result.rowCount > 0
+}
+
 const queryFindOrganizacionesParticipantesByIdInscripcion = `
     select o.id as id_organizacion, o.logo, o.nombre_comercial from inscripciones as i
     inner join organizaciones as o
@@ -224,4 +233,4 @@ const findOrganizacionesParticipantesByIdInscripcion = async (id_evento) => {
 }
 
 //findByIdUsuario
-module.exports = {findParticipantesPendientesByIdInscripcion, findOrganizacionesEventoInscripciones, create, findByIdAndEstado, updateEstadoById, deleteById, findAllByIdOrganizacion, findOrganizacionesParticipantesByIdInscripcion, findInscripcionesByIdEvento }
+module.exports = {existeInscripcion, findParticipantesPendientesByIdInscripcion, findOrganizacionesEventoInscripciones, create, findByIdAndEstado, updateEstadoById, deleteById, findAllByIdOrganizacion, findOrganizacionesParticipantesByIdInscripcion, findInscripcionesByIdEvento }

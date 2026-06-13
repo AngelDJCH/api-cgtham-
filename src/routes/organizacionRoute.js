@@ -11,8 +11,10 @@ organizacionRoutes.get('/', organizacionController.findAll)
 organizacionRoutes.get('/pendientes/', organizacionController.findAllNoAprobadas)
 organizacionRoutes.get('/:id', validateFindById, organizacionController.findById)
 organizacionRoutes.get('/fast/:id_organizacion', organizacionController.findByIdFast)
+organizacionRoutes.get('/logo/:id', organizacionController.findLogoByIdOrganizacion)
 organizacionRoutes.post('/', validateCreate, organizacionController.create)
 organizacionRoutes.put('/:id',auth,  validateUpdateById, organizacionController.updateById)
+organizacionRoutes.put('/estado/:id', auth, organizacionController.updateEstadoById)
 organizacionRoutes.delete('/:id',auth, verifyRoles('ADMIN_ORG' , 'ADMIN_SYS'), validateDeleteById, organizacionController.deleteById)
 
 module.exports = organizacionRoutes;
