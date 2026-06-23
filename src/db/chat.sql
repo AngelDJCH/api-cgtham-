@@ -1,4 +1,4 @@
-CREATE TABLE chat (
+CREATE TABLE chats (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     estado BOOLEAN NOT NULL,
     organizacion1 UUID NOT NULL,

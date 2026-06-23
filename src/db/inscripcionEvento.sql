@@ -1,4 +1,4 @@
-CREATE TABLE inscripciones(
+CREATE TABLE inscripcionEvento(
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     estado VARCHAR(20) NOT NULL,
     fecha DATE NOT NULL,

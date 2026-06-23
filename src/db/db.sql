@@ -111,31 +111,36 @@ CREATE TABLE cuentas (
         FOREIGN KEY (id_organizacion) REFERENCES organizaciones(id) ON DELETE CASCADE
 );
 
-CREATE TABLE chat (
+CREATE TABLE chats (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     estado BOOLEAN NOT NULL,
     organizacion1 UUID NOT NULL,
     organizacion2 UUID NOT NULL,
-    CONSTRAINT fk_chat_organizacion1
+    CONSTRAINT fk_chats_organizacion1
         FOREIGN KEY (organizacion1) REFERENCES organizaciones(id) ON DELETE CASCADE,
-    CONSTRAINT fk_chat_organizacion2
+    CONSTRAINT fk_chats_organizacion2
         FOREIGN KEY (organizacion2) REFERENCES organizaciones(id) ON DELETE CASCADE
 );
 
-CREATE TABLE mensajes (
+CREATE TABLE mensajes(
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     contenido TEXT NOT NULL,
     id_emisor UUID NOT NULL,
     id_receptor UUID NOT NULL,
-    id_chat UUID NOT NULL,
+	id_chat UUID NOT NULL,
     CONSTRAINT fk_mensajes_usuario_emisor
-        FOREIGN KEY (id_emisor) REFERENCES organizaciones(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_emisor)
+    REFERENCES organizaciones(id)
+    ON DELETE CASCADE,
     CONSTRAINT fk_mensajes_usuarios_receptor
-        FOREIGN KEY (id_receptor) REFERENCES organizaciones(id) ON DELETE CASCADE,
-    CONSTRAINT fk_chat_mensajes
-        FOREIGN KEY (id_chat) REFERENCES chat(id) ON DELETE CASCADE
-);
-
+    FOREIGN KEY (id_receptor)
+    REFERENCES organizaciones(id)
+    ON DELETE CASCADE,
+	CONSTRAINT fk_chats_mensajes
+	FOREIGN KEY (id_chat)
+	REFERENCES chats(id)
+    ON DELETE CASCADE
+)
 CREATE TABLE comentarios (
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     contenido VARCHAR(70) NOT NULL,
@@ -172,18 +177,6 @@ CREATE TABLE cursos (
     id_organizacion UUID NOT NULL,
     CONSTRAINT fk_cursos_organizacion
         FOREIGN KEY (id_organizacion) REFERENCES organizaciones(id) ON DELETE CASCADE -- Agregada coma final invisible
-);
-
-CREATE TABLE cursoOrganizacion (
-    id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
-    fecha DATE NOT NULL,
-    estado BOOLEAN NOT NULL,
-    id_organizacion UUID NOT NULL,
-    id_curso UUID NOT NULL,
-    CONSTRAINT fk_curso
-        FOREIGN KEY (id_curso) REFERENCES cursos(id) ON DELETE CASCADE,
-    CONSTRAINT fk_organziacion
-        FOREIGN KEY (id_organizacion) REFERENCES organizaciones(id) ON DELETE CASCADE
 );
 
 CREATE TABLE inscripcioncurso (
@@ -233,17 +226,22 @@ CREATE TABLE historicosevento (
         FOREIGN KEY (id_cuenta) REFERENCES cuentas(id)
 );
 
-CREATE TABLE inscripciones (
+CREATE TABLE inscripcionEvento(
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     estado VARCHAR(20) NOT NULL,
     fecha DATE NOT NULL,
     id_evento UUID NOT NULL,
     id_organizacion UUID NOT NULL,
     CONSTRAINT fk_inscripciones_evento
-        FOREIGN KEY (id_evento) REFERENCES eventos(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_evento)
+    REFERENCES eventos(id)
+    ON DELETE CASCADE,
     CONSTRAINT fk_inscripciones_organizaciones
-        FOREIGN KEY (id_organizacion) REFERENCES organizaciones(id) ON DELETE CASCADE
+    FOREIGN KEY (id_organizacion)
+    REFERENCES organizaciones(id)
+    ON DELETE CASCADE
 );
+
 
 -- ==========================================
 -- 5. INTERACCIONES ENTRE SUBTIPOS (Empresas/Escuelas/Cámaras)

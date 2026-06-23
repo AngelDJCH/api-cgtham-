@@ -5,6 +5,7 @@ const swaggerFile = require('./swagger_output.json')
 const cors = require('cors')
 const app = express()
 const cookie_parser = require('cookie-parser')
+const {rateLimit } = require('express-rate-limit')
 
 // MIDLEWARES
 app.use(express.json({limit:'1gb'}))
@@ -31,7 +32,7 @@ const convenioRoutes = require('./src/routes/convenioRoute')
 const eventoRoutes = require('./src/routes/eventoRoute')
 const empresaCamaraRoutes = require('./src/routes/empresaCamaraRoute')
 const convenioOrganizacionRoutes = require('./src/routes/convenioOrganizacionRoute')
-const inscripcionRoutes = require('./src/routes/inscripcionRoute')
+const inscripcionEventoRoutes = require('./src/routes/inscripcionEventoRoute')
 const postulacionRoutes = require('./src/routes/postulacionRoute')
 const comentarioRoutes = require('./src/routes/comentarioRoute')
 const historicoOfertaRoutes = require('./src/routes/historicoOfertaRoute')
@@ -46,11 +47,30 @@ const ofertaEducativaRoutes = require('./src/routes/ofertaEducativaRoute')
 const chatRoutes = require('./src/routes/chatRoute')
 const isncripcionCursoRoutes = require('./src/routes/inscripcionCursoRoute')
 
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, 
+    max: 500, 
+    standardHeaders: true, 
+    legacyHeaders: false,
+    
+    handler: (req, res, next, options) => {
+        const segundosRestantes = Math.ceil((req.rateLimit.resetTime - Date.now()) / 1000);
+
+        res.status(429).json({
+            error: 'Too Many Requests',
+            message: 'Demasiadas peticiones desde esta dirección IP. Por favor, inténtalo más tarde.',
+            retryAfterSeconds: segundosRestantes,
+            documentation: 'https://api.example.com/docs/rate-limits'
+        });
+    }
+});
+
+app.use(limiter);
 
 //ROUTES IN USE
 app.use('/api/v1/direcciones', direccionRoutes)
 app.use('/api/v1/contactos', contactosRoutes)
-app.use('/api/v1/usuarios', usuarioRoutes)
+// app.use('/api/v1/usuarios', usuarioRoutes)
 app.use('/api/v1/organizaciones', organizacionRoutes)
 app.use('/api/v1/empresas', empresaRoutes)
 app.use('/api/v1/escuelas', escuelaRoutes)
@@ -63,8 +83,8 @@ app.use('/api/v1/convenios', convenioRoutes)
 app.use('/api/v1/eventos', eventoRoutes)
 app.use('/api/v1/empresasCamaras', empresaCamaraRoutes)
 app.use('/api/v1/conveniosOrganizaciones', convenioOrganizacionRoutes)
-app.use('/api/v1/inscripciones', inscripcionRoutes)
-app.use('/api/v1/postulaciones', postulacionRoutes)
+app.use('/api/v1/inscripcionesEvento', inscripcionEventoRoutes)
+// app.use('/api/v1/postulaciones', postulacionRoutes)
 app.use('/api/v1/comentarios', comentarioRoutes )
 app.use('/api/v1/historicosofertaslaborales', historicoOfertaRoutes)
 app.use('/api/v1/historicoseventos', historicoEventoRoutes)
@@ -77,21 +97,17 @@ app.use('/api/v1/ofertaseducativas', ofertaEducativaRoutes)
 app.use('/api/v1/chat', chatRoutes)
 app.use('/api/v1/inscripcionCurso', isncripcionCursoRoutes)
 
+
 app.use((err, req, res, next) => {
-    // 1. Respaldar con un código 500 si statusCode viene indefinido
     const status = err.statusCode || 500;
 
-    // 2. Ahora comparas con la variable 'status' que ya tiene un número seguro
     if (status === 500) {
         console.log('Error inesperado:', err);
     }
 
-    // 3. Envías la respuesta usando la variable segura
     res.status(status).json({
         message: err.message || 'Ocurrió un error interno en el servidor'
     });
-
-    // NOTA sobre next(): Lee abajo por qué es mejor quitarlo o cambiarlo.
 });
 
 module.exports = app

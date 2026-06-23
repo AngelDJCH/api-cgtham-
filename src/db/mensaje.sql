@@ -12,8 +12,8 @@ CREATE TABLE mensajes(
     FOREIGN KEY (id_receptor)
     REFERENCES organizaciones(id)
     ON DELETE CASCADE,
-	CONSTRAINT fk_chat_mensajes
+	CONSTRAINT fk_chats_mensajes
 	FOREIGN KEY (id_chat)
-	REFERENCES chat(id)
+	REFERENCES chats(id)
     ON DELETE CASCADE
 )

@@ -1,13 +1,13 @@
-const pool = require('../config/postgres')
+const pool = require('../config/postgres.js')
 const Inscripcion = require('../models/inscripcion.js')
 
 const queryCreate = `
-    INSERT INTO inscripciones (estado, fecha, id_evento, id_organizacion)
+    INSERT INTO inscripcionEvento (estado, fecha, id_evento, id_organizacion)
     VALUES($1,$2,$3,$4) RETURNING * 
 `
 
 const queryFinByIdAndEstado = `
-    SELECT * FROM inscripciones AS i WHERE i.id = $1 AND i.estado = $2
+    SELECT * FROM inscripcionEvento AS i WHERE i.id = $1 AND i.estado = $2
 `
 
 // const queryFindByIdUsuario = `
@@ -18,21 +18,21 @@ const queryFinByIdAndEstado = `
 // `
 
 const queryUpdateEstadoById = `
-    UPDATE inscripciones AS i SET estado = $1 WHERE i.id = $2 RETURNING * 
+    UPDATE inscripcionEvento AS i SET estado = $1 WHERE i.id = $2 RETURNING * 
 `
 
 const queryDeleteById = `
-    DELETE FROM inscripciones AS i WHERE i.id = $1 RETURNING *
+    DELETE FROM inscripcionEvento AS i WHERE i.id = $1 RETURNING *
 `
 
 const queryFindAllByIdOrganizacion = `
     SELECT e.id as id_evento, e.titulo, i.id as id_inscripcion, i.fecha, i.estado, o.id as id_organizacion, o.nombre_comercial 
-    FROM eventos AS e INNER JOIN inscripciones AS i ON e.id=i.id_evento INNER JOIN organizaciones AS o ON
+    FROM eventos AS e INNER JOIN inscripcionEvento AS i ON e.id=i.id_evento INNER JOIN organizaciones AS o ON
     e.id_organizacion = o.id where i.id_organizacion= $1
 `
 
 const queryExisteInscripcion = `
-    select * from inscripciones where id_evento = $1 and id_organizacion = $2
+    select * from inscripcionEvento where id_evento = $1 and id_organizacion = $2
 `
 
 const existeInscripcion = async (id_evento, id_organizacion) => {
@@ -41,7 +41,7 @@ const existeInscripcion = async (id_evento, id_organizacion) => {
 }
 
 const queryFindOrganizacionesParticipantesByIdInscripcion = `
-    select o.id as id_organizacion, o.logo, o.nombre_comercial from inscripciones as i
+    select o.id as id_organizacion, o.logo, o.nombre_comercial from inscripcionEvento as i
     inner join organizaciones as o
     on o.id = i.id_organizacion
     where i.estado = 'APROBADA' and i.id_evento = $1
@@ -49,13 +49,13 @@ const queryFindOrganizacionesParticipantesByIdInscripcion = `
 
 const queryFindInscripcionesByIdEvento = `
     select i.id as id_inscripcion, i.estado, i.fecha,
-i.id_organizacion, o.nombre_comercial, o.logo from inscripciones as i
+i.id_organizacion, o.nombre_comercial, o.logo from inscripcionEvento as i
 inner join organizaciones as o on i.id_organizacion = o.id
 where i.id_evento = $1
 `
 
 const queryFindOrganizacionesEventoInscripciones = `
-    select o.id as id_organizacion, o.logo, o.nombre_comercial, i.fecha, i.estado , i.id as id_inscripcion from inscripciones as i
+    select o.id as id_organizacion, o.logo, o.nombre_comercial, i.fecha, i.estado , i.id as id_inscripcion from inscripcionEvento as i
     inner join organizaciones as o
     on o.id = i.id_organizacion
     where i.id_evento = $1
@@ -63,7 +63,7 @@ const queryFindOrganizacionesEventoInscripciones = `
 const queryFinParticipantesPendientesByIdInscripcion = `
     select i.id as id_inscripcion, i.fecha, o.id as id_organizacion,
     o.nombre_comercial, o.logo
-    from inscripciones as i 
+    from inscripcionEvento as i 
     inner join organizaciones as o on i.id_organizacion = o.id
     where i.id_evento = $1 and i.estado = 'PENDIENTE'
 `

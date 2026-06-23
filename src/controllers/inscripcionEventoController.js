@@ -1,4 +1,4 @@
-const inscripcionService = require('../services/inscripcionService')
+const inscripcionService = require('../services/inscripcionEventoService')
 
 const create = async (req, res, next) => {
     try {

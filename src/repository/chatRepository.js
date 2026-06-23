@@ -1,7 +1,7 @@
 const pool = require('../config/postgres')
 
 const queryCreate = `
-    INSERT INTO chat (
+    INSERT INTO chats (
         estado, organizacion1, organizacion2
     ) VALUES (
         true, $1,$2
@@ -9,7 +9,7 @@ const queryCreate = `
 `
 
 const queryFindOrganizacion = `
-    select id from chat where 
+    select id from chats where 
     (organizacion1 = $1 and organizacion2 = $2) or 
     (organizacion1 = $2 and organizacion2 = $1)
 `

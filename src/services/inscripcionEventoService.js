@@ -1,4 +1,4 @@
-const inscripcionRepository = require('../repository/inscripcionRepository')
+const inscripcionRepository = require('../repository/inscripcionEventoRepository')
 const CustomError = require('../midlewares/customError')
 
 const create = async (estado, fecha, id_evento, id_organizacion) => {

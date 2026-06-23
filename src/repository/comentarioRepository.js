@@ -77,7 +77,7 @@ const findById = async (id) => {
 
 const findAllByIdUsuario = async (id_organizacion) => {
     const result = await pool.query(queryComentariosByIdOrganizacion, [id_organizacion])
-    if (result.rowCount === 0) throw new Error('Ocurrio un error al obtener los comentarios del usuario')
+    // if (result.rowCount === 0) throw new Error('Ocurrio un error al obtener los comentarios del usuario')
     const rows = result.rows
     return rows.map(
         row => new Comentario(
