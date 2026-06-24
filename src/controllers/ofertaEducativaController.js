@@ -1,12 +1,12 @@
 const ofertaeducativaService = require('../services/ofertaEducativaService')
 
-const findAllByIdEscuela = async (req, res) => {
+const findAllByIdEscuela = async (req, res,next) => {
     try {
         const id = req.params.id
         const ofertas = await ofertaeducativaService.findAlllByIdEscuela(id)
         res.status(200).json(ofertas)
     } catch (error) {
-        res.status(404).json({message : error.message})
+        next(error)
     }
 }
 

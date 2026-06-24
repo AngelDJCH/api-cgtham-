@@ -1,6 +1,6 @@
 const camaraService = require('../services/camaraService')
 
-const create = async (req, res) => {
+const create = async (req, res,next) => {
     try {
         const { id, nombre, presidente } = req.body;
         const camara = await camaraService.create(id, nombre, presidente);
@@ -8,15 +8,11 @@ const create = async (req, res) => {
             camara.toJSON()
         )
     } catch (error) {
-        res.status(400).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const findById = async (req, res) => {
+const findById = async (req, res,next) => {
     try {
         const id = req.params.id;
         const camara = await camaraService.findById(id);
@@ -24,15 +20,11 @@ const findById = async (req, res) => {
             camara.toJSON()
         )
     } catch (error) {
-        res.status(401).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const findAll = async (req, res) => {
+const findAll = async (req, res,next) => {
     try {
         const camaras = await camaraService.findAll()
         res.status(200).json(
@@ -41,30 +33,22 @@ const findAll = async (req, res) => {
             )
         )
     } catch (error) {
-        res.status(400).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const updateById = async (req, res) => {
+const updateById = async (req, res,next) => {
     try {
         const id = req.params.id;
         const {nombre, presidente} = req.body;
         const camara = await camaraService.updateById(id, nombre, presidente)
         res.status(200).json(camara.toJSON())
     } catch (error) {
-        res.status(404).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const deleteById = async (req, res) => {
+const deleteById = async (req, res,next) => {
     try {
         const id = req.params.id;
         const camara = await camaraService.deleteById(id)
@@ -74,11 +58,7 @@ const deleteById = async (req, res) => {
             }
         )
     } catch (error) {
-        res.status(404).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 

@@ -72,7 +72,7 @@ const queryFindLogoByIdOrganizacion = `
 
 
 const queryUpdateEstadoById = `
-    UPDATE organizaciones SET estado = $1 WHERE id = $2
+    UPDATE organizaciones SET estado = $1 WHERE id = $2 RETURNING *
 `
 
 const findLogoByIdOrganizacion = async (id) => {

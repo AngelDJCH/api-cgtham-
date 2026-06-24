@@ -2,7 +2,7 @@ const { verifyToken } = require('../helpers/jwtToken');
 const ofertaLaboralService = require('../services/ofertaLaboralService')
 const historicoOferta = require('../services/historicoOfertaService')
 
-const create = async (req, res) => {
+const create = async (req, res,next) => {
     try {
         const { titulo, descripcion, salario, jornada, tipo_contrato, vacantes, beneficios,
             habilidades_tecnicas, habilidades_blandas, departamento_area, modalidad,
@@ -12,57 +12,41 @@ const create = async (req, res) => {
             experiencia, estado, id_empresa, documento)
         res.status(201).json(oferta_laboral.toJSON())
     } catch (error) {
-        res.status(400).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const findById = async (req, res) => {
+const findById = async (req, res,next) => {
     try {
         const id = req.params.id
         const oferta_laboral = await ofertaLaboralService.findById(id)
         res.status(200).json(oferta_laboral.toJSON())
     } catch (error) {
-        res.status(400).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const findAll = async (req, res) => {
+const findAll = async (req, res,next) => {
     try {
         const ofertas_laborales = await ofertaLaboralService.findAll()
         res.status(200).json(ofertas_laborales)
     } catch (error) {
-        res.status(400).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
 
-const findAllByIdOrganizacion = async (req, res) => {
+const findAllByIdOrganizacion = async (req, res,next) => {
     try {
         const id_organizacion = req.params.id_organizacion
         const ofertas_laborales = await ofertaLaboralService.findAllByIdOrganziacion(id_organizacion)
         res.status(200).json(ofertas_laborales)
     } catch (error) {
-        res.status(400).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const updateById = async (req, res) => {
+const updateById = async (req, res,next) => {
     try {
         const id = req.params.id
         const { titulo, descripcion, salario, jornada, tipo_contrato, vacantes, beneficios,
@@ -73,15 +57,11 @@ const updateById = async (req, res) => {
             experiencia, estado)
             res.status(200).json(oferta_laboral.toJSON())
     } catch (error) {
-        res.status(400).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const deleteById = async (req, res) => {
+const deleteById = async (req, res,next) => {
     try {
         const id = req.params.id
         const tk = req.cookies.tk
@@ -91,15 +71,11 @@ const deleteById = async (req, res) => {
         const oferta_laboral = await ofertaLaboralService.deletById(id)
         res.status(204).json({message : 'ELIMINADO'})
     } catch (error) {
-        res.status(400).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const countOfertas = async (req, res) => {
+const countOfertas = async (req, res,next) => {
     try {
         const countOfertas = await ofertaLaboralService.countOfertas()
         res.status(200).json(
@@ -108,11 +84,7 @@ const countOfertas = async (req, res) => {
             }
         )
     } catch (error) {
-        res.status(400).json(
-            {
-                error : error.message
-            }
-        )
+        next(error)
     }
 }
 

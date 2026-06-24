@@ -2,7 +2,7 @@ const inscripcionService = require('../services/inscripcionEventoService')
 
 const create = async (req, res, next) => {
     try {
-        const {estado, fecha, id_evento, id_organizacion} = req.body;
+        const { estado, fecha, id_evento, id_organizacion } = req.body;
         const inscripcion = await inscripcionService.create(estado, fecha, id_evento, id_organizacion)
         res.status(201).json(inscripcion.toJSON())
     } catch (error) {
@@ -10,115 +10,89 @@ const create = async (req, res, next) => {
     }
 }
 
-const findByIdAndEstado = async (req, res) => {
+const findByIdAndEstado = async (req, res, next) => {
     try {
         const id = req.params.id
-        const {estado} = req.body
+        const { estado } = req.body
         const inscripcion = await inscripcionService.findByIdAndEstado(id, estado)
         res.status(200).json(inscripcion.toJSON())
     } catch (error) {
-        res.status(400).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const findAllByIdOrganizacion =  async (req, res) => {
+const findAllByIdOrganizacion = async (req, res, next) => {
     try {
         const id_organizacion = req.params.id_organizacion
         const inscripciones = await inscripcionService.findAllByIdOrganizacion(id_organizacion)
-        res.status(200).json(inscripciones)        
+        res.status(200).json(inscripciones)
     } catch (error) {
-        res.status(400).json(
-            {
-                message : error.message
-            }
-        )
+        next(error)
     }
 }
 
 
-const findAllByIdUsuario=  async (req, res) => {
+const findAllByIdUsuario = async (req, res, next) => {
     try {
         const id_usuario = req.params.id_usuario
         const inscripciones = await inscripcionService.findByIdUsuario(id_usuario)
-        res.status(200).json(inscripciones)        
+        res.status(200).json(inscripciones)
     } catch (error) {
-        res.status(400).json(
-            {
-                message : error.message
-            }
-        )
+        next(error)
     }
 }
 
-const updateEstadoById = async (req, res) => {
+const updateEstadoById = async (req, res, next) => {
     try {
         const id = req.params.id
-        const {estado} = req.body
-        const inscripcion =  await inscripcionService.updateEstadoById(id, estado)
+        const { estado } = req.body
+        const inscripcion = await inscripcionService.updateEstadoById(id, estado)
         res.status(200).json(inscripcion.toJSON())
     } catch (error) {
-        res.status(400).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const deleteById = async (req, res) => {
+const deleteById = async (req, res, next) => {
     try {
         const id = req.params.id
         const inscripcion = await inscripcionService.deleteById(id)
         res.status(204).json({
-            message : 'ELIMINADA'
+            message: 'ELIMINADA'
         })
     } catch (error) {
-        res.status(404).json(
-            {
-                messsage : error.message
-            }
-        )
+        next(error)
     }
 }
 
-const findOrganizacionesParticipantesByIdInscripcion = async (req,res) => {
+const findOrganizacionesParticipantesByIdInscripcion = async (req, res, next) => {
     try {
         const id_evento = req.params.id_evento
         const participantes = await inscripcionService.findOrganizacionesParticipantesByIdInscripcion(id_evento)
         res.status(200).json(participantes)
     } catch (error) {
-        res.status(400).json(
-            {
-                message : error.message
-            }
-        )
+        next(error)
     }
 }
 
-const findInscripcionesByIdEvento = async (req, res) => {
+const findInscripcionesByIdEvento = async (req, res, next) => {
     try {
         const id = req.params.id
         const inscripciones = await inscripcionService.findInscripcionesByIdEvento(id)
         res.status(200).json(inscripciones)
     } catch (error) {
-        res.status(400).json({
-            message : error.message
-        })
+        next(error)
     }
 }
 
-const findParticipantesPendientesByIdInscripcion = async (req, res) => {
+const findParticipantesPendientesByIdInscripcion = async (req, res, next) => {
     try {
         const id_evento = req.params.id_evento
         const inscripciones = await inscripcionService.findParticipantesPendientesByIdInscripcion(id_evento)
         res.status(200).json(inscripciones)
     } catch (error) {
-        res.status(400).json({message :error.message})
+        next(error)
     }
 }
 
-module.exports = {findParticipantesPendientesByIdInscripcion, create, findByIdAndEstado, updateEstadoById, deleteById,findAllByIdOrganizacion, findAllByIdUsuario,findOrganizacionesParticipantesByIdInscripcion, findInscripcionesByIdEvento}
+module.exports = { findParticipantesPendientesByIdInscripcion, create, findByIdAndEstado, updateEstadoById, deleteById, findAllByIdOrganizacion, findAllByIdUsuario, findOrganizacionesParticipantesByIdInscripcion, findInscripcionesByIdEvento }

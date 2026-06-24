@@ -1,56 +1,26 @@
 const organizacionService = require('../services/organizacionService')
 
-const create = async (req, res) => {
+const create = async (req, res,next) => {
     try {
         const { nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, id_contacto, id_direccion } = req.body;
-        // const logoUrl = ''
-        // const bannerUrl = ''
-
-        // try {
-        //     const logoCarpeta = await cloudinary.uploader.upload(logo, {
-        //         folder: '/cgtham/logos',
-        //     })
-        //     const bannerCarpeta = await cloudinary.uploader.upload(banner, {
-        //         folder: '/cgtham/banners',
-        //     })
-        //     logoUrl = logoCarpeta.secure_url
-        //     bannerUrl = bannerCarpeta.secure_url
-        // } catch (error) {
-        //     res.status(400).json(
-        //         {
-        //             message: error
-        //         }
-        //     )
-        // }
-        // const organizacion = await organizacionService.create(nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logoUrl, bannerUrl, id_contacto, id_direccion);
-
-
         const organizacion = await organizacionService.create(nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, logo, banner, id_contacto, id_direccion);
         res.status(201).json(organizacion.toJSON())
     } catch (error) {
-        res.status(400).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const findById = async (req, res) => {
+const findById = async (req, res,next) => {
     try {
         const id = req.params.id;
         const organizacion = await organizacionService.findById(id)
         res.status(200).json(organizacion.toJSON())
     } catch (error) {
-        res.status(404).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const findAll = async (req, res) => {
+const findAll = async (req, res,next) => {
     try {
         const organizaciones = await organizacionService.findAll();
         res.status(200).json(
@@ -59,30 +29,22 @@ const findAll = async (req, res) => {
             )
         )
     } catch (error) {
-        res.status(400).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const updateById = async (req, res) => {
+const updateById = async (req, res,next) => {
     try {
         const id = req.params.id;
         const { nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc} = req.body;
         const organizacion = await organizacionService.updateById(id, nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc)
         res.status(200).json(organizacion.toJSON())
     } catch (error) {
-        res.status(404).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const deleteById = async (req, res) => {
+const deleteById = async (req, res,next) => {
     try {
         const id = req.params.id;
         const organizacion = await organizacionService.deleteById(id)
@@ -90,72 +52,58 @@ const deleteById = async (req, res) => {
             message: 'Elimninado exitosamente'
         })
     } catch (error) {
-        res.status(404).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const countOrganizaciones = async (req, res) => {
+const countOrganizaciones = async (req, res,next) => {
     try {
         const count_organizaciones = await organizacionService.countOrganizaciones()
         res.status(200).json({
             organizaciones: count_organizaciones
         })
     } catch (error) {
-        res.status(400).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const findAllNoAprobadas = async (req, res) => {
+const findAllNoAprobadas = async (req, res,next) => {
     try {
         const organizaciones = await organizacionService.findAllNoAprobadas()
         res.status(200).json(organizaciones)        
     } catch (error) {
-        res.status(400).json({
-            message : error.message
-        })
+        next(error)
     }
 }
 
-const findByIdFast = async (req, res) => {
+const findByIdFast = async (req, res,next) => {
     try {
         const id_organizacion = req.params.id_organizacion
         const organizacion = await organizacionService.findByIdFast(id_organizacion)
         res.status(200).json(organizacion)
     } catch (error) {
-        res.status(400).json({
-            message : error.message
-        })
+        next(error)
     }
 }
 
-const updateEstadoById = async (req, res) => {
+const updateEstadoById = async (req, res,next) => {
     try {
         const id = req.params.id
         const {estado} = req.body
         const organizacion = await organizacionService.updateEstadoById(id, estado)
         res.status(200).json(organizacion)
     } catch (error) {
-        res.status(404).json({
-            message : error.message
-        })
+        next(error)
     }
 }
 
-const findLogoByIdOrganizacion = async (req, res) => {
+const findLogoByIdOrganizacion = async (req, res,next) => {
     try {
         const id = req.params.id
         const logo = await organizacionService.findLogoByIdOrganizacion(id)
         res.status(200).json(logo)
     } catch (error) {
-        res.status(404).json({message:error.message})
+        next(error)
     }
 }
 

@@ -10,40 +10,34 @@ const create = async (req, res, next) => {
     }
 }
 
-const organizacionesParticipantes = async (req, res) => {
+const organizacionesParticipantes = async (req, res,next) => {
     try {
         const id = req.params.id
         const organizaciones = await inscripcionCursoService.organizacioneParticipantes(id)
         res.status(200).json(organizaciones)
     } catch (error) {
-        res.status(404).json({
-            message : error.message
-        })
+        next(error)
     }
 }
 
-const organizacionesPendientes = async (req, res) => {
+const organizacionesPendientes = async (req, res,next) => {
     try {
         const id = req.params.id
         const organizaciones = await inscripcionCursoService.organizacionesPendientes(id)
         res.status(200).json(organizaciones)
     } catch (error) {
-        res.status(404).json({
-            message : error.message
-        })
+        next(error)
     }
 }
 
-const updateEstadoById = async (req, res) => {
+const updateEstadoById = async (req, res,next) => {
     try {
         const id = req.params.id
         const {estado} = req.body
         const inscripcionCurso = await inscripcionCursoService.updateEstadoById(id,estado)
         res.status(200).json(inscripcionCurso)
     } catch (error) {
-        res.status(404).json({
-            message : error.message
-        })
+        next(error)
     }
 }
 

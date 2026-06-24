@@ -1,20 +1,16 @@
 const mensajeService = require('../services/mensajeService')
 
-const create = async (req, res) => {
+const create = async (req, res,next) => {
     try {
         const {contenido, id_emisor, id_receptor, id_chat} = req.body;
         const mensaje = await mensajeService.create(contenido, id_emisor, id_receptor, id_chat)
         res.status(201).json(mensaje.toJSON())
     } catch (error) {
-        res.status(400).json(
-            {
-                message : error.message
-            }
-        )
+        next(error)
     }
 }
 
-const findAllByIdChat = async (req, res) => {
+const findAllByIdChat = async (req, res,next) => {
     try {
         const {id} = req.body
         const mensajes = await mensajeService.findAllByIdChat(id)
@@ -24,11 +20,7 @@ const findAllByIdChat = async (req, res) => {
             )
         )
     } catch (error) {
-        res.status(404).json(
-            {
-                message : error.message
-            }
-        )
+        next(error)
     }
 }
 

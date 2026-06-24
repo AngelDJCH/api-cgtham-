@@ -3,35 +3,27 @@ const bcrypt = require('bcrypt')
 
 const { generateToken, verifyToken } = require('../helpers/jwtToken')
 
-const create = async (req, res) => {
+const create = async (req, res,next) => {
     try {
         const { correo, contrasenia, roles, id_organizacion } = req.body;
         const contraseniaHash = await bcrypt.hashSync(contrasenia, 10)
         const cuenta = await cuentaService.create(correo, contraseniaHash, roles, id_organizacion);
         res.status(201).json(cuenta.toJSON())
     } catch (error) {
-        res.status(400).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const logout = async (req, res) => {
+const logout = async (req, res,next) => {
     try {
         res.clearCookie('tk')
         res.status(204).json({ message: 'cookie borrada' })
     } catch (error) {
-        res.status(400).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const verificarSesion = async (req, res) => {
+const verificarSesion = async (req, res,next) => {
     try {
         const token = req.cookies.tk
         const decoded = verifyToken(token)
@@ -50,15 +42,11 @@ const verificarSesion = async (req, res) => {
         )
     } catch (error) {
         res.clearCookie('tk')
-        res.status(400).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const login = async (req, res) => {
+const login = async (req, res,next) => {
     try {
         const { correo, contrasenia } = req.body;
         const cuenta = await cuentaService.login(correo)
@@ -79,66 +67,51 @@ const login = async (req, res) => {
         }
         if (!result) throw new Error('Contrasenia incorrecta')
     } catch (error) {
-        res.status(404).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const findById = async (req, res) => {
+const findById = async (req, res,next) => {
     try {
         const id = req.params.id;
         const cuenta = await cuentaService.findById(id)
         res.status(200).json(cuenta.toJSON())
     } catch (error) {
-        res.status(404).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const updateRolById = async (req, res) => {
+const updateRolById = async (req, res,next) => {
     try {
         const id = req.params.id;
         const { roles } = req.body;
         const cuenta = await cuentaService.updateById(id, roles)
         res.status(200).json(cuenta.toJSON())
     } catch (error) {
-        res.status(404).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const updateCorreoByIdOrganizacion = async (req, res) => {
+const updateCorreoByIdOrganizacion = async (req, res,next) => {
     try {
         const id = req.params.id
         const { correo } = req.body
-        // const contraseniaHash = await bcrypt.hashSync(contrasenia, 10)
-        // const cuenta = await cuentaService.updateByIdOrganizacion(correo, contraseniaHash, id)
         const cuenta = await cuentaService.updateCorreoByIdOrganizacion(correo, id)
         res.status(200).json(cuenta.toJSON())
     } catch (error) {
-        res.status(404).json({ message: error.message })
+        next(error)
     }
 }
 
-const updateContraseniaByIdOrganizacion = async (req, res) => {
+const updateContraseniaByIdOrganizacion = async (req, res,next) => {
     try {
         const id = req.params.id
         const { contrasenia } = req.body
         const contraseniaHash = await bcrypt.hashSync(contrasenia, 10)
-        // const cuenta = await cuentaService.updateByIdOrganizacion(correo, contraseniaHash, id)
         const cuenta = await cuentaService.updateContraseniaByIdOrganizacion(contraseniaHash, id)
         res.status(200).json(cuenta.toJSON())
     } catch (error) {
-        res.status(404).json({ message: error.message })
+        next(error)
     }
 }
 

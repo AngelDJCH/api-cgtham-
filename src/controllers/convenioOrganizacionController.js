@@ -10,85 +10,65 @@ const create = async (req, res, next) => {
     }
 }
 
-const findById = async (req, res) => {
+const findById = async (req, res, next) => {
     try {
         const id = req.params.id
         const convenioOrganizacion = await convenioorganizacionService.findById(id)
         res.status(200).json(convenioOrganizacion.toJSON())
     } catch (error) {
-        res.status(404).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const updateRolById = async (req, res) => {
+const updateRolById = async (req, res, next) => {
     try {
         const id = req.params.id
         const { rol } = req.body
         const convenioOrganizacion = await convenioorganizacionService.updateRolById(id, rol)
         res.status(200).json(convenioOrganizacion.toJSON())
     } catch (error) {
-        res.status(404).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const updateEstadoById = async (req, res) => {
+const updateEstadoById = async (req, res, next) => {
     try {
         const id = req.params.id
-        const {estado} =  req.body
-        const convenio_organizacion = await convenioorganizacionService.updateEstadoById(id,estado)
+        const { estado } = req.body
+        const convenio_organizacion = await convenioorganizacionService.updateEstadoById(id, estado)
         res.status(200).json(convenio_organizacion.toJSON())
     } catch (error) {
-        res.status(400).json({
-            message : error.message
-        })
+        next(error)
     }
 }
 
-const findAll =  async (req, res) => {
+const findAll = async (req, res, next) => {
     try {
         const convenioOrganizacion = await convenioorganizacionService.findAll()
         res.status(200).json(convenioOrganizacion)
     } catch (error) {
-        res.status(400).json(
-            {
-                message : error.message
-            }
-        )
+        next(error)
     }
 }
 
-const findAllParticipantesById = async (req, res) => {
+const findAllParticipantesById = async (req, res, next) => {
     try {
         const id = req.params.id_convenio
         const participantes = await convenioorganizacionService.findAllParticipantesById(id)
         res.status(200).json(participantes)
     } catch (error) {
-        res.status(400).json({
-            message : error.message
-        })
+        next(error)
     }
 }
 
-const deleteById = async (req, res) => {
+const deleteById = async (req, res, next) => {
     try {
         const id = req.params.id
         const convenio_organizacion = await convenioorganizacionService.deleteById(id)
-        res.status(204).json({message : 'ELIMINADO'})        
+        res.status(204).json({ message: 'ELIMINADO' })
     } catch (error) {
-        res.status(400).json(
-            {
-                message :  error.message
-            }
-        )
+        next(error)
     }
 }
 
-module.exports = { create, findById, updateRolById, findAll, findAllParticipantesById, deleteById,updateEstadoById}
+module.exports = { create, findById, updateRolById, findAll, findAllParticipantesById, deleteById, updateEstadoById }

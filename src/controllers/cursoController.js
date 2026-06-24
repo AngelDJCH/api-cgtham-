@@ -1,110 +1,96 @@
 const cursoService = require('../services/cursoService')
 
-const create = async (req, res) => {
+const create = async (req, res, next) => {
     try {
-        const {titulo, descripcion, fecha_inicio, fecha_final, estado, id_organizacion} = req.body
-        const curso =  await cursoService.create(titulo, descripcion, fecha_inicio, fecha_final, estado,  id_organizacion)
+        const { titulo, descripcion, fecha_inicio, fecha_final, estado, id_organizacion } = req.body
+        const curso = await cursoService.create(titulo, descripcion, fecha_inicio, fecha_final, estado, id_organizacion)
         res.status(201).json(
             curso.toJSON()
         )
     } catch (error) {
-        res.status(400).json({
-            message : error.message
-        })
+        next(error)
     }
 }
 
-const findAllToEmpresas = async (req, res) => {
+const findAllToEmpresas = async (req, res, next) => {
     try {
         const cursos = await cursoService.findAllToEmpresas()
         res.status(200).json(cursos)
     } catch (error) {
-        res.status(400).json({
-            message : error.message
-        })
+        next(error)
     }
 }
 
-const findAllToEscuelas = async (req, res) => {
+const findAllToEscuelas = async (req, res, next) => {
     try {
         const id_organizacion = req.params.id_organizacion
         const cursos = await cursoService.findAllToEscuelas(id_organizacion)
-        res.status(200).json(cursos)        
+        res.status(200).json(cursos)
     } catch (error) {
-        res.status(400).json({
-            message : error.message
-        })
+        next(error)
     }
 }
 
-const findById = async (req,res) => {
+const findById = async (req, res, next) => {
     try {
         const id_curso = req.params.id_curso
         const curso = await cursoService.findById(id_curso)
         res.status(200).json(curso)
     } catch (error) {
-        res.status(400).json({
-            message : error.message
-        })
+        next(error)
     }
 }
 
-const updateById = async (req, res) => {
+const updateById = async (req, res, next) => {
     try {
         const id_curso = req.params.id_curso
-        const {titulo, descripcion, inicio, final} = req.body
+        const { titulo, descripcion, inicio, final } = req.body
         const curso = await cursoService.updateById(titulo, descripcion, inicio, final, id_curso)
-        res.status(200).json(curso)        
+        res.status(200).json(curso)
     } catch (error) {
-        res.status(400).json({
-            message : error.message
-        })
+        next(error)
     }
 }
 
-const updateEstadoById = async (req, res) => {
+const updateEstadoById = async (req, res, next) => {
     try {
         const id_curso = req.params.id_curso
         const curso = await cursoService.updateEstadoById('ELIMINADO', id_curso)
-        res.status(200).json(curso)        
+        res.status(200).json(curso)
     } catch (error) {
-        res.status(400).json({
-            message : error.message
-        })
+        next(error)
     }
 }
 
-const solicitar = async (req, res) => {
+const solicitar = async (req, res, next) => {
     try {
-        const {titulo, descripcion, estado, id_organizacion} = req.body
+        const { titulo, descripcion, estado, id_organizacion } = req.body
         const curso = await cursoService.solicitar(titulo, descripcion, estado, id_organizacion)
         res.status(201).json(curso)
     } catch (error) {
-        res.status(400).json({
-            message : error.message
-        })
+        next(error)
     }
 }
 
-const solicitudes = async (req, res) => {
+const solicitudes = async (req, res, next) => {
     try {
         const id_organizacion = req.params.id_organizacion
         const cursos = await cursoService.solicitudes(id_organizacion)
         res.status(200).json(cursos)
     } catch (error) {
-        res.status(400).json({message : error.message})
+        next(error)
     }
 }
 
-const updateByIdForPeticion = async (req, res) => {
+const updateByIdForPeticion = async (req, res, next) => {
     try {
         const id_curso = req.params.id_curso
-        const {titulo, descripcion, fecha_inicio, fecha_final} = req.body
+        const { titulo, descripcion, fecha_inicio, fecha_final } = req.body
         const curso = await cursoService.updateByIdForPeticion(titulo, descripcion, fecha_inicio, fecha_final, id_curso)
         res.status(200).json(curso)
     } catch (error) {
-        res.status(400).json({message : error.message})
+        next(error)
     }
 }
 
-module.exports = {create,findAllToEmpresas,findAllToEscuelas,findById, updateById, updateEstadoById,solicitar, solicitudes, updateByIdForPeticion}
+module.exports = { create, findAllToEmpresas, findAllToEscuelas, findById, updateById, updateEstadoById, solicitar, solicitudes, updateByIdForPeticion }

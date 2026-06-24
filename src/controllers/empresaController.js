@@ -1,34 +1,26 @@
 const empresaService = require('../services/empresaService')
 
-const create = async (req, res) => {
+const create = async (req, res,next) => {
     try {
         const { id_organizacion, razon_social, regimen_fiscal, direccion_fiscal } = req.body;
         const empresa = await empresaService.create(id_organizacion, razon_social, regimen_fiscal, direccion_fiscal);
         res.status(201).json(empresa.toJSON())
     } catch (error) {
-        res.status(400).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const findById = async (req, res) => {
+const findById = async (req, res,next) => {
     try {
         const id = req.params.id;
         const empresa = await empresaService.findById(id);
         res.status(200).json(empresa.toJSON())
     } catch (error) {
-        res.status(404).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const findAll = async (req, res) => {
+const findAll = async (req, res,next) => {
     try {
         const empresas = await empresaService.findAll()
         res.status(200).json(
@@ -37,40 +29,28 @@ const findAll = async (req, res) => {
             )
         )
     } catch (error) {
-        res.status(400).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const updateById = async (req, res) => {
+const updateById = async (req, res,next) => {
     try {
         const {razon_social, regimen_fiscal, direccion_fiscal } = req.body;
         const id = req.params.id;
         const empresa = await empresaService.updateById(id, razon_social, regimen_fiscal, direccion_fiscal)
         res.status(200).json(empresa.toJSON())
     } catch (error) {
-        res.status(404).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
-const deleteById = async (req, res) => {
+const deleteById = async (req, res,next) => {
     try {
         const id = req.params.id;
         const empresa = await empresaService.deleteById(id)
         res.status(204).json({message:"Eliminacion exitosa"})
     } catch (error) {
-        res.status(404).json(
-            {
-                message: error.message
-            }
-        )
+        next(error)
     }
 }
 
