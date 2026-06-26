@@ -44,25 +44,25 @@ const ofertaEducativaRoutes = require('./src/routes/ofertaEducativaRoute')
 const chatRoutes = require('./src/routes/chatRoute')
 const isncripcionCursoRoutes = require('./src/routes/inscripcionCursoRoute')
 
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, 
-    max: 500, 
-    standardHeaders: true, 
-    legacyHeaders: false,
+// const limiter = rateLimit({
+//     windowMs: 15 * 60 * 1000, 
+//     max: 500, 
+//     standardHeaders: true, 
+//     legacyHeaders: false,
     
-    handler: (req, res, next, options) => {
-        const segundosRestantes = Math.ceil((req.rateLimit.resetTime - Date.now()) / 1000);
+//     handler: (req, res, next, options) => {
+//         const segundosRestantes = Math.ceil((req.rateLimit.resetTime - Date.now()) / 1000);
 
-        res.status(429).json({
-            error: 'Too Many Requests',
-            message: 'Demasiadas peticiones desde esta dirección IP. Por favor, inténtalo más tarde.',
-            retryAfterSeconds: segundosRestantes,
-            documentation: 'https://api.example.com/docs/rate-limits'
-        });
-    }
-});
+//         res.status(429).json({
+//             error: 'Too Many Requests',
+//             message: 'Demasiadas peticiones desde esta dirección IP. Por favor, inténtalo más tarde.',
+//             retryAfterSeconds: segundosRestantes,
+//             documentation: 'https://api.example.com/docs/rate-limits'
+//         });
+//     }
+// });
 
-app.use(limiter);
+// app.use(limiter);
 
 //ROUTES IN USE
 app.use('/api/v1/direcciones', direccionRoutes)
