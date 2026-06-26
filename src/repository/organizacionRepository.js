@@ -233,7 +233,6 @@ const findById = async (id) => {
 
 const findAll = async () => {
     const result = await pool.query(queryFindAll);
-    if (result.rowCount === 0) throw new Error(`No hay organizaciones disponibles`)
     const organizaciones = result.rows.map(row => new Organizacion(
         row.id,
         row.nombre_comercial,
