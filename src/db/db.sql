@@ -260,16 +260,18 @@ CREATE TABLE empresacamara (
         FOREIGN KEY (id_camara) REFERENCES camaras(id) ON DELETE CASCADE
 );
 
-CREATE TABLE ofertaeducativa (
+CREATE TABLE ofertaeducativa(
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     nombre VARCHAR(150) NOT NULL,
     descripcion TEXT NOT NULL,
     duracion VARCHAR(10) NOT NULL,
-    profile TEXT, -- Nota: en tu script original decía "perfil TEXT NOT NULL", ajustado según tus estándares de tablas
+    perfil TEXT NOT NULL,
     id_escuela UUID NOT NULL,
     CONSTRAINT fk_ofertaeducativa_escuela
-        FOREIGN KEY (id_escuela) REFERENCES escuelas(id) ON DELETE CASCADE
+    FOREIGN KEY (id_escuela)
+    REFERENCES escuelas(id)
 );
+
 
 CREATE TABLE ofertaslaborales (
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
