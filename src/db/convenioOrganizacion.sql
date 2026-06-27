@@ -9,18 +9,7 @@ CREATE TABLE convenioorganizacion(
         REFERENCES convenios(id)
         ON DELETE CASCADE,
     CONSTRAINT fk_convenioorganizacion_organizaciones
-        FOREIGN KEY (id_organizacion)
-        REFERENCES organizaciones(id)
+        FOREIGN KEY (id_organizacion) 
+        REFERENCES organizaciones(id) 
         ON DELETE CASCADE
 );
-
--- 1. Eliminas la restricción vieja que está bloqueando todo
-ALTER TABLE convenioorganizacion 
-DROP CONSTRAINT fk_convenioorganizacion_organizaciones;
-
--- 2. La vuelves a crear con la regla de cascada activa
-ALTER TABLE convenioorganizacion 
-ADD CONSTRAINT fk_convenioorganizacion_organizaciones
-FOREIGN KEY (id_organizacion) 
-REFERENCES organizaciones(id) 
-ON DELETE CASCADE;

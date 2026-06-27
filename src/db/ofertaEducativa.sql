@@ -1,4 +1,4 @@
-CREATE TABLE ofertaeducativa(
+CREATE TABLE ofertaseducativa(
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     nombre VARCHAR(150) NOT NULL,
     descripcion TEXT NOT NULL,
@@ -8,4 +8,5 @@ CREATE TABLE ofertaeducativa(
     CONSTRAINT fk_ofertaeducativa_escuela
     FOREIGN KEY (id_escuela)
     REFERENCES escuelas(id)
+    ON DELETE CASCADE
 );

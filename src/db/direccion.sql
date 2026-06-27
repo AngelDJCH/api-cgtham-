@@ -1,4 +1,4 @@
-CREATE TABLE direciones(
+CREATE TABLE direcciones(
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     calle VARCHAR(150) NOT NULL,
     numero VARCHAR(25) NOT NULL,

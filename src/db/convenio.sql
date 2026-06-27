@@ -5,7 +5,7 @@ CREATE TABLE convenios(
     tipo VARCHAR(150) NOT NULL,
     subtipo VARCHAR(150) NOT NULL,
     estado BOOLEAN NOT NULL,
-    archivo TEXT NOT NULL;
+    archivo TEXT NOT NULL,
     fecha_registro DATE NOT NULL,
     fecha_inicio DATE NOT NULL,
     fecha_final DATE NOT NULL

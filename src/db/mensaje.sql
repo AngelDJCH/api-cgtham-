@@ -16,4 +16,4 @@ CREATE TABLE mensajes(
 	FOREIGN KEY (id_chat)
 	REFERENCES chats(id)
     ON DELETE CASCADE
-)
+);

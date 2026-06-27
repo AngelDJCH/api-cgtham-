@@ -6,9 +6,8 @@ CREATE TABLE historicosoferta(
     id_cuenta UUID NOT NULL,
     CONSTRAINT fk_historicosofertas_oferta
     FOREIGN KEY (id_oferta)
-    REFERENCES ofertaslaborales(id)
-    ON DELETE CASCADE,
+    REFERENCES ofertaslaborales(id),
     CONSTRAINT fk_historicosofertas_cuenta
     FOREIGN KEY (id_cuenta)
     REFERENCES cuentas(id)
-)
+);

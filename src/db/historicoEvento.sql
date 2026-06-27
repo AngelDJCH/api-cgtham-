@@ -10,4 +10,4 @@ CREATE TABLE historicosevento(
     CONSTRAINT fk_historicoseventos_cuenta
     FOREIGN KEY (id_cuenta)
     REFERENCES cuentas(id)
-)
+);

@@ -18,4 +18,4 @@ CREATE TABLE organizaciones(
     CONSTRAINT fk_organizaciones_direccion
     FOREIGN KEY (id_direccion)
     REFERENCES direciones(id)
-)
+);

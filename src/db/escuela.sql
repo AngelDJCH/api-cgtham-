@@ -6,4 +6,4 @@ CREATE TABLE escuelas(
     FOREIGN KEY (id)
     REFERENCES organizaciones(id)
     ON DELETE CASCADE
-)
+);

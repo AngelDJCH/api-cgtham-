@@ -14,4 +14,4 @@ CREATE TABLE visitas(
     FOREIGN KEY (id_empresa)
     REFERENCES organizaciones(id)
     ON DELETE CASCADE
-)
+);

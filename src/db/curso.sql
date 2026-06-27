@@ -10,4 +10,4 @@ CREATE TABLE cursos(
     CONSTRAINT fk_cursos_organizacion
     FOREIGN KEY (id_organizacion)
     REFERENCES organizaciones(id)
-)
+);

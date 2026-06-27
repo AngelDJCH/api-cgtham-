@@ -1,17 +1,17 @@
 const pool = require('../config/postgres')
 
 const queryCreate = `
-    INSERT INTO ofertaeducativa (
+    INSERT INTO ofertaseducativa (
         nombre, descripcion, duracion, profile, id_escuela
     ) VALUES ($1,$2,$3,$4,$5) RETURNING *
 `
 
 const queryFindAllByIdEscuela = `
-    SELECT * FROM ofertaeducativa WHERE id_escuela = $1
+    SELECT * FROM ofertaseducativa WHERE id_escuela = $1
 `
 
 const queryExisteOfertaByIdOrganizacion =  `
-    SELECT * FROM ofertaeducativa WHERE nombre = $1 and id_escuela = $2
+    SELECT * FROM ofertaseducativa WHERE nombre = $1 and id_escuela = $2
 `
 
 const existeOfertaByIdOrganizacion = async (nombre, id_escuela) => {

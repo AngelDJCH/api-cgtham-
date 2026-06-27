@@ -15,9 +15,8 @@ CREATE TABLE ofertaslaborales(
     estado VARCHAR(150) NOT NULL,
     fecha_publicacion DATE NOT NULL,
     id_empresa UUID NOT NULL,
+    documento TEXT NOT NULL,
     CONSTRAINT fk_ofertaslaborales_empresa
     FOREIGN KEY (id_empresa)
     REFERENCES empresas(id)
 );
-
-ALTER TABLE ofertaslaborales ADD COLUMN documento TEXT;

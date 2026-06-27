@@ -11,4 +11,4 @@ CREATE TABLE chats (
     FOREIGN KEY (organizacion2)
     REFERENCES organizaciones(id)
     ON DELETE CASCADE
-)
+);

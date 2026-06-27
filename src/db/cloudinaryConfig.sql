@@ -8,4 +8,4 @@ CREATE TABLE cloudinaryconfig(
     FOREIGN KEY (id_organizacion)
     REFERENCES organizaciones(id)
     ON DELETE CASCADE
-)
+);

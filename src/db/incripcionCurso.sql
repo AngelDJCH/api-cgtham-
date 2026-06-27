@@ -1,4 +1,3 @@
-
 CREATE TABLE inscripcioncurso(
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     fecha_inscripcion DATE NOT NULL,
@@ -14,4 +13,4 @@ CREATE TABLE inscripcioncurso(
     FOREIGN KEY (id_organizacion)
     REFERENCES organizaciones(id)
     ON DELETE CASCADE
-)
+);

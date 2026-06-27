@@ -6,4 +6,4 @@ CREATE TABLE camaras(
     FOREIGN KEY(id)
     REFERENCES organizaciones(id)
     ON DELETE CASCADE
-)
+);
