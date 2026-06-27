@@ -15,4 +15,9 @@ const updateById = async (id, calle, numero, colonia, codigo_postal, ciudad, est
     return direccion;
 }
 
-module.exports = { create, findById, updateById }
+const deleteById = async (id) => {
+    const result = await direccionRepository.deleteById(id)
+    return result
+}
+
+module.exports = { create, findById, updateById, deleteById }

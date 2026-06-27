@@ -25,6 +25,15 @@ WHERE id = $8
 RETURNING *
 `;
 
+const queryDeleteById = `
+  DELETE FROM direcciones where id = $1
+`
+
+const deleteById = async (id) => {
+  const result = await pool.query(queryDeleteById, [id])
+  return result.rowCount > 0
+}
+
 const create = async (calle, numero, colonia, codigo_postal, ciudad, estado, pais) => {
   const result = await pool.query(queryCreate, [
     calle,
@@ -113,5 +122,6 @@ const updateById = async (
 module.exports = {
   create,
   findById,
-  updateById
+  updateById,
+  deleteById
 };

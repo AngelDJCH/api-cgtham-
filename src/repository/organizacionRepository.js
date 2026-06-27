@@ -30,7 +30,7 @@ const queryUpdateById = `
 `
 
 const queryDeleteById = `
-    DELETE FROM organizaciones AS o WHERE o.id = $1
+    DELETE FROM organizaciones WHERE id = $1
 `
 
 const queryUpdateLogoByIdOrganizacion = `

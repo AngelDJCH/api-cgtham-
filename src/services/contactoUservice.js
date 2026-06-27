@@ -15,6 +15,11 @@ const updateById = async (id, correo, telefono) => {
     return contacto;
 }
 
+const deleteById = async (id) => {
+    const result = await contactoRepository.deleteById(id)
+    return result
+}
+
 module.exports = {
-    create, findById, updateById
+    create, findById, updateById, deleteById
 }

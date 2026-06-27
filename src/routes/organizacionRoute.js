@@ -15,6 +15,6 @@ organizacionRoutes.get('/logo/:id', organizacionController.findLogoByIdOrganizac
 organizacionRoutes.post('/', validateCreate, organizacionController.create)
 organizacionRoutes.put('/:id',auth,  validateUpdateById, organizacionController.updateById)
 organizacionRoutes.put('/estado/:id', auth, organizacionController.updateEstadoById)
-organizacionRoutes.delete('/:id',auth, verifyRoles('ADMIN_ORG' , 'ADMIN_SYS'), validateDeleteById, organizacionController.deleteById)
+organizacionRoutes.delete('/:id', organizacionController.deleteById)
 
 module.exports = organizacionRoutes;

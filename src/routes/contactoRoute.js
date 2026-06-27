@@ -9,5 +9,6 @@ const verifyRoles = require('../midlewares/verifyRoles')
 contactosRoutes.get('/:id',auth, validateFindById, contactoController.findById);
 contactosRoutes.post('/', validateCreate, contactoController.create);
 contactosRoutes.put('/:id',auth, validateUpdateById, contactoController.updateById)
+contactosRoutes.delete('/:id', contactoController.deleteById)
 
 module.exports = contactosRoutes

@@ -13,7 +13,7 @@ app.use(express.urlencoded({limit:'100mb', extended:true}))
 //app.use(cors({ origin: '*', credentials: true})) https://cheery-donut-20af10.netlify.app
 // http://localhost:3000
 app.use(cors({origin : process.env.URL_FRONTEND || 'http://localhost:3000', credentials: true})) //Acepta cualquier origien // https://api-cgtham.onrender.com
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 app.use(cookie_parser())
 
 /*ROUTES*/

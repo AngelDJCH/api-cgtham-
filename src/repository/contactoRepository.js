@@ -13,6 +13,15 @@ const queryUpdateById = `
 UPDATE contactos AS c SET correo =  $1 , telefono = $2 WHERE c.id = $3 RETURNING *
 `
 
+const queryDeleteById = `
+    DELETE FROM contactos WHERE id = $1
+`
+
+const deleteById = async (id) => {
+    const result = await pool.query(queryDeleteById, [id])
+    result.rowCount > 0
+}
+
 const create = async (correo, telefono) => {
     const result = await pool.query(queryCreate,[correo, telefono]);
     const row = result.rows[0];
@@ -35,4 +44,4 @@ const updateById = async (id, correo, telefono) => {
     return new Contacto(row.id, row.correo, row.telefono)
 }
 
-module.exports = {create, findById, updateById}
+module.exports = {create, findById, updateById, deleteById}

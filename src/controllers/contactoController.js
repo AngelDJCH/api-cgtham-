@@ -31,4 +31,14 @@ const updateById = async (req, res, next) => {
     }
 }
 
-module.exports = { create, findById, updateById }
+const deleteById = async (req, res, next) => {
+    try {
+        const id = req.params.id
+        const result = await contactoService.deleteById(id)
+        res.status(204).json({eliminado : result})
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports = { create, findById, updateById, deleteById }

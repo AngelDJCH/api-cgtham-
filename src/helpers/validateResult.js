@@ -8,11 +8,7 @@ const validateResult = async (req, res, next) => {
 
         console.log(error.array());
 
-        res.status(403).json(
-            {
-                errors : error.array()
-            }
-        )
+        next(error.array())
     }
 }
 

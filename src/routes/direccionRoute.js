@@ -9,5 +9,6 @@ const verifyRoles = require('../midlewares/verifyRoles')
 direccionRoutes.get('/:id',auth,validateFindById, direccionController.findById);
 direccionRoutes.post('/',validateCreate, direccionController.create);
 direccionRoutes.put('/:id',auth,validateUpdateById, direccionController.updateById)
+direccionRoutes.delete('/:id', direccionController.deleteById)
 
 module.exports = direccionRoutes

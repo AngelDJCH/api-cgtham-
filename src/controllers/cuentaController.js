@@ -5,9 +5,9 @@ const { generateToken, verifyToken } = require('../helpers/jwtToken')
 
 const create = async (req, res,next) => {
     try {
-        const { correo, contrasenia, roles, id_organizacion } = req.body;
+        const { correo, contrasenia, id_organizacion } = req.body;
         const contraseniaHash = await bcrypt.hashSync(contrasenia, 10)
-        const cuenta = await cuentaService.create(correo, contraseniaHash, roles, id_organizacion);
+        const cuenta = await cuentaService.create(correo, contraseniaHash, ['ADMIN_ORG'], id_organizacion);
         res.status(201).json(cuenta.toJSON())
     } catch (error) {
         next(error)
