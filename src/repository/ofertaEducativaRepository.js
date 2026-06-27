@@ -1,7 +1,7 @@
 const pool = require('../config/postgres')
 
 const queryCreate = `
-    INSERT INTO ofertaeducativa (
+    INSERT INTO ofertaseducativa (
         nombre, descripcion, duracion, perfil, id_escuela
     ) VALUES ($1,$2,$3,$4,$5) RETURNING *
 `
