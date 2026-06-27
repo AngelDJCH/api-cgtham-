@@ -293,7 +293,7 @@ CREATE TABLE empresacamara(
     ON DELETE CASCADE
 );
 
-CREATE TABLE ofertaseducativa(
+CREATE TABLE ofertaeducativa(
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     nombre VARCHAR(150) NOT NULL,
     descripcion TEXT NOT NULL,
@@ -303,11 +303,10 @@ CREATE TABLE ofertaseducativa(
     CONSTRAINT fk_ofertaeducativa_escuela
     FOREIGN KEY (id_escuela)
     REFERENCES escuelas(id)
-    ON DELETE CASCADE
 );
 
 
-CREATE TABLE ofertaslaborales(
+CREATE TABLE ofertaslaborales (
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     titulo VARCHAR(150) NOT NULL,
     descripcion TEXT NOT NULL,

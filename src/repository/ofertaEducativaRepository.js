@@ -1,8 +1,8 @@
 const pool = require('../config/postgres')
 
 const queryCreate = `
-    INSERT INTO ofertaseducativa (
-        nombre, descripcion, duracion, profile, id_escuela
+    INSERT INTO ofertaeducativa (
+        nombre, descripcion, duracion, perfil, id_escuela
     ) VALUES ($1,$2,$3,$4,$5) RETURNING *
 `
 
@@ -26,7 +26,7 @@ const create = async (nombre, descripcion, duracion, perfil, id_escuela) => {
         id : row.id,
         nombre : row.nombre,
         descripcion : row.descripcion,
-        perfil : row.profile,
+        perfil : row.perfil,
         id_escuela : row.id_escuela
     }
 }
@@ -41,7 +41,7 @@ const findAllByIdEscuela = async (id_escuela) => {
                 nombre: row.nombre,
                 descripcion : row.descripcion,
                 duracion : row.duracion,
-                perfil : row.profile,
+                perfil : row.perfil,
                 id_escuela : row.id_escuela
             }
         }
