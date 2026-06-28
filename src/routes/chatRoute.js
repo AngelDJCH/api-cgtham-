@@ -3,7 +3,7 @@ const chatController = require('../controllers/chatController')
 const auth = require('../midlewares/auth')
 const chatRoutes = express.Router()
 
-chatRoutes.post('/', auth, chatController.create)
-chatRoutes.post('/organizaciones', auth, chatController.findOrganizacionChat)
+chatRoutes.post('/', chatController.create)
+chatRoutes.post('/organizaciones', chatController.findOrganizacionChat)
 
 module.exports = chatRoutes
