@@ -8,7 +8,7 @@ const verifyRoles = require('../midlewares/verifyRoles')
 empresaRoutes.get('/',auth, empresaController.findAll);
 empresaRoutes.get('/:id',auth, validateFindById, empresaController.findById);
 empresaRoutes.post('/', validateCreate, empresaController.create);
-empresaRoutes.put('/:id',auth, verifyRoles('ADMIN_ORG', 'ADMIN_SYS'), validateUpdateById, empresaController.updateById);
-empresaRoutes.delete('/:id',auth, verifyRoles('ADMIN_ORG', 'ADMIN_SYS'),validateDeleteById, empresaController.deleteById);
+empresaRoutes.put('/:id',auth, validateUpdateById, empresaController.updateById);
+empresaRoutes.delete('/:id',auth,validateDeleteById, empresaController.deleteById);
 
 module.exports = empresaRoutes

@@ -35,4 +35,9 @@ const deleteByIdForEscuelas = async (id) => {
     return visitas
 }
 
-module.exports = { create, findByIdEmpresa, updateEstadoRechazadaById, findById,updateById, findByIdEscuela, deleteByIdForEscuelas}
+const findAllForAdministrador = async () => {
+    const visitas = await visitaRepository.findAllForAdministrador()
+    return visitas
+}
+
+module.exports = {findAllForAdministrador, create, findByIdEmpresa, updateEstadoRechazadaById, findById,updateById, findByIdEscuela, deleteByIdForEscuelas}

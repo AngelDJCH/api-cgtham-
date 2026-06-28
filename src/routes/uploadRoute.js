@@ -5,7 +5,8 @@ const nubeCloud = require('../config/nubeCloud');
 const cloudinaryService = require('../services/cloudinaryConfigService')
 const organizacionRepository = require('../repository/organizacionRepository');
 const { verifyToken } = require('../helpers/jwtToken');
-const fotoService = require('../services/fotoService')
+const fotoService = require('../services/fotoService');
+const auth = require('../midlewares/auth');
 
 uploadRoute.post('/upload', async (req, res) => {
     try {
@@ -25,7 +26,7 @@ uploadRoute.post('/upload', async (req, res) => {
     }
 })
 
-uploadRoute.post('/upload/logo/', async (req, res) => {
+uploadRoute.post('/upload/logo/', auth, async (req, res) => {
     try {
         const id_organizacion = req.body.id_organizacion
         const cloudConfig = await cloudinaryService.findByIdOrganizacion(id_organizacion)
@@ -35,12 +36,12 @@ uploadRoute.post('/upload/logo/', async (req, res) => {
                 folder: '/cgtham/logo'
             })
             const changeLogo = await organizacionRepository.updateLogoByIdOrganizacion(uploadStram.secure_url, id_organizacion)
-            if(!changeLogo) throw new Error('No se pudo cambiar el logo')
+            if (!changeLogo) throw new Error('No se pudo cambiar el logo')
             res.status(200).json({
                 url: uploadStram.secure_url
             })
         } else {
-            res.status(400).json({message : 'Error al subir la imagen'})
+            res.status(400).json({ message: 'Error al subir la imagen' })
         }
     } catch (error) {
         res.status(400).json({
@@ -49,7 +50,7 @@ uploadRoute.post('/upload/logo/', async (req, res) => {
     }
 })
 
-uploadRoute.post('/upload/banner/', async (req, res) => {
+uploadRoute.post('/upload/banner/', auth, async (req, res) => {
     try {
         const id_organizacion = req.body.id_organizacion
         const cloudConfig = await cloudinaryService.findByIdOrganizacion(id_organizacion)
@@ -59,12 +60,12 @@ uploadRoute.post('/upload/banner/', async (req, res) => {
                 folder: '/cgtham/banner'
             })
             const changeLogo = await organizacionRepository.updateBannerByIdOrganizacion(uploadStram.secure_url, id_organizacion)
-            if(!changeLogo) throw new Error('No se pudo cambiar el banner')
+            if (!changeLogo) throw new Error('No se pudo cambiar el banner')
             res.status(200).json({
                 url: uploadStram.secure_url
             })
         } else {
-            res.status(400).json({message : 'Error al subir la imagen'})
+            res.status(400).json({ message: 'Error al subir la imagen' })
         }
     } catch (error) {
         res.status(400).json({
@@ -74,7 +75,7 @@ uploadRoute.post('/upload/banner/', async (req, res) => {
 })
 
 
-uploadRoute.post('/upload/documento/', async (req, res) => {
+uploadRoute.post('/upload/documento/', auth, async (req, res) => {
     try {
         const id_organizacion = req.body.id_organizacion
         const cloudConfig = await cloudinaryService.findByIdOrganizacion(id_organizacion)
@@ -82,13 +83,13 @@ uploadRoute.post('/upload/documento/', async (req, res) => {
             const imagen_url = req.body.imagen_url
             const uploadStram = await nubeCloud(cloudConfig.nombre, cloudConfig.clave, cloudConfig.clave_secreta).uploader.upload(imagen_url, {
                 folder: '/cgtham/documentos',
-                resource_type : 'raw'
+                resource_type: 'raw'
             })
             res.status(200).json({
                 url: uploadStram.secure_url
             })
         } else {
-            res.status(400).json({message : 'Error al subir el documento'})
+            res.status(400).json({ message: 'Error al subir el documento' })
         }
     } catch (error) {
         res.status(400).json({
@@ -98,7 +99,7 @@ uploadRoute.post('/upload/documento/', async (req, res) => {
 })
 
 
-uploadRoute.post('/upload/foto/', async (req, res) => {
+uploadRoute.post('/upload/foto/', auth, async (req, res) => {
     try {
         const id_evento = req.body.id_evento
         const id_organizacion = req.body.id_organizacion
@@ -111,7 +112,7 @@ uploadRoute.post('/upload/foto/', async (req, res) => {
             const foto = await fotoService.create(uploadStram.secure_url, id_evento)
             res.status(200).json(foto.toJSON())
         } else {
-            res.status(400).json({message : 'Error al subir la imagen'})
+            res.status(400).json({ message: 'Error al subir la imagen' })
         }
     } catch (error) {
         res.status(400).json({

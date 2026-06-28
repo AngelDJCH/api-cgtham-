@@ -54,19 +54,48 @@ const queryUpdateById = `
     UPDATE visitas SET fecha_aprobacion = now(), fecha_visita = $1, estado = 'APROBADA' WHERE id = $2 RETURNING *
 `
 
+
+const queryFindAllForAdministrador = `
+	select v.id as id_visita, v.estado, 
+	(select o.nombre_comercial from organizaciones as o where o.id = es.id)
+	as escuela,
+	(select o.nombre_comercial from organizaciones as o where o.id = em.id)
+	as empresa
+	from visitas as v
+	inner join escuelas as es
+	on es.id = v.id_escuela
+	inner join empresas as em
+	on em.id = v.id_empresa
+`
+
+const findAllForAdministrador = async () => {
+    const result = await pool.query(queryFindAllForAdministrador)
+    const rows = result.rows
+    return rows.map(
+        row => {
+            return {
+                id: row.id_visita,
+                estado: row.estado,
+                escuela : row.escuela,
+                empresa : row.empresa
+            }
+        }
+    )
+}
+
 const deleteByIdForEscuelas = async (id_visita) => {
     const result = await pool.query(queryDeleteByIdForEscuelas, [id_visita])
     const row = result.rows[0]
     return {
-        id : row.id
+        id: row.id
     }
 }
 
 const updateById = async (fecha_visita, id_visita) => {
-    const result = await pool.query(queryUpdateById,[fecha_visita, id_visita])
+    const result = await pool.query(queryUpdateById, [fecha_visita, id_visita])
     const row = result.rows[0]
     return {
-        id : row.id
+        id: row.id
     }
 }
 
@@ -78,7 +107,7 @@ const findById = async (id_visita) => {
         solicitado: row.fecha_solicitud,
         aprobado: row.fecha_aprobacion,
         agendado: row.fecha_visita,
-        estado : row.estado,
+        estado: row.estado,
         escuela: {
             id: row.id_escuela,
             nombre: row.nombre_comercial,
@@ -150,4 +179,4 @@ const create = async (id_escuela, id_empresa) => {
     }
 }
 
-module.exports = { create, findByIdEmpresa, updateEstadoRechazadaById, findById, updateById,findByIdEscuela, deleteByIdForEscuelas }
+module.exports = {findAllForAdministrador, create, findByIdEmpresa, updateEstadoRechazadaById, findById, updateById, findByIdEscuela, deleteByIdForEscuelas }

@@ -6,10 +6,10 @@ const { validateCreate, validateDeleteById, validateFindById, validateUpdateById
 const auth = require('../midlewares/auth')
 const verifyRoles = require('../midlewares/verifyRoles')
 
-camaraRoutes.get('/',auth, verifyRoles('ADMIN_ORG','ADMIN_SYS'), camaraController.findAll)
-camaraRoutes.get('/:id',auth, verifyRoles('ADMIN_ORG','ADMIN_SYS'), validateFindById, camaraController.findById)
+camaraRoutes.get('/',auth, camaraController.findAll)
+camaraRoutes.get('/:id',auth, validateFindById, camaraController.findById)
 camaraRoutes.post('/', validateCreate, camaraController.create)
-camaraRoutes.put('/:id',auth, verifyRoles('ADMIN_ORG','ADMIN_SYS'), validateUpdateById, camaraController.updateById)
-camaraRoutes.delete('/:id',auth, verifyRoles('ADMIN_ORG','ADMIN_SYS'), validateDeleteById, camaraController.deleteById)
+camaraRoutes.put('/:id',auth, validateUpdateById, camaraController.updateById)
+// camaraRoutes.delete('/:id',auth, verifyRoles('ADMIN_SYS'), validateDeleteById, camaraController.deleteById)
 
 module.exports = camaraRoutes

@@ -6,7 +6,7 @@ const auth = require('../midlewares/auth')
 const verifyRoles = require('../midlewares/verifyRoles')
 
 fotoRoutes.get('/:id_evento', findByIdEvento, fotoController.findByIdEvento)
-fotoRoutes.post('/', auth, verifyRoles('ADMIN_ORG', 'ADMIN_SYS'),create, fotoController.create)
-fotoRoutes.delete('/:id',auth, verifyRoles('ADMIN_ORG', 'ADMIN_SYS'), deleteById, fotoController.deleteById)
+fotoRoutes.post('/', auth,create, fotoController.create)
+fotoRoutes.delete('/:id',auth, deleteById, fotoController.deleteById)
 
 module.exports = fotoRoutes

@@ -7,8 +7,8 @@ const verifyRoles = require('../midlewares/verifyRoles')
 
 empresaCamaraRoutes.get('/:id',auth, validateFindById, empresaCamaraController.findById)
 empresaCamaraRoutes.get('/',auth, empresaCamaraController.findAll)
-empresaCamaraRoutes.post('/',auth, verifyRoles('ADMIN_ORG', 'ADMIN_SYS'), validateCreate, empresaCamaraController.create)
-empresaCamaraRoutes.put('/estado/:id',auth, verifyRoles('ADMIN_ORG', 'ADMIN_SYS'), validateUpdateEstadoById, empresaCamaraController.updateEstadoById)
-empresaCamaraRoutes.put('/fecha_vencimiento/:id',auth, verifyRoles('ADMIN_ORG', 'ADMIN_SYS'), validateUpdateFechaVencimientoById, empresaCamaraController.updateFechaVencimientoById)
+empresaCamaraRoutes.post('/',auth, validateCreate, empresaCamaraController.create)
+empresaCamaraRoutes.put('/estado/:id',auth, validateUpdateEstadoById, empresaCamaraController.updateEstadoById)
+empresaCamaraRoutes.put('/fecha_vencimiento/:id',auth, validateUpdateFechaVencimientoById, empresaCamaraController.updateFechaVencimientoById)
 
 module.exports = empresaCamaraRoutes

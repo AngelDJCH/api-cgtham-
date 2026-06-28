@@ -9,6 +9,6 @@ escuelaRoutes.get('/', auth, escuelaController.findAll)
 escuelaRoutes.get('/:id', auth, validateFindById, escuelaController.findById)
 escuelaRoutes.post('/', validateCreate, escuelaController.create)
 escuelaRoutes.put('/:id', auth, validateUpdateById, escuelaController.updateById)
-escuelaRoutes.delete('/:id', auth, verifyRoles('ADMIN_ORG', 'ADMIN_SYS'), validateDeleteById, escuelaController.deleteById)
+escuelaRoutes.delete('/:id', auth, validateDeleteById, escuelaController.deleteById)
 
 module.exports = escuelaRoutes

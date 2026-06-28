@@ -71,4 +71,13 @@ const deleteByIdForEscuelas = async (req, res,next) => {
     }
 }
 
-module.exports = { create, findByIdEmpresa, updateEstadoRechazadaById, findById, updateById,findByIdEscuela, deleteByIdForEscuelas }
+const findAllForAdministrador= async (req, res, next) => {
+    try {
+        const visitas = await visitaService.findAllForAdministrador()
+        res.status(200).json(visitas)
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports = {findAllForAdministrador, create, findByIdEmpresa, updateEstadoRechazadaById, findById, updateById,findByIdEscuela, deleteByIdForEscuelas }
