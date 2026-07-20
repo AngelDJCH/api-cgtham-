@@ -1,7 +1,7 @@
 const { check } = require('express-validator')
 const validateResult = require('../helpers/validateResult')
 
-const create = [
+const validateCreate = [
     check('nombre').exists().not().isEmpty(),
     check('clave').exists().not().isEmpty(),
     check('clave_secreta').exists().not().isEmpty(),
@@ -11,14 +11,14 @@ const create = [
     }
 ]
 
-const findByIdOrganizacion = [
+const validateFindByIdOrganizacion = [
     check('id_organizacion').exists().not().isEmpty().isUUID(),
     (req, res, next) => {
         validateResult(req, res, next)
     }
 ]
 
-const updateByIdOrganizacion = [
+const validateUpdateByIdOrganizacion = [
     check('nombre').exists().not().isEmpty(),
     check('clave').exists().not().isEmpty(),
     check('clave_secreta').exists().not().isEmpty(),
@@ -27,4 +27,4 @@ const updateByIdOrganizacion = [
     }
 ]
 
-module.exports = {create, findByIdOrganizacion, updateByIdOrganizacion}
+module.exports = {validateCreate, validateFindByIdOrganizacion, validateUpdateByIdOrganizacion}

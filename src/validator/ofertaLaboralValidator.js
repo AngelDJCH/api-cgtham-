@@ -53,4 +53,11 @@ const validateDeleteById = [
     }
 ]
 
-module.exports = {validateCreate, validateDeleteById, validateFindById, validateUpdateById}
+const validateFindAllByOrganizacion = [
+    check('id_organizacion').exists().not().isEmpty().isUUID(),
+    (req, res, next) => {
+        validateResult(req, res, next)
+    }
+]
+
+module.exports = { validateFindAllByOrganizacion, validateCreate, validateDeleteById, validateFindById, validateUpdateById }

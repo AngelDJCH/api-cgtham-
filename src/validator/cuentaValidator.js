@@ -33,4 +33,20 @@ const validateLogin = [
     }
 ]
 
-module.exports = { validateCreate, validateFindById, validateUpdateById, validateLogin }
+const validateContrasenia = [
+    check('id').exists().not().isEmpty().isUUID(),
+    check('contrasenia').exists().not().isEmpty(),
+    (req, res, next) => {
+        validateResult(req, res, next)
+    }
+]
+
+const validateUpdateCorreo = [
+    check('id').exists().not().isEmpty().isUUID(),
+    check('correo').exists().not().isEmpty().isEmail(),
+    (req, res, next) => {
+        validateResult(req, res, next)
+    }
+]
+
+module.exports = { validateCreate, validateFindById, validateUpdateById, validateLogin, validateUpdateCorreo, validateContrasenia }

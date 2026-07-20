@@ -27,4 +27,12 @@ const validateUpdateById = [
     }
 ]
 
-module.exports = {validateCreate, validateFindById, validateUpdateById}
+
+const validateDeleteById = [
+    check('id').exists().not().isEmpty().isUUID(),
+    (req, res, next) => {
+        validateResult(req, res, next)
+    }
+]
+
+module.exports = { validateCreate, validateFindById, validateUpdateById, validateDeleteById }

@@ -35,8 +35,6 @@ const verificarSesion = async (req, res,next) => {
             organizacion: decoded.data.organizacion,
             foto: decoded.data.logo
         }
-
-        console.log(usuario)
         res.status(200).json(
             usuario
         )

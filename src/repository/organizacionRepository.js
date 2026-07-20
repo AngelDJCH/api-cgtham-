@@ -247,13 +247,12 @@ const findAll = async () => {
         row.id_contacto,
         row.id_direccion
     ));
-
     return organizaciones;
 }
 
 const updateById = async (id, nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc) => {
     const result = await pool.query(queryUpdateById, [nombre_comercial, descripcion, tipo, sector, tamaño, giro, rfc, id])
-    if (result.rowCount === 0) throw new Error(`Ocurrio un error al actualizar los daots de la ID: ${id}`)
+    if (result.rowCount === 0) throw new Error(`Ocurrio un error al actualizar los datos de la ID: ${id}`)
     const row = result.rows[0]
     return new Organizacion(
         row.id,

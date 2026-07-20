@@ -6,7 +6,7 @@ const validateCreate = [
     check('descripcion').exists().not().isEmpty(),
     check('tipo').exists().not().isEmpty().isLength({ min: 5, max: 30 }),
     check('sector').exists().not().isEmpty().isLength({ min: 5, max: 150 }),
-    check('tamaño').isInt({min:1}).withMessage('El tamaño no puede ser menor a 1'),
+    check('tamaño').isInt({ min: 1 }).withMessage('El tamaño no puede ser menor a 1'),
     check('giro').exists().not().isEmpty(),
     check('rfc').exists().not().isEmpty().isLength({ min: 13, max: 13 }),
     check('logo').exists().not().isEmpty().isURL(),
@@ -31,7 +31,7 @@ const validateUpdateById = [
     check('descripcion').exists().not().isEmpty(),
     check('tipo').exists().not().isEmpty().isLength({ min: 5, max: 30 }),
     check('sector').exists().not().isEmpty().isLength({ min: 5, max: 150 }),
-    check('tamaño').isInt({min:1}).withMessage('El tamaño no puede ser menor a 1'),
+    check('tamaño').isInt({ min: 1 }).withMessage('El tamaño no puede ser menor a 1'),
     check('giro').exists().not().isEmpty(),
     check('rfc').exists().not().isEmpty().isLength({ min: 13, max: 13 }),
     (req, res, next) => {
@@ -46,5 +46,19 @@ const validateDeleteById = [
     }
 ]
 
+const validateFindByIdFast = [
+    check('id_organizacion').exists().not().isEmpty().isUUID(),
+    (req, res, next) => {
+        validateResult(req, res, next)
+    }
+]
 
-module.exports = {validateCreate, validateDeleteById, validateFindById, validateUpdateById}
+const validateUpdateEstadoById = [
+    check('id').exists().not().isEmpty().isUUID(),
+    check('estado').exists().not().isEmpty(),
+    (req, res, next) => {
+        validateResult(req, res, next)
+    }
+]
+
+module.exports = {validateUpdateEstadoById, validateFindByIdFast, validateCreate, validateDeleteById, validateFindById, validateUpdateById }

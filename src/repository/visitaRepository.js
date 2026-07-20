@@ -66,6 +66,7 @@ const queryFindAllForAdministrador = `
 	on es.id = v.id_escuela
 	inner join empresas as em
 	on em.id = v.id_empresa
+    where v.estado != 'ELIMINADO'
 `
 
 const findAllForAdministrador = async () => {
