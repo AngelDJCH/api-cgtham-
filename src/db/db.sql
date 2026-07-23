@@ -293,7 +293,7 @@ CREATE TABLE empresacamara(
     ON DELETE CASCADE
 );
 
-CREATE TABLE ofertaeducativa(
+CREATE TABLE ofertaseducativa(
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     nombre VARCHAR(150) NOT NULL,
     descripcion TEXT NOT NULL,

@@ -3,7 +3,7 @@ const { check } = require('express-validator')
 
 const validateCreate = [
     check('id_escuela').exists().not().isEmpty().isUUID(),
-    check('id_empresa').exists().not().isEmpty().isULID(),
+    check('id_empresa').exists().not().isEmpty().isUUID(),
     (req, res, next) => {
         validateResult(req, res, next)
     }
