@@ -5,7 +5,7 @@ const validateCreate = [
     check('titulo').exists().not().isEmpty(),
     check('descripcion').exists().not().isEmpty(),
     check('fecha_inicio').exists().not().isEmpty().isDate(),
-    check('fecha_fin').exists().not().isEmpty().isDate(),
+    check('fecha_final').exists().not().isEmpty().isDate(),
     check('estado').exists().not().isEmpty(),
     check('id_organizacion').exists().not().isEmpty().isUUID(),
     (req,res,next)=>{
@@ -58,7 +58,7 @@ const validateUpdateById = [
 const validateUpdateEstadoById = [
     check('id_curso').exists().not().isEmpty(),
     (req,res,next)=>{
-        valdiateResult(req,res,next)
+        validateResult(req,res,next)
     }
 ]
 
