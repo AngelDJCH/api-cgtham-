@@ -53,7 +53,7 @@ CREATE TABLE organizaciones(
     REFERENCES contactos(id),
     CONSTRAINT fk_organizaciones_direccion
     FOREIGN KEY (id_direccion)
-    REFERENCES direciones(id)
+    REFERENCES direcciones(id)
 );
 -- ==========================================
 -- 3. ESPECIALIZACIONES DE ORGANIZACIÓN
