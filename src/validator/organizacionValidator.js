@@ -33,7 +33,7 @@ const validateUpdateById = [
     check('sector').exists().not().isEmpty().isLength({ min: 5, max: 150 }),
     check('tamaño').isInt({ min: 1 }).withMessage('El tamaño no puede ser menor a 1'),
     check('giro').exists().not().isEmpty(),
-    check('rfc').exists().not().isEmpty().isLength({ min: 13, max: 13 }),
+    check('rfc').exists().not().isEmpty().isLength({ min: 12, max: 13 }),
     (req, res, next) => {
         validateResult(req, res, next)
     }

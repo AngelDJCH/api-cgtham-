@@ -43,6 +43,7 @@ const ofertaeducativaRoutes = require('./src/routes/ofertaEducativaRoute')
 const ofertaEducativaRoutes = require('./src/routes/ofertaEducativaRoute')
 const chatRoutes = require('./src/routes/chatRoute')
 const isncripcionCursoRoutes = require('./src/routes/inscripcionCursoRoute')
+const afiliacionRoutes = require('./src/routes/afiliacionRoute')
 
 // const limiter = rateLimit({
 //     windowMs: 15 * 60 * 1000, 
@@ -93,6 +94,7 @@ app.use('/api/v1/visitas', visitaRoute)
 app.use('/api/v1/ofertaseducativas', ofertaEducativaRoutes)
 app.use('/api/v1/chat', chatRoutes)
 app.use('/api/v1/inscripcionCurso', isncripcionCursoRoutes)
+app.use('/api/v1/afiliaciones', afiliacionRoutes)
 
 
 app.use((err, req, res, next) => {
