@@ -1,13 +1,20 @@
 const cuentaService = require('../services/cuentaService')
 const bcrypt = require('bcrypt')
 
-const { generateToken, verifyToken } = require('../helpers/jwtToken')
+const { generateToken, verifyToken } = require('../helpers/jwtToken');
+const { enviarCorreo } = require('../config/email');
 
 const create = async (req, res,next) => {
     try {
         const { correo, contrasenia, id_organizacion } = req.body;
         const contraseniaHash = await bcrypt.hashSync(contrasenia, 10)
         const cuenta = await cuentaService.create(correo, contraseniaHash, ['ADMIN_ORG'], id_organizacion);
+        // await enviarCorreo(
+        //     correo, 'CREACIÓN DE CUENTA', 'Su cuenta ha sido creada',
+        //     `
+        //         <h1>Espera que un administrador valide tu cuenta!!</h1>
+        //     `
+        // )
         res.status(201).json(cuenta.toJSON())
     } catch (error) {
         next(error)
