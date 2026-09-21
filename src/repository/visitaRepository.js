@@ -60,7 +60,8 @@ const queryFindAllForAdministrador = `
 	(select o.nombre_comercial from organizaciones as o where o.id = es.id)
 	as escuela,
 	(select o.nombre_comercial from organizaciones as o where o.id = em.id)
-	as empresa
+	as empresa,
+    v.fecha_visita
 	from visitas as v
 	inner join escuelas as es
 	on es.id = v.id_escuela
@@ -78,7 +79,8 @@ const findAllForAdministrador = async () => {
                 id: row.id_visita,
                 estado: row.estado,
                 escuela : row.escuela,
-                empresa : row.empresa
+                empresa : row.empresa,
+                fecha_visita : row.fecha_visita
             }
         }
     )
