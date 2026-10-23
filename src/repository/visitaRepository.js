@@ -14,7 +14,7 @@ const queryFindByIdEmpresa = `
     FROM visitas as v
     inner join escuelas as e on v.id_escuela = e.id
     inner join organizaciones as o on e.id = o.id
-    WHERE v.id_empresa = $1
+    WHERE v.id_empresa = $1 LIMIT $2 OFFSET $3
 `
 
 const queryFindByIdEscuela = `
@@ -24,7 +24,7 @@ const queryFindByIdEscuela = `
     FROM visitas as v
     inner join empresas as e on v.id_empresa = e.id
     inner join organizaciones as o on e.id = o.id
-    WHERE v.id_escuela = $1
+    WHERE v.id_escuela = $1 LIMIT $2 OFFSET $3
 `
 
 const queryFindAll = `
@@ -68,10 +68,11 @@ const queryFindAllForAdministrador = `
 	inner join empresas as em
 	on em.id = v.id_empresa
     where v.estado != 'ELIMINADO'
+    LIMIT $1 OFFSET $2
 `
 
-const findAllForAdministrador = async () => {
-    const result = await pool.query(queryFindAllForAdministrador)
+const findAllForAdministrador = async (limit, offset) => {
+    const result = await pool.query(queryFindAllForAdministrador, [limit, offset])
     const rows = result.rows
     return rows.map(
         row => {
@@ -128,8 +129,8 @@ const updateEstadoRechazadaById = async (id_visita) => {
     }
 }
 
-const findByIdEmpresa = async (id_empresa) => {
-    const result = await pool.query(queryFindByIdEmpresa, [id_empresa])
+const findByIdEmpresa = async (id_empresa, limit, offset) => {
+    const result = await pool.query(queryFindByIdEmpresa, [id_empresa, limit, offset])
     const rows = result.rows
     return rows.map(
         row => {
@@ -148,8 +149,8 @@ const findByIdEmpresa = async (id_empresa) => {
     )
 }
 
-const findByIdEscuela = async (id_escuela) => {
-    const result = await pool.query(queryFindByIdEscuela, [id_escuela])
+const findByIdEscuela = async (id_escuela, limit, offset) => {
+    const result = await pool.query(queryFindByIdEscuela, [id_escuela,limit, offset])
     const rows = result.rows
     return rows.map(
         row => {

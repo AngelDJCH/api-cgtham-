@@ -22,8 +22,10 @@ const findById = async (req, res, next) => {
 
 const findAllByIdUsuario = async (req, res, next) => {
     try {
+        const limit = req.params.limit
+        const offset = req.params.offset
         const id_organizacion = req.params.id_organizacion
-        const comentarios = await comentarioService.findAllByIdUsuario(id_organizacion)
+        const comentarios = await comentarioService.findAllByIdUsuario(id_organizacion, limit, offset)
         res.status(200).json(comentarios.map(comentario => comentario.toJSON()))
     } catch (error) {
         next(error)
@@ -75,7 +77,9 @@ const deleteById = async (req, res, next) => {
 
 const findAllComentariosByAdministrador = async (req, res, next) => {
     try {
-        const comentarios = await comentarioService.findAllComentariosByAdministrador()
+        const limit = req.params.limit
+        const offset = req.params.offset
+        const comentarios = await comentarioService.findAllComentariosByAdministrador(limit, offset)
         res.status(200).json(comentarios)
     } catch (error) {
         next(error)

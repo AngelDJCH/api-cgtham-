@@ -5,13 +5,13 @@ const create = async (id_escuela, id_empresa) => {
     return visita
 }
 
-const findByIdEmpresa = async (id_empresa) => {
-    const visitas = await visitaRepository.findByIdEmpresa(id_empresa)
+const findByIdEmpresa = async (id_empresa,limit, offset) => {
+    const visitas = await visitaRepository.findByIdEmpresa(id_empresa,limit, offset)
     return visitas
 }
 
-const findByIdEscuela = async (id_escuela) => {
-    const visitas = await visitaRepository.findByIdEscuela(id_escuela)
+const findByIdEscuela = async (id_escuela,limit, offset) => {
+    const visitas = await visitaRepository.findByIdEscuela(id_escuela,limit, offset)
     return visitas
 }
 
@@ -35,8 +35,8 @@ const deleteByIdForEscuelas = async (id) => {
     return visitas
 }
 
-const findAllForAdministrador = async () => {
-    const visitas = await visitaRepository.findAllForAdministrador()
+const findAllForAdministrador = async (limit, offset) => {
+    const visitas = await visitaRepository.findAllForAdministrador(limit, offset)
     return visitas
 }
 

@@ -28,7 +28,7 @@ const queryDeleteById = `
 const queryFindAllByIdOrganizacion = `
     SELECT e.id as id_evento, e.titulo, i.id as id_inscripcion, i.fecha, i.estado, o.id as id_organizacion, o.nombre_comercial 
     FROM eventos AS e INNER JOIN inscripcionEvento AS i ON e.id=i.id_evento INNER JOIN organizaciones AS o ON
-    e.id_organizacion = o.id where i.id_organizacion= $1
+    e.id_organizacion = o.id where i.id_organizacion= $1 LIMIT $2 OFFSET $3
 `
 
 const queryExisteInscripcion = `
@@ -194,8 +194,8 @@ const deleteById = async (id) => {
 //     )
 // }
 
-const findAllByIdOrganizacion = async (id_organizacion) => {
-    const result = await pool.query(queryFindAllByIdOrganizacion, [id_organizacion])
+const findAllByIdOrganizacion = async (id_organizacion, limit, offset) => {
+    const result = await pool.query(queryFindAllByIdOrganizacion, [id_organizacion,  limit, offset])
     const rows = result.rows
     return rows.map(
         row => {

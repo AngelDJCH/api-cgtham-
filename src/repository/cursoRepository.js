@@ -11,7 +11,7 @@ select
 c.id  as id_curso, c.titulo, c.descripcion, c.fecha_publicacion, c.fecha_inicio, c.fecha_final, c.estado,
 o.id as id_organizacion, o.nombre_comercial, o.logo, o.banner
 from cursos as c inner join organizaciones as o on c.id_organizacion = o.id
-where c.estado = 'PUBLICADO'
+where c.estado = 'PUBLICADO' LIMIT $1 OFFSET $2
 `
 
 const queryFindToEscuelas = `
@@ -19,7 +19,7 @@ select
 c.id  as id_curso, c.titulo, c.descripcion, c.fecha_publicacion, c.fecha_inicio, c.fecha_final, c.estado,
 o.id as id_organizacion, o.nombre_comercial, o.logo, o.banner
 from cursos as c inner join organizaciones as o on c.id_organizacion = o.id
-where o.id = $1 and c.estado != 'ELIMINADO'
+where o.id = $1 and c.estado != 'ELIMINADO' LIMIT $2 OFFSET $3
 `
 
 const queryFindById = `
@@ -137,8 +137,8 @@ const create = async (titulo, descripcion, fecha_inicio, fecha_final, estado, id
     )
 }
 
-const findAllToEmpresas = async () => {
-    const result = await pool.query(queryFindToEmpresas)
+const findAllToEmpresas = async (limit, offset) => {
+    const result = await pool.query(queryFindToEmpresas, [limit, offset])
     const rows = result.rows
     return rows.map(
         row => {
@@ -161,8 +161,8 @@ const findAllToEmpresas = async () => {
     )
 }
 
-const findAllToEscuelas = async (id_organizacion) => {
-    const result = await pool.query(queryFindToEscuelas, [id_organizacion])
+const findAllToEscuelas = async (id_organizacion,limit, offset) => {
+    const result = await pool.query(queryFindToEscuelas, [id_organizacion,limit, offset])
     const rows = result.rows
     return rows.map(
         row => {

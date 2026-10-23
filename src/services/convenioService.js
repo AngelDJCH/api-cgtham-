@@ -10,8 +10,8 @@ const findById = async (id) => {
     return convenio;
 }
 
-const findAll = async () => {
-    const convenios = await convenioRepository.findAll()
+const findAll = async (limit, offset) => {
+    const convenios = await convenioRepository.findAll(limit, offset)
     return convenios;
 }
 

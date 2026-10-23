@@ -23,8 +23,10 @@ const findByIdAndEstado = async (req, res, next) => {
 
 const findAllByIdOrganizacion = async (req, res, next) => {
     try {
+        const limit = req.params.limit
+        const offset = req.params.offset
         const id_organizacion = req.params.id_organizacion
-        const inscripciones = await inscripcionService.findAllByIdOrganizacion(id_organizacion)
+        const inscripciones = await inscripcionService.findAllByIdOrganizacion(id_organizacion, limit, offset)
         res.status(200).json(inscripciones)
     } catch (error) {
         next(error)

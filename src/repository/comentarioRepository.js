@@ -15,11 +15,13 @@ const queryFindAllByUsuario = `
 const queryComentariosByIdOrganizacion = `
     SELECT * FROM comentarios as c 
     WHERE c.id_organizacion = $1
+    LIMIT $2 OFFSET $3
 `;
 
 const queryFindAllComentariosByAdministrador = `
     select o.id as id_organizacion, o.nombre_comercial, c.id as id_comentario, c.contenido, c.fecha, c.estado from comentarios as c inner join organizaciones as o on c.id_organizacion = o.id where c.estado = 'Pendiente' and c.id_administrador is null
 	order by c.fecha desc
+    LIMIT $1 OFFSET $2
 `
 
 const queryFindAllComentarios = `
@@ -75,8 +77,8 @@ const findById = async (id) => {
     )
 }
 
-const findAllByIdUsuario = async (id_organizacion) => {
-    const result = await pool.query(queryComentariosByIdOrganizacion, [id_organizacion])
+const findAllByIdUsuario = async (id_organizacion, limit, offset) => {
+    const result = await pool.query(queryComentariosByIdOrganizacion, [id_organizacion, limit, offset])
     // if (result.rowCount === 0) throw new Error('Ocurrio un error al obtener los comentarios del usuario')
     const rows = result.rows
     return rows.map(
@@ -148,8 +150,8 @@ const deleteById = async (id) => {
     )
 }
 
-const findAllComentariosByAdministrador = async () => {
-    const result = await pool.query(queryFindAllComentariosByAdministrador)
+const findAllComentariosByAdministrador = async (limit, offset) => {
+    const result = await pool.query(queryFindAllComentariosByAdministrador, [limit, offset])
     const rows = result.rows
     return rows.map(
         row => {

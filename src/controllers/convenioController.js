@@ -23,7 +23,9 @@ const findById = async (req, res,next) => {
 
 const findAll = async (req, res,next) => {
     try {
-        const convenios = await convenioService.findAll()
+        const limit = req.params.limit
+        const offset = req.params.offset
+        const convenios = await convenioService.findAll(limit, offset)
         res.status(200).json(convenios
         )
     } catch (error) {

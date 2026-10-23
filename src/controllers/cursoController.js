@@ -14,7 +14,9 @@ const create = async (req, res, next) => {
 
 const findAllToEmpresas = async (req, res, next) => {
     try {
-        const cursos = await cursoService.findAllToEmpresas()
+        const limit = req.params.limit
+        const offset = req.params.offset
+        const cursos = await cursoService.findAllToEmpresas(limit, offset)
         res.status(200).json(cursos)
     } catch (error) {
         next(error)
@@ -23,8 +25,10 @@ const findAllToEmpresas = async (req, res, next) => {
 
 const findAllToEscuelas = async (req, res, next) => {
     try {
+        const limit = req.params.limit
+        const offset = req.params.offset
         const id_organizacion = req.params.id_organizacion
-        const cursos = await cursoService.findAllToEscuelas(id_organizacion)
+        const cursos = await cursoService.findAllToEscuelas(id_organizacion, limit, offset)
         res.status(200).json(cursos)
     } catch (error) {
         next(error)

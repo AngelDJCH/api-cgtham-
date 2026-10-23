@@ -10,8 +10,8 @@ const findById = async (id) => {
     return comentario;
 }
 
-const findAllByIdUsuario = async (id_organizacion) => {
-    const comentarios = await comentarioRepository.findAllByIdUsuario(id_organizacion)
+const findAllByIdUsuario = async (id_organizacion, limit, offset) => {
+    const comentarios = await comentarioRepository.findAllByIdUsuario(id_organizacion, limit, offset)
     return comentarios;
 }
 
@@ -36,8 +36,8 @@ const deleteById = async (id) => {
     return comentario;
 }
 
-const findAllComentariosByAdministrador = async () => {
-    const comentarios = await comentarioRepository.findAllComentariosByAdministrador()
+const findAllComentariosByAdministrador = async (limit, offset) => {
+    const comentarios = await comentarioRepository.findAllComentariosByAdministrador(limit, offset)
     return comentarios
 }
 

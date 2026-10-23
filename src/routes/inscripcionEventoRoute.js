@@ -11,7 +11,7 @@ inscripcionEventoRoutes.get('/participantes/:id_evento', validateFindOrganizacio
 inscripcionEventoRoutes.get('/pendientes/:id_evento', auth, validateFindParticipantesPendientesByIdInscripcion, inscripcionController.findParticipantesPendientesByIdInscripcion)
 
 // inscripcionRoutes.get('/estado/:id',auth, verifyRoles('USER'), validateFindByIdAndEstado,inscripcionController.findByIdAndEstado)
-inscripcionEventoRoutes.get('/organizaciones/:id_organizacion', auth, validateFindAllByIdOrganizacion, inscripcionController.findAllByIdOrganizacion)
+inscripcionEventoRoutes.get('/organizaciones/:id_organizacion/:limit/:offset', auth, validateFindAllByIdOrganizacion, inscripcionController.findAllByIdOrganizacion)
 inscripcionEventoRoutes.post('/', auth, verifyRoles('ADMIN_ORG'), validateCreate, inscripcionController.create)
 inscripcionEventoRoutes.put('/estado/:id', auth, verifyRoles('ADMIN_ORG'), validateUpdateEstadoById, inscripcionController.updateEstadoById)
 inscripcionEventoRoutes.delete('/:id', auth, validateDeleteById, inscripcionController.deleteById)

@@ -30,8 +30,8 @@ const deleteById = async (id) => {
 //     return inscripciones
 // }
 
-const findAllByIdOrganizacion = async (id_organizacion) => {
-    const inscripciones = await inscripcionRepository.findAllByIdOrganizacion(id_organizacion)
+const findAllByIdOrganizacion = async (id_organizacion, limit, offset) => {
+    const inscripciones = await inscripcionRepository.findAllByIdOrganizacion(id_organizacion, limit, offset)
     return inscripciones
 }
 

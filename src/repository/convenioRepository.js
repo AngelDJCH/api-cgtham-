@@ -17,6 +17,7 @@ const queryFindAll = `
     FROM convenios as c inner join convenioorganizacion as co on c.id = co.id_convenio
     inner join organizaciones as o on co.id_organizacion = o.id
         where co.rol = 'ANFITRION'
+    LIMIT $1 OFFSET $2
 `
 
 const queryUpdateById = `
@@ -86,8 +87,8 @@ const findById = async (id) => {
     )
 }
 
-const findAll = async () => {
-    const result = await pool.query(queryFindAll)
+const findAll = async (limit, offset) => {
+    const result = await pool.query(queryFindAll, [limit, offset])
     return result.rows.map(
         row => {
             return {

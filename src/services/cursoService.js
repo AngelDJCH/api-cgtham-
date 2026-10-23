@@ -5,13 +5,13 @@ const create = async (titulo, descripcion, fecha_inicio, fecha_final, estado,  i
     return curso
 }
 
-const findAllToEmpresas = async () => {
-    const cursos = await cursoRepository.findAllToEmpresas()
+const findAllToEmpresas = async (limit, offset) => {
+    const cursos = await cursoRepository.findAllToEmpresas(limit, offset)
     return cursos
 }
 
-const findAllToEscuelas = async (id_organizacion) => {
-    const cursos = await cursoRepository.findAllToEscuelas(id_organizacion)
+const findAllToEscuelas = async (id_organizacion,limit, offset) => {
+    const cursos = await cursoRepository.findAllToEscuelas(id_organizacion,limit, offset)
     return cursos
 }
 

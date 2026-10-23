@@ -30,6 +30,7 @@ ol.vacantes, ol.beneficios, ol.habilidades_tecnicas, ol.habilidades_blandas, ol.
 ol.modalidad, ol.experiencia, ol.fecha_publicacion, ol.documento, e.id as id_empresa, e.logo, e.nombre_comercial
 from ofertaslaborales as ol inner join organizaciones as e on ol.id_empresa = e.id
 where ol.estado = 'Activa'
+LIMIT $1 OFFSET $2
 `
 
 const queryFindAllByIdOrganizacion = `
@@ -38,6 +39,7 @@ ol.vacantes, ol.beneficios, ol.habilidades_tecnicas, ol.habilidades_blandas, ol.
 ol.modalidad, ol.experiencia, ol.fecha_publicacion, ol.documento, o.id as id_empresa, o.logo, o.nombre_comercial
 from ofertaslaborales as ol inner join organizaciones as o on ol.id_empresa = o.id
 where ol.estado = 'Activa' and o.id = $1
+LIMIT $2 OFFSET $3
 `
 
 const queryDeleteById = `
@@ -103,8 +105,8 @@ const findById = async (id) => {
     )
 }
 
-const findAll = async () => {
-    const result = await pool.query(queryFindAll);
+const findAll = async (limit, offset) => {
+    const result = await pool.query(queryFindAll, [limit, offset]);
     const rows = result.rows
     return rows.map(
         row => {
@@ -159,8 +161,8 @@ const findAll = async () => {
 //     )
 // }
 
-const findAllByIdOrganizacion = async (id_organizacion) => {
-    const result = await pool.query(queryFindAllByIdOrganizacion, [id_organizacion]);
+const findAllByIdOrganizacion = async (id_organizacion, limit, offset) => {
+    const result = await pool.query(queryFindAllByIdOrganizacion, [id_organizacion, limit, offset]);
     const rows = result.rows
     return rows.map(
         row => {

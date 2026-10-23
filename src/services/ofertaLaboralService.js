@@ -10,8 +10,8 @@ const create = async (titulo, descripcion, salario, jornada, tipo_contrato, vaca
     return oferta_laboral;
 }
 
-const findAll = async () => {
-    const ofertas_laborales = await ofertaLaboralRepository.findAll()
+const findAll = async (limit, offset) => {
+    const ofertas_laborales = await ofertaLaboralRepository.findAll(limit, offset)
     return ofertas_laborales;
 }
 
@@ -45,8 +45,8 @@ const findAllHistoricos = async() =>{
     return historicosOfetas
 }
 
-const findAllByIdOrganziacion = async (id_organizacion) => {
-    const ofertas = await ofertaLaboralRepository.findAllByIdOrganizacion(id_organizacion)
+const findAllByIdOrganziacion = async (id_organizacion, limit, offset) => {
+    const ofertas = await ofertaLaboralRepository.findAllByIdOrganizacion(id_organizacion, limit, offset)
     return ofertas
 }
 
