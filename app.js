@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config({ override: true })
 const express = require('express')
 const swaggerUi = require('swagger-ui-express')
 const swaggerFile = require('./swagger_output.json')

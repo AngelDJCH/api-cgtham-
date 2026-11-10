@@ -15,11 +15,11 @@ const queryFindById = `
 `
 
 const queryFindAll = `
-    SELECT * FROM organizaciones where estado = true
+    SELECT * FROM organizaciones WHERE estado = true AND tipo != 'Comité' AND nombre_comercial NOT ILIKE '%cgtham%'
 `
 
 const queryCountOrganizaciones = `
-    SELECT COUNT(*) AS total FROM organizaciones AS o WHERE o.estado = true
+    SELECT COUNT(*) AS total FROM organizaciones AS o WHERE o.estado = true AND o.tipo != 'Comité' AND o.nombre_comercial NOT ILIKE '%cgtham%'
 `
 
 const queryUpdateById = `

@@ -30,6 +30,7 @@ const create = async (nombre, clave, clave_secreta, id_organizacion) => {
 
 const findByIdOrganizacion = async (id_organizacion) => {
     const result = await pool.query(queryFindByIdOrganizacion, [id_organizacion])
+    if (!result.rows || result.rows.length === 0) return null
     const row = result.rows[0]
     return new CloudinaryConfig(
         row.id,

@@ -42,15 +42,16 @@ SELECT
     e.titulo, 
     e.descripcion, 
     e.tipo,
+    e.estado,
     e.fecha_inicio, 
     e.fecha_final,
     e.fecha_publicacion, 
     o.id AS id_organizacion, 
     o.nombre_comercial, 
     o.logo,
-    ARRAY_AGG(f.url_imagen) AS fotos
+    COALESCE(ARRAY_AGG(f.url_imagen) FILTER (WHERE f.url_imagen IS NOT NULL), '{}') AS fotos
 FROM eventos AS e
-INNER JOIN fotos AS f ON f.id_evento = e.id
+LEFT JOIN fotos AS f ON f.id_evento = e.id
 INNER JOIN organizaciones AS o ON e.id_organizacion = o.id
 WHERE e.estado = 'ACTIVO'
 GROUP BY 
@@ -58,11 +59,13 @@ GROUP BY
     e.titulo, 
     e.descripcion, 
     e.tipo, 
+    e.estado,
     e.fecha_inicio, 
     e.fecha_final, 
     o.id, 
     o.nombre_comercial, 
     o.logo
+ORDER BY e.fecha_publicacion DESC
 LIMIT $1 OFFSET $2
 `
 
@@ -210,15 +213,17 @@ const findAllEventos = async (limit, offset) => {
                 titulo: row.titulo,
                 descripcion: row.descripcion,
                 tipo: row.tipo,
+                estado: row.estado,
                 fecha_inicio: row.fecha_inicio,
                 fecha_final: row.fecha_final,
                 fecha_publicacion: row.fecha_publicacion,
+                id_organizacion: row.id_organizacion,
                 organizacion: {
                     id: row.id_organizacion,
                     nombre: row.nombre_comercial,
                     foto: row.logo
                 },
-                fotos: row.fotos
+                fotos: row.fotos || []
             }
         }
     )

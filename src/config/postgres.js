@@ -1,5 +1,5 @@
 const { Pool } = require("pg");
-require('dotenv').config()
+require('dotenv').config({ override: true })
 
 const pool = new Pool({
     user: process.env.USER_DB || 'postgres',
@@ -7,8 +7,7 @@ const pool = new Pool({
     host: process.env.HOST_DB || 'localhost',
     database: process.env.NAME_DB || 'cgtham_db',
     port: process.env.PORT_DB || 5432,
-    ssl:process.env.SSL_DB === 'true' ? { rejectUnauthorized: false } : false//Se debe de comentar el SSL (Capa segura de socket) ya que de manera local no se ocupa 
-                // Pero en producción es necesario activarlo (esto en Render -> Host para DB en la nube Pg)
+    ssl: process.env.SSL_DB === 'true' ? { rejectUnauthorized: false } : false
 });
 
 module.exports = pool;

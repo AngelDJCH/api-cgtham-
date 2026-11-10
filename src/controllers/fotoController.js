@@ -1,8 +1,8 @@
 const fotoService = require('../services/fotoService')
 
-const create = async (req, res,next) => {
+const create = async (req, res, next) => {
     try {
-        const {url_imagen, id_evento} = req.body
+        const { url_imagen, id_evento } = req.body
         const foto = await fotoService.create(url_imagen, id_evento)
         res.status(201).json(foto.toJSON())
     } catch (error) {
@@ -10,7 +10,7 @@ const create = async (req, res,next) => {
     }
 }
 
-const findByIdEvento = async (req, res,next) => {
+const findByIdEvento = async (req, res, next) => {
     try {
         const id_evento = req.params.id_evento
         const fotos = await fotoService.findByIdEvento(id_evento)
@@ -20,14 +20,14 @@ const findByIdEvento = async (req, res,next) => {
     }
 }
 
-const deleteById = async (req, res,next) => {
+const deleteById = async (req, res, next) => {
     try {
         const id = req.params.id
-        const foto = await fotoService.deleteById(id)
-        res.status(204)
+        await fotoService.deleteById(id)
+        res.status(204).end()
     } catch (error) {
         next(error)
     }
 }
 
-module.exports = {create, findByIdEvento, deleteById}
+module.exports = { create, findByIdEvento, deleteById }

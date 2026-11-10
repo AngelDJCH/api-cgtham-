@@ -5,10 +5,12 @@ const validateResult = async (req, res, next) => {
         validationResult(req).throw()
         return next()
     } catch (error) {
-
-        console.log(error.array());
-
-        next(error.array())
+        const errors = error.array()
+        console.log('Errores de validación:', errors)
+        return res.status(400).json({
+            message: errors[0]?.msg || 'Error de validación en los datos proporcionados',
+            errors: errors
+        })
     }
 }
 
