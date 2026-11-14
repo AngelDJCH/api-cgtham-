@@ -10,4 +10,9 @@ const findAllByIdChat = async (id) => {
     return mensajes;
 }
 
-module.exports = {create, findAllByIdChat}
+const findUltimosMensajesPorOrganizacion = async (id_organizacion) => {
+    const mensajes = await mensajeRepository.findUltimosMensajesPorOrganizacion(id_organizacion)
+    return mensajes;
+}
+
+module.exports = {create, findAllByIdChat, findUltimosMensajesPorOrganizacion}

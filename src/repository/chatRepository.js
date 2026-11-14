@@ -27,6 +27,9 @@ const create = async (organizacion1, organizacion2) => {
 
 const findOrganizacionChat = async (id_emisor, id_receptor) => {
     const result = await pool.query(queryFindOrganizacion, [id_emisor, id_receptor])
+    if (result.rowCount === 0) {
+        return null
+    }
     const row = result.rows[0]
     return {
         id : row.id

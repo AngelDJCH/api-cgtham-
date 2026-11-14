@@ -1,7 +1,7 @@
 const eventoRepository = require('../repository/eventoRepository')
 
-const create = async (titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final) => {
-    const evento = await eventoRepository.create(titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final)
+const create = async (titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final, limite_participantes = null, tipo_organizacion_permitida = 'TODAS', region_permitida = 'TODAS', modalidad = 'PRESENCIAL', sector_permitido = 'TODOS', giro_permitido = 'TODOS', hora_inicio = '09:00', hora_final = '18:00') => {
+    const evento = await eventoRepository.create(titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final, limite_participantes, tipo_organizacion_permitida, region_permitida, modalidad, sector_permitido, giro_permitido, hora_inicio, hora_final)
     return evento;
 }
 
@@ -15,8 +15,8 @@ const findAll = async () => {
     return eventos;
 }
 
-const updateById = async (id, titulo, descripcion, tipo, fecha_inicio, fecha_final) => {
-    const evento = await eventoRepository.updateById(id, titulo, descripcion, tipo, fecha_inicio, fecha_final)
+const updateById = async (id, titulo, descripcion, tipo, fecha_inicio, fecha_final, limite_participantes = null, tipo_organizacion_permitida = 'TODAS', region_permitida = 'TODAS', modalidad = 'PRESENCIAL', sector_permitido = 'TODOS', giro_permitido = 'TODOS', hora_inicio = '09:00', hora_final = '18:00') => {
+    const evento = await eventoRepository.updateById(id, titulo, descripcion, tipo, fecha_inicio, fecha_final, limite_participantes, tipo_organizacion_permitida, region_permitida, modalidad, sector_permitido, giro_permitido, hora_inicio, hora_final)
     return evento;
 }
 

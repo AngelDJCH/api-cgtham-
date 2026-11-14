@@ -79,11 +79,11 @@ const findOrganizacionesParticipantesByIdInscripcion = async (req, res, next) =>
 
 const findInscripcionesByIdEvento = async (req, res, next) => {
     try {
-        const id = req.params.id
-        const inscripciones = await inscripcionService.findInscripcionesByIdEvento(id)
-        res.status(200).json(inscripciones)
+        const id = req.params.id_evento || req.params.id;
+        const inscripciones = await inscripcionService.findInscripcionesByIdEvento(id);
+        res.status(200).json(inscripciones);
     } catch (error) {
-        next(error)
+        next(error);
     }
 }
 

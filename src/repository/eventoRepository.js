@@ -3,7 +3,10 @@ const Evento = require('../models/evento')
 
 const queryCreate = `
     INSERT INTO eventos (titulo, descripcion, tipo, estado, id_organizacion,
-    fecha_inicio, fecha_final, fecha_publicacion) VALUES ($1,$2,$3,$4,$5,$6,$7,now())
+    fecha_inicio, fecha_final, fecha_publicacion, limite_participantes,
+    tipo_organizacion_permitida, region_permitida, modalidad, sector_permitido, giro_permitido,
+    hora_inicio, hora_final) 
+    VALUES ($1,$2,$3,$4,$5,$6,$7,now(),$8,$9,$10,$11,$12,$13,$14,$15)
     RETURNING * 
 `
 
@@ -17,7 +20,10 @@ const queryFindAll = `
 
 const queryUpdateById = `
     UPDATE eventos AS e SET titulo = $1, descripcion = $2, tipo = $3,
-    fecha_inicio = $4, fecha_final = $5 WHERE e.id = $6 RETURNING * 
+    fecha_inicio = $4, fecha_final = $5, limite_participantes = $6,
+    tipo_organizacion_permitida = $7, region_permitida = $8, modalidad = $9,
+    sector_permitido = $10, giro_permitido = $11, hora_inicio = $12, hora_final = $13
+    WHERE e.id = $14 RETURNING * 
 `
 
 const queryDeleteById = `
@@ -46,12 +52,22 @@ SELECT
     e.fecha_inicio, 
     e.fecha_final,
     e.fecha_publicacion, 
+    e.limite_participantes,
+    e.tipo_organizacion_permitida,
+    e.region_permitida,
+    e.modalidad,
+    e.sector_permitido,
+    e.giro_permitido,
+    e.hora_inicio,
+    e.hora_final,
+    COUNT(DISTINCT CASE WHEN i_part.estado = 'APROBADA' THEN i_part.id END) AS total_participantes,
     o.id AS id_organizacion, 
     o.nombre_comercial, 
     o.logo,
     COALESCE(ARRAY_AGG(f.url_imagen) FILTER (WHERE f.url_imagen IS NOT NULL), '{}') AS fotos
 FROM eventos AS e
 LEFT JOIN fotos AS f ON f.id_evento = e.id
+LEFT JOIN inscripcionEvento AS i_part ON i_part.id_evento = e.id
 INNER JOIN organizaciones AS o ON e.id_organizacion = o.id
 WHERE e.estado = 'ACTIVO'
 GROUP BY 
@@ -62,6 +78,15 @@ GROUP BY
     e.estado,
     e.fecha_inicio, 
     e.fecha_final, 
+    e.fecha_publicacion,
+    e.limite_participantes,
+    e.tipo_organizacion_permitida,
+    e.region_permitida,
+    e.modalidad,
+    e.sector_permitido,
+    e.giro_permitido,
+    e.hora_inicio,
+    e.hora_final,
     o.id, 
     o.nombre_comercial, 
     o.logo
@@ -94,8 +119,8 @@ const dashEventosPorAño = async () => {
     )
 }
 
-const create = async (titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final) => {
-    const result = await pool.query(queryCreate, [titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final])
+const create = async (titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final, limite_participantes = null, tipo_organizacion_permitida = 'TODAS', region_permitida = 'TODAS', modalidad = 'PRESENCIAL', sector_permitido = 'TODOS', giro_permitido = 'TODOS', hora_inicio = '09:00', hora_final = '18:00') => {
+    const result = await pool.query(queryCreate, [titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final, limite_participantes, tipo_organizacion_permitida, region_permitida, modalidad, sector_permitido, giro_permitido, hora_inicio, hora_final])
     if (result.rowCount === 0) throw new Error("Ocurrio un error al crear un nuevo evento");
     const row = result.rows[0]
     return new Evento(
@@ -107,7 +132,15 @@ const create = async (titulo, descripcion, tipo, estado, id_organizacion, fecha_
         row.id_organizacion,
         row.fecha_inicio,
         row.fecha_final,
-        row.fecha_publicacion
+        row.fecha_publicacion,
+        row.limite_participantes,
+        row.tipo_organizacion_permitida,
+        row.region_permitida,
+        row.modalidad,
+        row.sector_permitido,
+        row.giro_permitido,
+        row.hora_inicio,
+        row.hora_final
     )
 }
 
@@ -124,7 +157,15 @@ const findById = async (id) => {
         row.id_organizacion,
         row.fecha_inicio,
         row.fecha_final,
-        row.fecha_publicacion
+        row.fecha_publicacion,
+        row.limite_participantes,
+        row.tipo_organizacion_permitida,
+        row.region_permitida,
+        row.modalidad,
+        row.sector_permitido,
+        row.giro_permitido,
+        row.hora_inicio,
+        row.hora_final
     )
 }
 
@@ -141,13 +182,21 @@ const findAll = async () => {
             row.id_organizacion,
             row.fecha_inicio,
             row.fecha_final,
-            row.fecha_publicacion
+            row.fecha_publicacion,
+            row.limite_participantes,
+            row.tipo_organizacion_permitida,
+            row.region_permitida,
+            row.modalidad,
+            row.sector_permitido,
+            row.giro_permitido,
+            row.hora_inicio,
+            row.hora_final
         )
     )
 }
 
-const updateById = async (id, titulo, descripcion, tipo, fecha_inicio, fecha_final) => {
-    const result = await pool.query(queryUpdateById, [titulo, descripcion, tipo, fecha_inicio, fecha_final, id])
+const updateById = async (id, titulo, descripcion, tipo, fecha_inicio, fecha_final, limite_participantes = null, tipo_organizacion_permitida = 'TODAS', region_permitida = 'TODAS', modalidad = 'PRESENCIAL', sector_permitido = 'TODOS', giro_permitido = 'TODOS', hora_inicio = '09:00', hora_final = '18:00') => {
+    const result = await pool.query(queryUpdateById, [titulo, descripcion, tipo, fecha_inicio, fecha_final, limite_participantes, tipo_organizacion_permitida, region_permitida, modalidad, sector_permitido, giro_permitido, hora_inicio, hora_final, id])
     if (result.rowCount === 0) throw new Error(`Ocurrio un error al actualizar el evento con ID : ${id}`)
     const row = result.rows[0]
     return new Evento(
@@ -159,7 +208,15 @@ const updateById = async (id, titulo, descripcion, tipo, fecha_inicio, fecha_fin
         row.id_organizacion,
         row.fecha_inicio,
         row.fecha_final,
-        row.fecha_publicacion
+        row.fecha_publicacion,
+        row.limite_participantes,
+        row.tipo_organizacion_permitida,
+        row.region_permitida,
+        row.modalidad,
+        row.sector_permitido,
+        row.giro_permitido,
+        row.hora_inicio,
+        row.hora_final
     )
 }
 
@@ -217,6 +274,15 @@ const findAllEventos = async (limit, offset) => {
                 fecha_inicio: row.fecha_inicio,
                 fecha_final: row.fecha_final,
                 fecha_publicacion: row.fecha_publicacion,
+                limite_participantes: row.limite_participantes,
+                tipo_organizacion_permitida: row.tipo_organizacion_permitida || 'TODAS',
+                region_permitida: row.region_permitida || 'TODAS',
+                modalidad: row.modalidad || 'PRESENCIAL',
+                sector_permitido: row.sector_permitido || 'TODOS',
+                giro_permitido: row.giro_permitido || 'TODOS',
+                hora_inicio: row.hora_inicio || '09:00',
+                hora_final: row.hora_final || '18:00',
+                total_participantes: parseInt(row.total_participantes || 0),
                 id_organizacion: row.id_organizacion,
                 organizacion: {
                     id: row.id_organizacion,

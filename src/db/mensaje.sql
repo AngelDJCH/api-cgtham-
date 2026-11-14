@@ -4,6 +4,7 @@ CREATE TABLE mensajes(
     id_emisor UUID NOT NULL,
     id_receptor UUID NOT NULL,
 	id_chat UUID NOT NULL,
+    fecha_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_mensajes_usuario_emisor
     FOREIGN KEY (id_emisor)
     REFERENCES organizaciones(id)

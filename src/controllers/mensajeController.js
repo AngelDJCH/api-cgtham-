@@ -24,4 +24,18 @@ const findAllByIdChat = async (req, res,next) => {
     }
 }
 
-module.exports = {create, findAllByIdChat}
+const findUltimosMensajesPorOrganizacion = async (req, res, next) => {
+    try {
+        const { id_organizacion } = req.params
+        const mensajes = await mensajeService.findUltimosMensajesPorOrganizacion(id_organizacion)
+        res.status(200).json(
+            mensajes.map(
+                mensaje => mensaje.toJSON()
+            )
+        )
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports = {create, findAllByIdChat, findUltimosMensajesPorOrganizacion}

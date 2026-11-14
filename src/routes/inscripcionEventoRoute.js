@@ -6,7 +6,7 @@ const auth = require('../midlewares/auth')
 const verifyRoles = require('../midlewares/verifyRoles')
 
 
-// inscripcionRoutes.get('/evento/:id', inscripcionController.findInscripcionesByIdEvento)
+inscripcionEventoRoutes.get('/evento/:id_evento', auth, inscripcionController.findInscripcionesByIdEvento)
 inscripcionEventoRoutes.get('/participantes/:id_evento', validateFindOrganizacionesParticipantesByIdInscripcion, inscripcionController.findOrganizacionesParticipantesByIdInscripcion)
 inscripcionEventoRoutes.get('/pendientes/:id_evento', auth, validateFindParticipantesPendientesByIdInscripcion, inscripcionController.findParticipantesPendientesByIdInscripcion)
 

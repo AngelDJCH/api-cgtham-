@@ -107,11 +107,15 @@ const findInscripcionesByIdEvento = async (id_evento) => {
         row => {
             return {
                 id: row.id_inscripcion,
+                id_inscripcion: row.id_inscripcion,
                 estado: row.estado,
                 fecha: row.fecha,
                 organizacion: {
                     id: row.id_organizacion,
-                    nombre: row.nombre_comercial
+                    id_organizacion: row.id_organizacion,
+                    nombre: row.nombre_comercial,
+                    nombre_comercial: row.nombre_comercial,
+                    logo: row.logo
                 }
             }
         }

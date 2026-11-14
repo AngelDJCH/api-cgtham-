@@ -7,5 +7,6 @@ const verifyRoles = require('../midlewares/verifyRoles')
 
 mensajeRoutes.post('/', validateCreate, mensajeController.create)
 mensajeRoutes.post('/chat', validateFindAllByIdEmisorAndIdReceptor, mensajeController.findAllByIdChat)
+mensajeRoutes.get('/pendientes/:id_organizacion', mensajeController.findUltimosMensajesPorOrganizacion)
 
 module.exports = mensajeRoutes

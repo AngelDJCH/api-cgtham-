@@ -30,4 +30,23 @@ const updateContraseniaByIdOrganizacion = async (contrasenia, id_organizacion) =
     return cuenta
 }
 
-module.exports = { create, findById, updateRolById, login,updateCorreoByIdOrganizacion, updateContraseniaByIdOrganizacion}
+const findByCorreo = async (correo) => {
+    const cuenta = await cuentaRepository.findByCorreo(correo)
+    return cuenta
+}
+
+const updateContraseniaByCorreo = async (contrasenia, correo) => {
+    const cuenta = await cuentaRepository.updateContraseniaByCorreo(contrasenia, correo)
+    return cuenta
+}
+
+module.exports = {
+    create,
+    findById,
+    updateRolById,
+    login,
+    updateCorreoByIdOrganizacion,
+    updateContraseniaByIdOrganizacion,
+    findByCorreo,
+    updateContraseniaByCorreo
+}

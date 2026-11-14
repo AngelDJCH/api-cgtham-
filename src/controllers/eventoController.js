@@ -5,8 +5,27 @@ const historicoEvento = require('../services/historicoEventoService')
 
 const create = async (req, res,next) => {
     try {
-        const { titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final } = req.body;
-        const evento = await eventService.create(titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final)
+        const { titulo, descripcion, tipo, estado, id_organizacion, fecha_inicio, fecha_final, limite_participantes, tipo_organizacion_permitida, region_permitida, modalidad, sector_permitido, giro_permitido, hora_inicio, hora_final } = req.body;
+        const limite = (limite_participantes !== undefined && limite_participantes !== '' && limite_participantes !== null) 
+            ? parseInt(limite_participantes) 
+            : null;
+        const evento = await eventService.create(
+            titulo, 
+            descripcion, 
+            tipo, 
+            estado, 
+            id_organizacion, 
+            fecha_inicio, 
+            fecha_final, 
+            limite, 
+            tipo_organizacion_permitida || 'TODAS', 
+            region_permitida || 'TODAS', 
+            modalidad || 'PRESENCIAL',
+            sector_permitido || 'TODOS',
+            giro_permitido || 'TODOS',
+            hora_inicio || '09:00',
+            hora_final || '18:00'
+        )
         res.status(200).json(evento.toJSON())
     } catch (error) {
         next(error)
@@ -39,8 +58,26 @@ const findAll = async (req, res,next) => {
 const updateById = async (req, res,next) => {
     try {
         const id = req.params.id
-        const { titulo, descripcion, tipo, fecha_inicio, fecha_final } = req.body;
-        const evento = await eventService.updateById(id, titulo, descripcion, tipo, fecha_inicio, fecha_final)
+        const { titulo, descripcion, tipo, fecha_inicio, fecha_final, limite_participantes, tipo_organizacion_permitida, region_permitida, modalidad, sector_permitido, giro_permitido, hora_inicio, hora_final } = req.body;
+        const limite = (limite_participantes !== undefined && limite_participantes !== '' && limite_participantes !== null) 
+            ? parseInt(limite_participantes) 
+            : null;
+        const evento = await eventService.updateById(
+            id, 
+            titulo, 
+            descripcion, 
+            tipo, 
+            fecha_inicio, 
+            fecha_final, 
+            limite, 
+            tipo_organizacion_permitida || 'TODAS', 
+            region_permitida || 'TODAS', 
+            modalidad || 'PRESENCIAL',
+            sector_permitido || 'TODOS',
+            giro_permitido || 'TODOS',
+            hora_inicio || '09:00',
+            hora_final || '18:00'
+        )
         res.status(200).json(evento.toJSON())
     } catch (error) {
         next(error)

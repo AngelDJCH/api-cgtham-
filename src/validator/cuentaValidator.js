@@ -49,4 +49,37 @@ const validateUpdateCorreo = [
     }
 ]
 
-module.exports = { validateCreate, validateFindById, validateUpdateById, validateLogin, validateUpdateCorreo, validateContrasenia }
+const validateSolicitarRecuperacion = [
+    check('correo').exists().not().isEmpty().isEmail().withMessage('Debe proporcionar un correo válido'),
+    (req, res, next) => {
+        validateResult(req, res, next)
+    }
+]
+
+const validateVerificarCodigo = [
+    check('correo').exists().not().isEmpty().isEmail().withMessage('Debe proporcionar un correo válido'),
+    check('codigo').exists().not().isEmpty().isLength({ min: 6, max: 6 }).withMessage('El código debe ser de 6 dígitos'),
+    (req, res, next) => {
+        validateResult(req, res, next)
+    }
+]
+
+const validateRestablecerRecuperacion = [
+    check('correo').exists().not().isEmpty().isEmail().withMessage('Debe proporcionar un correo válido'),
+    check('contrasenia').exists().not().isEmpty().isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres'),
+    (req, res, next) => {
+        validateResult(req, res, next)
+    }
+]
+
+module.exports = {
+    validateCreate,
+    validateFindById,
+    validateUpdateById,
+    validateLogin,
+    validateUpdateCorreo,
+    validateContrasenia,
+    validateSolicitarRecuperacion,
+    validateVerificarCodigo,
+    validateRestablecerRecuperacion
+}

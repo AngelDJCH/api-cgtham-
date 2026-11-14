@@ -18,7 +18,7 @@ const queryUpdateRol = `
 
 const queryLogin = `
 	    SELECT c.id as id_cuenta,c.correo, c.contrasenia,
-	c.roles, o.id as id_organizacion, o.logo, o.tipo
+	c.roles, o.id as id_organizacion, o.logo, o.tipo, o.sector, o.giro
 	FROM cuentas AS c inner join organizaciones as o on c.id_organizacion = o.id
 	WHERE c.correo = $1 and o.estado = true
 `
@@ -29,6 +29,17 @@ const queryUpdateCorreoByIdOrganizacion = `
 
 const queryUpdateContraseniaByIdOrganizacion = `
     UPDATE cuentas SET contrasenia = $1 WHERE id_organizacion = $2 RETURNING *
+`
+
+const queryFindByCorreo = `
+    SELECT c.id as id_cuenta, c.correo, c.contrasenia,
+    c.roles, o.id as id_organizacion, o.nombre_comercial, o.logo, o.tipo, o.estado
+    FROM cuentas AS c INNER JOIN organizaciones AS o ON c.id_organizacion = o.id
+    WHERE c.correo = $1
+`
+
+const queryUpdateContraseniaByCorreo = `
+    UPDATE cuentas SET contrasenia = $1 WHERE correo = $2 RETURNING *
 `
 
 const updateCorreoByIdOrganizacion = async (correo, id_organizacion) => {
@@ -106,9 +117,39 @@ const login = async (correo) => {
         contraseña: row.contrasenia,
         rol: row.roles,
         tipo: row.tipo,
+        sector: row.sector,
+        giro: row.giro,
         organizacion: row.id_organizacion,
         logo: row.logo
     }
 }
 
-module.exports = { create, findById, updateRolById, login, updateCorreoByIdOrganizacion, updateContraseniaByIdOrganizacion }
+const findByCorreo = async (correo) => {
+    const result = await pool.query(queryFindByCorreo, [correo])
+    if (result.rowCount === 0) return null
+    return result.rows[0]
+}
+
+const updateContraseniaByCorreo = async (contrasenia, correo) => {
+    const result = await pool.query(queryUpdateContraseniaByCorreo, [contrasenia, correo])
+    if (result.rowCount === 0) throw new Error('No se pudo actualizar la contraseña de la cuenta')
+    const row = result.rows[0]
+    return new Cuenta(
+        row.id,
+        row.correo,
+        row.contrasenia,
+        row.roles,
+        row.id_usuario
+    )
+}
+
+module.exports = {
+    create,
+    findById,
+    updateRolById,
+    login,
+    updateCorreoByIdOrganizacion,
+    updateContraseniaByIdOrganizacion,
+    findByCorreo,
+    updateContraseniaByCorreo
+}
